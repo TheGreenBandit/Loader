@@ -51,11 +51,11 @@ int main(int, char**)
     loader::g_logger.log("Welcome!");
     loader::util::write_update_bat();
 
-    if (loader::util::get_release_title("TheGreenBandit", "Loader") != "V1.0 Initial Release")
+    if (loader::util::get_release_title("TheGreenBandit", "Loader") != "V1.2 Updating Fixed")
     {
         loader::g_logger.log("The loader is outdated! Closing and downloading the newest version.");
-        //system("update.bat");
-        //exit(0);
+        system("update.bat");
+        exit(0);
     }
 
     WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T(WINDOW_NAME), NULL };

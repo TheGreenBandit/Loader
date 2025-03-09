@@ -93,18 +93,43 @@ namespace loader::util
         if (bat_file.is_open()) {
             bat_file <<
                 "@echo off\n"
-                "SET \"EXE_PATH=%~dp0loader.exe\"\n"
-                "SET \"UPDATE_PATH=%~dp0temp\\new_loader.exe\"\n"
-                "SET \"URL=https://github.com/thegreenbandit/main-loader/releases/latest/loader.exe\"\n\n"
-                "taskkill /F /IM loader.exe\n\n"
-                "echo Downloading new version...\n"
-                "curl -L -o \"%UPDATE_PATH%\" \"%URL%\"\n\n"
-                "echo Replacing old version...\n"
-                "copy /Y \"%UPDATE_PATH%\" \"%EXE_PATH%\"\n\n"
-                "echo Restarting the loader...\n"
-                "start \"\" \"%EXE_PATH%\"\n\n"
-                "del \"%UPDATE_PATH%\"\n\n"
-                "exit\n";
+                "Title Download and Run Loader from GitHub\n\n"
+
+                ":: GitHub API URL for the latest release\n"
+                "set \"url=https://api.github.com/repos/TheGreenBandit/Loader/releases/latest\"\n\n"
+
+                ":: Local path to save the downloaded file\n"
+                "set \"File=%~dp0Loader.exe\"\n\n"
+
+                ":: GitHub Personal Access Token (replace this with your actual token)\n"
+                "set \"GITHUB_TOKEN=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\"\n\n"
+
+                ":: Call the Download function to fetch the latest release\n"
+                "call :Download \"%url%\" \"%File%\" \"%GITHUB_TOKEN%\"\n\n"
+
+                ":: Check if the file was downloaded successfully and display it\n"
+                "if exist \"%File%\" (\n"
+                "    echo Download successful. Running Loader...\n"
+                "    start \"\" \"%File%\"\n"
+                ") else (\n"
+                "    echo Failed to download the file.\n"
+                ")\n\n"
+
+                ":: End the script\n"
+                "pause>nul\n"
+                "exit /b\n\n"
+
+                "::*********************************************************************************\n"
+                ":Download\n"
+                ":: Powershell command to download the file from the GitHub API with authentication\n"
+                "powershell -Command ^\n"
+                "    $url = '%1'; ^\n"
+                "    $token = '%3'; ^\n"
+                "    $headers = @{ 'User-Agent' = 'Mozilla/5.0'; 'Authorization' = 'token ' + $token }; ^\n"
+                "    $response = Invoke-RestMethod -Uri $url -Headers $headers; ^\n"
+                "    $downloadUrl = $response.assets[0].browser_download_url; ^\n"
+                "    Invoke-WebRequest -Uri $downloadUrl -OutFile '%2'; \n"
+                "exit /b\n";
             bat_file.close();
         }
     }
