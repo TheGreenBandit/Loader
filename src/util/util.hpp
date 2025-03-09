@@ -56,6 +56,27 @@ namespace loader::util
         }
     }
 
+    inline std::string get_latest_release_url(const std::string& owner, const std::string& repo)
+    {
+        std::string url = "https://api.github.com/repos/" + owner + "/" + repo + "/releases/latest";
+        std::string releaseData = util::download_string(url);
+
+        if (releaseData == "FAILED" || releaseData.empty())
+            return "Error: Failed to retrieve release data.";
+
+        try
+        {
+            auto jsonData = nlohmann::json::parse(releaseData);
+            if (jsonData.contains("assets") && !jsonData["assets"].empty())
+                return jsonData["assets"][0]["browser_download_url"];
+            else return "Error: No downloadable assets found in the release data.";
+        }
+        catch (const std::exception& e)
+        {
+            return std::string("JSON parsing error: ") + e.what();
+        }
+    }
+
     inline void download_file(std::string path, std::string link)
     {
         char sysdir[MAX_PATH] = { 0 };
@@ -65,6 +86,13 @@ namespace loader::util
         
         auto res = URLDownloadToFileA(NULL, link.c_str(), Path, 0, NULL);
        // return log((FAILED(res) ? "Failed" : "Success"));
+    }
+
+    inline void download_menu(std::string owner, std::string repo)
+    {
+        if (!std::filesystem::is_directory(std::filesystem::current_path() / "Menus" / repo)) std::filesystem::create_directory(std::filesystem::current_path() / "Menus" / repo);
+        download_file((std::filesystem::current_path() / "Menus" / (repo + ".dll")).string(), get_latest_release_url(owner, repo));
+        return;
     }
 
     inline std::vector<char> read_all_bytes(std::string_view path) noexcept

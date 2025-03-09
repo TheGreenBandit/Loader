@@ -16,18 +16,12 @@ namespace loader
             ImGui::Text("It seems the menu is not yet installed...");
             ImGui::Text(std::format("Would you like to download it to {}?", path.string()).c_str());
             if (ImGui::Button("Download"))
-            {
-                if (!fs::is_directory(fs::current_path() / "Menus" / "unk")) fs::create_directory(fs::current_path() / "Menus" / "unk");
-                util::download_file(path.string(), "https://github.com/TheGreenBandit/unk/releases/download/release/unk.dll");
-            }
+                util::download_menu("TheGreenBandit", "Unk");
         }
         else
         {
             if (ImGui::Button("Redownload"))
-            {
-                if (!fs::is_directory(fs::current_path() / "Menus" / "unk")) fs::create_directory(fs::current_path() / "Menus" / "unk");
-                util::download_file(path.string(), "https://github.com/TheGreenBandit/unk/releases/download/release/unk.dll");
-            }
+                util::download_menu("TheGreenBandit", "Unk");
             if (ImGui::Button("Load Menu"))
                 g_inject.inject();
         }

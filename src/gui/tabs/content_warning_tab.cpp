@@ -15,18 +15,12 @@ namespace loader
             ImGui::Text("It seems the menu is not yet installed...");
             ImGui::Text(std::format("Would you like to download it to {}?", path.string()).c_str());
             if (ImGui::Button("Download")) //fixme
-            {
-                if (!fs::is_directory(fs::current_path() / "Menus" / "SpookSuite")) fs::create_directory(fs::current_path() / "Menus" / "SpookSuite");
-                util::download_file(path.string(), "https://github.com/IcyRelic/SpookSuite/releases/download/release/spooksuite.dll");
-            }
+                util::download_menu("IcyRelic", "SpookSuite");
         }
         else
         {
             if (ImGui::Button("Redownload"))
-            {
-                if (!fs::is_directory(fs::current_path() / "Menus" / "SpookSuite")) fs::create_directory(fs::current_path() / "Menus" / "SpookSuite");
-                util::download_file(path.string(), "https://github.com/IcyRelic/SpookSuite/releases/download/release/spooksuite.dll");
-            }
+                util::download_menu("IcyRelic", "SpookSuite");
             if (ImGui::Button("Load Menu"))
                 g_inject.inject();
         }

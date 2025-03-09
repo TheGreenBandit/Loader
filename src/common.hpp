@@ -22,6 +22,8 @@
 #pragma comment(lib, "urlmon.lib")
 #pragma comment(lib, "wininet.lib")
 
+namespace fs = std::filesystem;
+
 #define WINDOW_NAME "TGB's Loader"
 
 namespace loader
