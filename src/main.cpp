@@ -48,7 +48,7 @@ int main(int, char**)
     loader::g_logger.clear_log();
     loader::g_logger.log("Welcome!");
     loader::util::write_update_bat();
-    if (loader::util::get_release_title("TheGreenBandit", "Loader") != "V1.5 Updating Links Etc")
+    if (loader::util::get_release_title("TheGreenBandit", "Loader") != "V1.6 GUI & More")
     {
         loader::g_logger.log("The loader is outdated! Closing and downloading the newest version.");
         system("update.bat");
