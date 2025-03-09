@@ -1,9 +1,5 @@
 #include "../gui.hpp"
-#include <format>
-#include <filesystem>
 #include "../../util/injection.hpp"
-
-namespace fs = std::filesystem;
 
 namespace loader
 {
