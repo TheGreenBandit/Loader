@@ -21,8 +21,16 @@ namespace loader
                 util::download_file(path.string(), "https://github.com/TheGreenBandit/unk/releases/download/release/unk.dll");
             }
         }
-        else if (ImGui::Button("Load Menu"))
-            g_inject.inject();
+        else
+        {
+            if (ImGui::Button("Redownload"))
+            {
+                if (!fs::is_directory(fs::current_path() / "Menus" / "unk")) fs::create_directory(fs::current_path() / "Menus" / "unk");
+                util::download_file(path.string(), "https://github.com/TheGreenBandit/unk/releases/download/release/unk.dll");
+            }
+            if (ImGui::Button("Load Menu"))
+                g_inject.inject();
+        }
         if (ImGui::Button("Launch Game"))
             ShellExecuteA(0, "open", "steam://rungameid/3241660", 0, 0, SW_HIDE);
         //if (ImGui::Button("Open Game Folder"))

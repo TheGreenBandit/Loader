@@ -21,8 +21,16 @@ namespace loader
                 util::download_file(path.string(), "https://icyrelic.com/release/lethalmenu/LethalMenu.dll");
             }
         }
-        else if (ImGui::Button("Load Menu"))
-            g_inject.inject();
+        else
+        {
+            if (ImGui::Button("Redownload"))
+            {
+                if (!fs::is_directory(fs::current_path() / "Menus" / "LethalMenu")) fs::create_directory(fs::current_path() / "Menus" / "LethalMenu");
+                util::download_file(path.string(), "https://icyrelic.com/release/lethalmenu/LethalMenu.dll");
+            }
+            if (ImGui::Button("Load Menu"))
+                g_inject.inject();
+        }
         if (ImGui::Button("Launch Game"))
             ShellExecuteA(0, "open", "steam://rungameid/1966720", 0, 0, SW_HIDE);
 
