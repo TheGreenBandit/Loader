@@ -27,7 +27,7 @@ void initialize()
     loader::g_gui.initialize();
     if (!fs::is_directory(fs::current_path() / "Resources")) fs::create_directory(fs::current_path() / "Resources");
     if (!fs::exists(fs::current_path() / "Resources" / "icon.png"))
-        loader::util::download_file((fs::current_path() / "Resources" / "icon.png").string(), "https://cdn.discordapp.com/attachments/1208846442303852555/1345752381538832514/106003542.png?ex=67c5b112&is=67c45f92&hm=2a55f71900df7596dc10b409011ab932bf9bebf5c6de1e99c50c6ea2476e9100&");
+        loader::util::download_file((fs::current_path() / "Resources" / "icon.png").string(), "https://cdn.discordapp.com/attachments/1208846442303852555/1345752381538832514/106003542.png?ex=67ceeb92&is=67cd9a12&hm=1906f1a9596d48d7c22b785fa8ad33339353d7d29ae637b051fa6646f139b34a&");
     if (!fs::exists(fs::current_path() / "smi.exe"))
         loader::util::download_file((fs::current_path() / "smi.exe").string(), "https://cdn.discordapp.com/attachments/1208846442303852555/1345749972468895797/smi.exe?ex=67c5aed4&is=67c45d54&hm=e180bd420a244a74bb0c7a877f3fd1d7571f4e31ed91ee24844ba315b0d5cea4&");
     if (!fs::exists(fs::current_path() / "SharpMonoInjector.dll"))
@@ -51,7 +51,7 @@ int main(int, char**)
     loader::g_logger.log("Welcome!");
     loader::util::write_update_bat();
 
-    if (loader::util::get_release_title("TheGreenBandit", "Loader") != "V1.2 Updating Fixed")
+    if (loader::util::get_release_title("TheGreenBandit", "Loader") != "V1.3 Redownloading")
     {
         loader::g_logger.log("The loader is outdated! Closing and downloading the newest version.");
         system("update.bat");
