@@ -25,11 +25,11 @@ void initialize()
     loader::g_gui.initialize();
     if (!fs::is_directory(fs::current_path() / "Resources")) fs::create_directory(fs::current_path() / "Resources");
     if (!fs::exists(fs::current_path() / "Resources" / "icon.png"))
-        loader::util::download_file((fs::current_path() / "Resources" / "icon.png").string(), "https://download856.mediafire.com/b6q2420cwatgTIFIaKdoE-CTnzC-BiqolRdB3irjusuZRbGp1cirDxifcJeD0KzefSb2UW9XtOg3k5clnGClgd1CNTVpza-HfJdSGi0Y1sxcfWq1vRrIBzRG5s2O4LK9-i2JGMdyeSmRRaIIbDbp2xZ7V_myBl2SFFCKNFq-UbWWTg/qxg4gvxjq5cl07f/106003542.png");
+        loader::util::download_file((fs::current_path() / "Resources" / "icon.png").string(), "https://download856.mediafire.com/i5n4nfmnzuygce0owmPLRVlJJFo0iaQVEv6ZNbYGUzEHM94PjqDiX5J0YoI4GY-GBXDEPxI1JzTK7mcWg59oAlhn7jvy5YyCOWmMzyc0qlSrIiDHc2NyiY3roHFeDp2DL-e9S5tmDK3FZkaCKP3JrEP9GurtP-8oOZWiQXRYtn8X3Q/qxg4gvxjq5cl07f/106003542.png");
     if (!fs::exists(fs::current_path() / "smi.exe"))
-        loader::util::download_file((fs::current_path() / "smi.exe").string(), "https://download1072.mediafire.com/20orzbjrc6tgX4V8wlIWxLxmrbxCERpGSbBlL8vo2OINlxhV-7sYEbE9hemYqIe4DsqFh8hcqE3WM-6w9ASy7xc9Ewu4U3aUH2QUelfRiKfazaGEPx6JhxOCzwlNq6b3HTGnZsk3vBLYmJo5CmwX9QCN0N1Kg801ifEQfPrIIrLYiA/rzv0rem9zu7b934/smi.exe");
+        loader::util::download_file((fs::current_path() / "smi.exe").string(), "https://download1072.mediafire.com/ho18cmqatzwggfDbFWHa3VaGym4bCuEwMnEn-BKGPBY0VsKdvQsRmemqPv8NANZD6LsJgJnQ1k3xinhQ6j7RMmGkzrnVlFFowO7-B7CoIvGoDRqLfbL7ffc-DmcWgc46qgST--31ueAXsG05JZ6oOXnf5kNjyHlz-Cim5ltlD6s7bg/rzv0rem9zu7b934/smi.exe");
     if (!fs::exists(fs::current_path() / "SharpMonoInjector.dll"))
-        loader::util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://download1320.mediafire.com/z74ugo8gb5vg5DCe2NB9PElwqhx1LKwJLLOOEz4PKd_6yEIgZIoHGCL4SqOhQzePL-s94TjHinDdHOS6VptqNOkgOcQ-n938-9kaU-AUd5v6LfZv1mTnsJ5i84O52JEhhsGubMMXTE8hAyw5WQgWlLjkocv7b10Ie3RsopixcGSs-g/k2al0ojkc7o6oqv/SharpMonoInjector.dll");
+        loader::util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://download1320.mediafire.com/k1rd6760pbtgtkD76RKX5z-FufrQgdODVi6poy7RfVHuBmAi10hqeiAfQEIpOx_H8a3rmU4ZlOYDMWQxGAMX9BF_UybOCpIZubOkkGx9NRvGalkM_dVEXYsT75y3wHmVmI0iQMRUJWwPNU--DcQ_FFyV8YE5JY5iTJHlpIl6ig0-kw/k2al0ojkc7o6oqv/SharpMonoInjector.dll");
     if (!fs::is_directory(fs::current_path() / "Menus")) fs::create_directory(fs::current_path() / "Menus");
     loader::g_gui.load_texture_from_file((fs::current_path() / "Resources" / "icon.png").string().c_str(),//todo add menu preview images
         g_pd3dDevice,
