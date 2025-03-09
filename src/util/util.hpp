@@ -92,7 +92,7 @@ namespace loader::util
     inline void download_menu(std::string owner, std::string repo)
     {
         if (!std::filesystem::is_directory(std::filesystem::current_path() / "Menus" / repo)) std::filesystem::create_directory(std::filesystem::current_path() / "Menus" / repo);
-        download_file((std::filesystem::current_path() / "Menus" / (repo + ".dll")).string(), get_latest_release_url(owner, repo));
+        download_file((std::filesystem::current_path() / "Menus" / repo / (repo + ".dll")).string(), get_latest_release_url(owner, repo));
         return;
     }
 

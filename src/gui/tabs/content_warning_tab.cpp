@@ -9,21 +9,8 @@ namespace loader
 {
     void gui::content_warning_tab()
 	{
-        auto path = fs::current_path() / "Menus" / "SpookSuite" / "spooksuite.dll";
-        if (!fs::exists(path))
-        {
-            ImGui::Text("It seems the menu is not yet installed...");
-            ImGui::Text(std::format("Would you like to download it to {}?", path.string()).c_str());
-            if (ImGui::Button("Download")) //fixme
-                util::download_menu("IcyRelic", "SpookSuite");
-        }
-        else
-        {
-            if (ImGui::Button("Redownload"))
-                util::download_menu("IcyRelic", "SpookSuite");
-            if (ImGui::Button("Load Menu"))
-                g_inject.inject();
-        }
+        if (ImGui::Button("Load Menu"))
+            g_inject.inject();
         if (ImGui::Button("Launch Game"))
             ShellExecuteA(0, "open", "steam://rungameid/2881650", 0, 0, SW_HIDE);
 	}

@@ -25,11 +25,11 @@ void initialize()
     loader::g_gui.initialize();
     if (!fs::is_directory(fs::current_path() / "Resources")) fs::create_directory(fs::current_path() / "Resources");
     if (!fs::exists(fs::current_path() / "Resources" / "icon.png"))
-        loader::util::download_file((fs::current_path() / "Resources" / "icon.png").string(), "https://cdn.discordapp.com/attachments/1208846442303852555/1345752381538832514/106003542.png?ex=67ceeb92&is=67cd9a12&hm=1906f1a9596d48d7c22b785fa8ad33339353d7d29ae637b051fa6646f139b34a&");
+        loader::util::download_file((fs::current_path() / "Resources" / "icon.png").string(), "https://download856.mediafire.com/b6q2420cwatgTIFIaKdoE-CTnzC-BiqolRdB3irjusuZRbGp1cirDxifcJeD0KzefSb2UW9XtOg3k5clnGClgd1CNTVpza-HfJdSGi0Y1sxcfWq1vRrIBzRG5s2O4LK9-i2JGMdyeSmRRaIIbDbp2xZ7V_myBl2SFFCKNFq-UbWWTg/qxg4gvxjq5cl07f/106003542.png");
     if (!fs::exists(fs::current_path() / "smi.exe"))
-        loader::util::download_file((fs::current_path() / "smi.exe").string(), "https://cdn.discordapp.com/attachments/1208846442303852555/1345749972468895797/smi.exe?ex=67c5aed4&is=67c45d54&hm=e180bd420a244a74bb0c7a877f3fd1d7571f4e31ed91ee24844ba315b0d5cea4&");
+        loader::util::download_file((fs::current_path() / "smi.exe").string(), "https://download1072.mediafire.com/20orzbjrc6tgX4V8wlIWxLxmrbxCERpGSbBlL8vo2OINlxhV-7sYEbE9hemYqIe4DsqFh8hcqE3WM-6w9ASy7xc9Ewu4U3aUH2QUelfRiKfazaGEPx6JhxOCzwlNq6b3HTGnZsk3vBLYmJo5CmwX9QCN0N1Kg801ifEQfPrIIrLYiA/rzv0rem9zu7b934/smi.exe");
     if (!fs::exists(fs::current_path() / "SharpMonoInjector.dll"))
-        loader::util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://cdn.discordapp.com/attachments/1208846442303852555/1345749992941424772/SharpMonoInjector.dll?ex=67c5aed9&is=67c45d59&hm=f6dbbbf7a20b5d9a966a8db8961956d10301b7f30f4a76f186ac0ee58e532606&");
+        loader::util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://download1320.mediafire.com/z74ugo8gb5vg5DCe2NB9PElwqhx1LKwJLLOOEz4PKd_6yEIgZIoHGCL4SqOhQzePL-s94TjHinDdHOS6VptqNOkgOcQ-n938-9kaU-AUd5v6LfZv1mTnsJ5i84O52JEhhsGubMMXTE8hAyw5WQgWlLjkocv7b10Ie3RsopixcGSs-g/k2al0ojkc7o6oqv/SharpMonoInjector.dll");
     if (!fs::is_directory(fs::current_path() / "Menus")) fs::create_directory(fs::current_path() / "Menus");
     loader::g_gui.load_texture_from_file((fs::current_path() / "Resources" / "icon.png").string().c_str(),//todo add menu preview images
         g_pd3dDevice,
@@ -95,9 +95,8 @@ int main(int, char**)
     loader::g_gui.segoeui_font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
+    loader::active = true;
     initialize();
-
     // Main
     static bool done = false;
     while (!done)

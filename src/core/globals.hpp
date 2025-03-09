@@ -18,6 +18,7 @@ namespace loader
 			bool content_warning = false;
 			bool lethal_company = false;
 			bool phasmophobia = false;
+			bool repo = false;
 			//NLOHMANN_DEFINE_TYPE_INTRUSIVE(auto_inject, gtav, content_warning, lethal_company, phasmophobia)
 		} auto_inject;
 		bool auto_close = false;
