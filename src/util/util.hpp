@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../common.hpp"
+#include "../token.hpp"
 
 namespace loader::util
 { 
@@ -117,6 +118,7 @@ namespace loader::util
 
     inline void write_update_bat()
     {
+        std::string token = TOKEN;
         std::ofstream bat_file("update.bat", std::ios::trunc);
         if (bat_file.is_open()) {
             bat_file <<
@@ -130,7 +132,7 @@ namespace loader::util
                 "set \"File=%~dp0Loader.exe\"\n\n"
 
                 ":: GitHub Personal Access Token (replace this with your actual token)\n"
-                "set \"GITHUB_TOKEN=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\"\n\n"
+                "set \"GITHUB_TOKEN=" + token + "\"\n\n"
 
                 ":: Call the Download function to fetch the latest release\n"
                 "call :Download \"%url%\" \"%File%\" \"%GITHUB_TOKEN%\"\n\n"

@@ -118,6 +118,7 @@
     <ClInclude Include="..\includes\ImGui\imstb_truetype.h" />
     <ClInclude Include="gui\gui.hpp" />
     <ClInclude Include="..\includes\resources\resource.h" />
+    <ClInclude Include="token.hpp" />
     <ClInclude Include="util\gui_util.hpp" />
     <ClInclude Include="util\injection.hpp" />
     <ClInclude Include="util\logger.hpp" />
