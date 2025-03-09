@@ -124,20 +124,13 @@ namespace loader::util
             bat_file <<
                 "@echo off\n"
                 "Title Download and Run Loader from GitHub\n\n"
-
-                ":: GitHub API URL for the latest release\n"
                 "set \"url=https://api.github.com/repos/TheGreenBandit/Loader/releases/latest\"\n\n"
-
-                ":: Local path to save the downloaded file\n"
                 "set \"File=%~dp0Loader.exe\"\n\n"
-
-                ":: GitHub Personal Access Token (replace this with your actual token)\n"
                 "set \"GITHUB_TOKEN=" + token + "\"\n\n"
 
-                ":: Call the Download function to fetch the latest release\n"
-                "call :Download \"%url%\" \"%File%\" \"%GITHUB_TOKEN%\"\n\n"
+                "taskkill /F /IM loader.exe\n\n"
 
-                ":: Check if the file was downloaded successfully and display it\n"
+                "call :Download \"%url%\" \"%File%\" \"%GITHUB_TOKEN%\"\n\n"
                 "if exist \"%File%\" (\n"
                 "    echo Download successful. Running Loader...\n"
                 "    start \"\" \"%File%\"\n"
@@ -145,9 +138,9 @@ namespace loader::util
                 "    echo Failed to download the file.\n"
                 ")\n\n"
 
-                ":: End the script\n"
-                "pause>nul\n"
-                "exit /b\n\n"
+                "start \"\" \"%File%\"\n\n"
+
+                "exit\n\n"
 
                 "::*********************************************************************************\n"
                 ":Download\n"
