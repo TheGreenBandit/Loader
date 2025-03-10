@@ -25,6 +25,7 @@
 namespace fs = std::filesystem;
 
 #define WINDOW_NAME "TGB's Loader"
+#define VERSION "V1.8 Links Should Be Fine Now"
 
 namespace loader
 {

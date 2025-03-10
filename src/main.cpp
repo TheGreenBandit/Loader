@@ -25,11 +25,11 @@ void initialize()
     loader::g_gui.initialize();
     if (!fs::is_directory(fs::current_path() / "Resources")) fs::create_directory(fs::current_path() / "Resources");
     if (!fs::exists(fs::current_path() / "Resources" / "icon.png"))
-        loader::util::download_file((fs::current_path() / "Resources" / "icon.png").string(), "https://download856.mediafire.com/i5n4nfmnzuygce0owmPLRVlJJFo0iaQVEv6ZNbYGUzEHM94PjqDiX5J0YoI4GY-GBXDEPxI1JzTK7mcWg59oAlhn7jvy5YyCOWmMzyc0qlSrIiDHc2NyiY3roHFeDp2DL-e9S5tmDK3FZkaCKP3JrEP9GurtP-8oOZWiQXRYtn8X3Q/qxg4gvxjq5cl07f/106003542.png");
+        loader::util::download_file((fs::current_path() / "Resources" / "icon.png").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
     if (!fs::exists(fs::current_path() / "smi.exe"))
-        loader::util::download_file((fs::current_path() / "smi.exe").string(), "https://download1072.mediafire.com/ho18cmqatzwggfDbFWHa3VaGym4bCuEwMnEn-BKGPBY0VsKdvQsRmemqPv8NANZD6LsJgJnQ1k3xinhQ6j7RMmGkzrnVlFFowO7-B7CoIvGoDRqLfbL7ffc-DmcWgc46qgST--31ueAXsG05JZ6oOXnf5kNjyHlz-Cim5ltlD6s7bg/rzv0rem9zu7b934/smi.exe");
+        loader::util::download_file((fs::current_path() / "smi.exe").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
     if (!fs::exists(fs::current_path() / "SharpMonoInjector.dll"))
-        loader::util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://download1320.mediafire.com/k1rd6760pbtgtkD76RKX5z-FufrQgdODVi6poy7RfVHuBmAi10hqeiAfQEIpOx_H8a3rmU4ZlOYDMWQxGAMX9BF_UybOCpIZubOkkGx9NRvGalkM_dVEXYsT75y3wHmVmI0iQMRUJWwPNU--DcQ_FFyV8YE5JY5iTJHlpIl6ig0-kw/k2al0ojkc7o6oqv/SharpMonoInjector.dll");
+        loader::util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
     if (!fs::is_directory(fs::current_path() / "Menus")) fs::create_directory(fs::current_path() / "Menus");
     loader::g_gui.load_texture_from_file((fs::current_path() / "Resources" / "icon.png").string().c_str(),//todo add menu preview images
         g_pd3dDevice,
@@ -48,7 +48,7 @@ int main(int, char**)
     loader::g_logger.clear_log();
     loader::g_logger.log("Welcome!");
     loader::util::write_update_bat();
-    if (loader::util::get_release_title("TheGreenBandit", "Loader") != "V1.7 Fixed Links")
+    if (loader::util::get_release_title("TheGreenBandit", "Loader") != VERSION)
     {
         loader::g_logger.log("The loader is outdated! Closing and downloading the newest version.");
         system("update.bat");
