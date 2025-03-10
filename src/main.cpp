@@ -24,11 +24,11 @@ void initialize()
 {
     loader::g_gui.initialize();
     if (!fs::is_directory(fs::current_path() / "Resources")) fs::create_directory(fs::current_path() / "Resources");
-    if (!fs::exists(fs::current_path() / "Resources" / "icon.png"))
+    //if (!fs::exists(fs::current_path() / "Resources" / "icon.png"))
         loader::util::download_file((fs::current_path() / "Resources" / "icon.png").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
-    if (!fs::exists(fs::current_path() / "smi.exe"))
+    //if (!fs::exists(fs::current_path() / "smi.exe"))
         loader::util::download_file((fs::current_path() / "smi.exe").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
-    if (!fs::exists(fs::current_path() / "SharpMonoInjector.dll"))
+    //if (!fs::exists(fs::current_path() / "SharpMonoInjector.dll"))
         loader::util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
     if (!fs::is_directory(fs::current_path() / "Menus")) fs::create_directory(fs::current_path() / "Menus");
     loader::g_gui.load_texture_from_file((fs::current_path() / "Resources" / "icon.png").string().c_str(),//todo add menu preview images
