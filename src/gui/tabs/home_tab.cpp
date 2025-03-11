@@ -4,7 +4,7 @@ namespace loader
 {
 	void gui::home_tab()
 	{
-		ImGui::Image((void*)icon,
+		ImGui::Image((void*)icon->view,
 			ImVec2(100, 100),
 			ImVec2(0, 0),
 			ImVec2(1, 1),

@@ -6,7 +6,7 @@ namespace loader
 	void injection::auto_inject()
 	{
 		std::thread([&] {
-			while (active) 
+			while (true || active) 
 			{
 				static bool injected;
 				if (!injected)
@@ -128,6 +128,9 @@ namespace loader
 		g_logger.log(_namespace);
 		//smi.exe inject -p "Content Warning" -a "Menus/SpookSuite/spooksuite.dll" -n "SpookSuite" -c "Loader" -m "Init"
 		HWND hwnd = FindWindowA(NULL, window);
+		if (hwnd == nullptr)
+			return g_logger.log("failed to find game window, cancelling injection.");
+
 		DWORD pid; GetWindowThreadProcessId(hwnd, &pid);
 		std::string command = std::format(
 			"smi.exe inject -p \"{}\" -a \"{}\" -n \"{}\" -c \"{}\" -m \"{}\"",

@@ -82,20 +82,27 @@ namespace loader
             exit(0);
     }
 
-    bool gui::load_texture_from_file(const char* path, ID3D11Device* d3dDevice, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
+    bool gui::load_texture_from_file(const char* path, ID3D11Device* d3dDevice, Image** image)
     {
-        // Load from disk into a raw RGBA buffer
-        int image_width = 0;
-        int image_height = 0;
-        unsigned char* image_data = stbi_load(path, &image_width, &image_height, NULL, 4);
+        Image* ret = new Image();
+        ret->size[0] = 0;
+        ret->size[1] = 0;
+        ret->view = nullptr;
+
+        unsigned char* image_data = stbi_load(path, &ret->size[0], &ret->size[1], NULL, 4);
+
         if (image_data == NULL)
+        {
+            g_logger.log("FAILED TO LOAD IMAGE! Code 1");
             return false;
+        }
+            
 
         // Create texture
         D3D11_TEXTURE2D_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
-        desc.Width = image_width;
-        desc.Height = image_height;
+        desc.Width = ret->size[0];
+        desc.Height = ret->size[1];
         desc.MipLevels = 1;
         desc.ArraySize = 1;
         desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -118,12 +125,10 @@ namespace loader
         srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
         srvDesc.Texture2D.MipLevels = desc.MipLevels;
         srvDesc.Texture2D.MostDetailedMip = 0;
-        d3dDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
+        d3dDevice->CreateShaderResourceView(pTexture, &srvDesc, &ret->view);
 
         pTexture->Release();
-
-        *out_width = image_width;
-        *out_height = image_height;
+        *image = ret;
         stbi_image_free(image_data);
         return true;
     }

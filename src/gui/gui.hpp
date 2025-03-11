@@ -5,6 +5,14 @@
 
 namespace loader 
 {
+	//data
+	static ID3D11Device* g_pd3dDevice = nullptr;
+	static ID3D11DeviceContext* g_pd3dDeviceContext = nullptr;
+	static IDXGISwapChain* g_pSwapChain = nullptr;
+	static bool g_SwapChainOccluded = false;
+	static UINT g_ResizeWidth = 0, g_ResizeHeight = 0;
+	static ID3D11RenderTargetView* g_mainRenderTargetView = nullptr;
+
 	enum etab : uint32_t
 	{
 		HOME,
@@ -20,7 +28,8 @@ namespace loader
 
 	struct Image
 	{
-		int x, y;
+		int size[2] = { 0, 0 };
+		ID3D11ShaderResourceView* view = nullptr;
 	};
 
 	inline class gui
@@ -47,12 +56,15 @@ namespace loader
 		void repo_tab();
 		void settings_tab();
 
-		bool load_texture_from_file(const char* path, ID3D11Device* d3dDevice, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
+		bool load_texture_from_file(const char* path, ID3D11Device* d3dDevice, Image** image);
 
 		etab tab;
 		ImFont* default_font;
 		ImFont* segoeui_font;
-		ID3D11ShaderResourceView* icon;
-		Image icon_size = { 0, 0 };
+		std::vector<Image*> unkimages;
+		Image* icon;
+		Image* unkself;
+
+
 	} g_gui;
 }

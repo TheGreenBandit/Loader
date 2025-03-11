@@ -4,15 +4,7 @@
 #include <d3d11.h>
 #include "common.hpp"
 #include "util/injection.hpp"
-
-// Data
-static ID3D11Device* g_pd3dDevice = nullptr;
-static ID3D11DeviceContext* g_pd3dDeviceContext = nullptr;
-static IDXGISwapChain* g_pSwapChain = nullptr;
-static bool g_SwapChainOccluded = false;
-static UINT g_ResizeWidth = 0, g_ResizeHeight = 0;
-static ID3D11RenderTargetView* g_mainRenderTargetView = nullptr;
-
+#include "util/gui_util.hpp"
 // Forward declarations of helper functions
 bool CreateDeviceD3D(HWND hWnd);
 void CleanupDeviceD3D();
@@ -20,25 +12,26 @@ void CreateRenderTarget();
 void CleanupRenderTarget();
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+using namespace loader;
+
 void initialize()
 {
-    loader::g_gui.initialize();
+    g_gui.initialize();
+    //images n shit
     if (!fs::is_directory(fs::current_path() / "Resources")) fs::create_directory(fs::current_path() / "Resources");
-    //if (!fs::exists(fs::current_path() / "Resources" / "icon.png"))
-        loader::util::download_file((fs::current_path() / "Resources" / "icon.png").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
-    //if (!fs::exists(fs::current_path() / "smi.exe"))
-        loader::util::download_file((fs::current_path() / "smi.exe").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
-    //if (!fs::exists(fs::current_path() / "SharpMonoInjector.dll"))
-        loader::util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
-    if (!fs::is_directory(fs::current_path() / "Menus")) fs::create_directory(fs::current_path() / "Menus");
-    loader::g_gui.load_texture_from_file((fs::current_path() / "Resources" / "icon.png").string().c_str(),//todo add menu preview images
-        g_pd3dDevice,
-        &loader::g_gui.icon,
-        &loader::g_gui.icon_size.x,
-        &loader::g_gui.icon_size.y);
+    g_gui.icon = g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "icon.png").string().c_str(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
+    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "unkself.png").string().c_str(), "https://cdn.discordapp.com/attachments/1208846442303852555/1349159830488743957/unkself.png?ex=67d21681&is=67d0c501&hm=fc262b2764be0d6de822569eefad148a8096c31c1f7ca680b5f53e423ebfaf9e&", &g_gui.unkimages);
+    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "unksvisual.png").string().c_str(), "https://cdn.discordapp.com/attachments/1208846442303852555/1349159830836875376/unkvisual.png?ex=67d21681&is=67d0c501&hm=f6eb61d5a540f2755de788714d98d879e44412002ea7779f233e6234aa6dfcbc&", &g_gui.unkimages);
 
-    loader::g_inject.auto_inject();
-    loader::g_logger.log("Menu Initialized");
+
+    //if (!fs::exists(fs::current_path() / "smi.exe"))
+        util::download_file((fs::current_path() / "smi.exe").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
+    //if (!fs::exists(fs::current_path() / "SharpMonoInjector.dll"))
+        util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
+    if (!fs::is_directory(fs::current_path() / "Menus")) fs::create_directory(fs::current_path() / "Menus");
+
+    g_inject.auto_inject();
+    g_logger.log("Menu Initialized");
 }
 
 int main(int, char**)
@@ -89,7 +82,7 @@ int main(int, char**)
     }
 
     ImGui_ImplWin32_Init(hwnd);
-    ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+    ImGui_ImplDX11_Init(loader::g_pd3dDevice, loader::g_pd3dDeviceContext);
 
     loader::g_gui.default_font = io.Fonts->AddFontDefault();
     loader::g_gui.segoeui_font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
@@ -114,19 +107,19 @@ int main(int, char**)
         if (done)
             break;
         // Handle window being minimized or screen locked
-        if (g_SwapChainOccluded && g_pSwapChain->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED)
+        if (loader::g_SwapChainOccluded && loader::g_pSwapChain->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED)
         {
             ::Sleep(10);
             continue;
         }
-        g_SwapChainOccluded = false;
+        loader::g_SwapChainOccluded = false;
 
         // Handle window resize (we don't resize directly in the WM_SIZE handler)
-        if (g_ResizeWidth != 0 && g_ResizeHeight != 0)
+        if (loader::g_ResizeWidth != 0 && loader::g_ResizeHeight != 0)
         {
             CleanupRenderTarget();
-            g_pSwapChain->ResizeBuffers(0, g_ResizeWidth, g_ResizeHeight, DXGI_FORMAT_UNKNOWN, 0);
-            g_ResizeWidth = g_ResizeHeight = 0;
+            loader::g_pSwapChain->ResizeBuffers(0, loader::g_ResizeWidth, loader::g_ResizeHeight, DXGI_FORMAT_UNKNOWN, 0);
+            loader::g_ResizeWidth = loader::g_ResizeHeight = 0;
             CreateRenderTarget();
         }
 
@@ -138,8 +131,8 @@ int main(int, char**)
 
         ImGui::Render();
         const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
-        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, nullptr);
-        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
+        loader::g_pd3dDeviceContext->OMSetRenderTargets(1, &loader::g_mainRenderTargetView, nullptr);
+        loader::g_pd3dDeviceContext->ClearRenderTargetView(loader::g_mainRenderTargetView, clear_color_with_alpha);
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -149,9 +142,9 @@ int main(int, char**)
         }
 
         // Present
-        HRESULT hr = g_pSwapChain->Present(1, 0);   // Present with vsync
+        HRESULT hr = loader::g_pSwapChain->Present(1, 0);   // Present with vsync
         //HRESULT hr = g_pSwapChain->Present(0, 0); // Present without vsync
-        g_SwapChainOccluded = (hr == DXGI_STATUS_OCCLUDED);
+        loader::g_SwapChainOccluded = (hr == DXGI_STATUS_OCCLUDED);
     }
 
     // Cleanup
@@ -188,9 +181,9 @@ bool CreateDeviceD3D(HWND hWnd)
     //createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
     D3D_FEATURE_LEVEL featureLevel;
     const D3D_FEATURE_LEVEL featureLevelArray[2] = { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_0, };
-    HRESULT res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext);
+    HRESULT res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &loader::g_pSwapChain, &loader::g_pd3dDevice, &featureLevel, &loader::g_pd3dDeviceContext);
     if (res == DXGI_ERROR_UNSUPPORTED) // Try high-performance WARP software driver if hardware is not available.
-        res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_WARP, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &g_pSwapChain, &g_pd3dDevice, &featureLevel, &g_pd3dDeviceContext);
+        res = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_WARP, nullptr, createDeviceFlags, featureLevelArray, 2, D3D11_SDK_VERSION, &sd, &loader::g_pSwapChain, &loader::g_pd3dDevice, &featureLevel, &loader::g_pd3dDeviceContext);
     if (res != S_OK)
         return false;
 
@@ -201,22 +194,22 @@ bool CreateDeviceD3D(HWND hWnd)
 void CleanupDeviceD3D()
 {
     CleanupRenderTarget();
-    if (g_pSwapChain) { g_pSwapChain->Release(); g_pSwapChain = nullptr; }
-    if (g_pd3dDeviceContext) { g_pd3dDeviceContext->Release(); g_pd3dDeviceContext = nullptr; }
-    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = nullptr; }
+    if (loader::g_pSwapChain) { loader::g_pSwapChain->Release(); loader::g_pSwapChain = nullptr; }
+    if (loader::g_pd3dDeviceContext) { loader::g_pd3dDeviceContext->Release(); loader::g_pd3dDeviceContext = nullptr; }
+    if (loader::g_pd3dDevice) { loader::g_pd3dDevice->Release(); loader::g_pd3dDevice = nullptr; }
 }
 
 void CreateRenderTarget()
 {
     ID3D11Texture2D* pBackBuffer;
-    g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
-    g_pd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_mainRenderTargetView);
+    loader::g_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&pBackBuffer));
+    loader::g_pd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &loader::g_mainRenderTargetView);
     pBackBuffer->Release();
 }
 
 void CleanupRenderTarget()
 {
-    if (g_mainRenderTargetView) { g_mainRenderTargetView->Release(); g_mainRenderTargetView = nullptr; }
+    if (loader::g_mainRenderTargetView) { loader::g_mainRenderTargetView->Release(); loader::g_mainRenderTargetView = nullptr; }
 }
 
 // Forward declare message handler from imgui_impl_win32.cpp
@@ -232,8 +225,8 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_SIZE:
         if (wParam == SIZE_MINIMIZED)
             return 0;
-        g_ResizeWidth = (UINT)LOWORD(lParam); // Queue resize
-        g_ResizeHeight = (UINT)HIWORD(lParam);
+        loader::g_ResizeWidth = (UINT)LOWORD(lParam); // Queue resize
+        loader::g_ResizeHeight = (UINT)HIWORD(lParam);
         return 0;
     case WM_SYSCOMMAND:
         if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
