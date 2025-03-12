@@ -9,25 +9,31 @@ namespace loader
 		{
 			ImVec2 s = (specified_size.x == 0 || specified_size.y == 0) ? ImVec2(images[*selected]->size[0],
 				images[*selected]->size[1]) : specified_size;
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_WindowBg));
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 0));
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 			centeredchild("", ImVec2(s.x + 15, s.y), false, [=]
-				{
+				{				
 					int ret = *selected;
 					float opos = ImGui::GetCursorPosY();
-					float npos = ImGui::GetContentRegionAvail().y / 2;
+					float npos = (ImGui::GetContentRegionAvail().y / 2) - 20;
 					ImGui::SetCursorPosY(npos);
-					if (ImGui::Button("<"))
+					if (ImGui::Button("B\nA\nC\nK"))
 						ret --;
 					ImGui::SameLine();
 					ImGui::SetCursorPosY(opos);
 					ImGui::Image((void*)images[*selected]->view, s);
 					ImGui::SameLine();
 					ImGui::SetCursorPosY(npos);
-					if (ImGui::Button(">"))
+					if (ImGui::Button("N\nE\nX\nT"))
 						ret ++;
 					if (ret > (images.size() - 1)) ret = 0;//back and forth function
 					if (ret < 0) ret = (images.size() - 1);
 					*selected = ret;
 				});
+			ImGui::PopStyleVar();
+			ImGui::PopStyleVar();
+			ImGui::PopStyleColor();
 		}
 
 		inline Image* download_and_load_image_to_list(const char* path, const char* link, std::vector<loader::Image*>* image_dir = nullptr)
