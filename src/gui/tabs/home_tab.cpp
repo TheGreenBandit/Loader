@@ -16,7 +16,7 @@ namespace loader
 		
 		if (ImGui::Button("Video Tutorial")) 
 			ShellExecuteA(0, 0, "https://www.youtube.com/watch?v=BonLkFNnO9w", 0, 0, SW_HIDE);
-		if (ImGui::Button("Join the discord here!"))
-			ShellExecuteA(0, 0, "https://discord.gg/eVBBZrEy8j", 0, 0, SW_HIDE);
+		//if (ImGui::Button("Join the discord here!"))
+		//	ShellExecuteA(0, 0, "https://discord.gg/eVBBZrEy8j", 0, 0, SW_HIDE);
 	}
 }
