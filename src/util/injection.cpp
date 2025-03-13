@@ -24,7 +24,7 @@ namespace loader
 	void injection::inject()
 	{
 		g_logger.log("called inject");
-		switch (g_gui.tab)
+		switch (g_gui.game)
 		{
 			case LETHAL_COMPANY:
 			{
@@ -43,16 +43,16 @@ namespace loader
 				util::download_menu("TheGreenBandit", "Unk");
 				mono_inject(g_gui.tab);
 			}break;
-			case GTAV: //this and under shouldnt call as not implemented! also i havent made phasmo menu yet and blade is outdated
-			{
-				util::download_menu("TheGreenBandit", "Blade");
-				inject_dll(g_gui.tab);
-			}break;
-			case PHASMOPHOBIA:
-			{
-				util::download_menu("TheGreenBandit", "PhasmoMenu");
-				inject_dll(g_gui.tab);
-			}break;
+			//case GTAV: //this and under shouldnt call as not implemented! also i havent made phasmo menu yet and blade is outdated
+			//{
+			//	util::download_menu("TheGreenBandit", "Blade");
+			//	inject_dll(g_gui.tab);
+			//}break;
+			//case PHASMOPHOBIA:
+			//{
+			//	util::download_menu("TheGreenBandit", "PhasmoMenu");
+			//	inject_dll(g_gui.tab);
+			//}break;
 			default: break;
 		}
 	}
@@ -60,35 +60,35 @@ namespace loader
 	void injection::inject_dll(etab tab, std::string_view npath, std::string_view nwindow) {
 		std::thread([=] 
 			{
-				fs::path path = npath;
-				if (npath == "")
-				{
-					if (tab == GTAV)
-						g.gtav.alternate_path != "" ? path = g.gtav.alternate_path : path = fs::current_path() / "Blade" / "Blade.dll";
-					else
-						path = fs::current_path() / "Phasmenu" / "Phasmenu.dll";
-				}
-				auto window = nwindow.data();
-				if (nwindow == "")
-				{
-					if (tab == GTAV)
-						window = "Grand Theft Auto V";
-					else
-						window = "Phasmophobia";
-				}
+				//fs::path path = npath;
+				//if (npath == "")
+				//{
+				//	if (tab == GTAV)
+				//		g.gtav.alternate_path != "" ? path = g.gtav.alternate_path : path = fs::current_path() / "Blade" / "Blade.dll";
+				//	else
+				//		path = fs::current_path() / "Phasmenu" / "Phasmenu.dll";
+				//}
+				//auto window = nwindow.data();
+				//if (nwindow == "")
+				//{
+				//	if (tab == GTAV)
+				//		window = "Grand Theft Auto V";
+				//	else
+				//		window = "Phasmophobia";
+				//}
 
-				//std::this_thread::sleep_for(std::chrono::milliseconds(globals.injection_delay)); implement me?
-				HWND hwnd = FindWindowA(NULL, window);
-				DWORD pid; GetWindowThreadProcessId(hwnd, &pid);
-				HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
-				LPVOID pDllPath = VirtualAllocEx(handle, 0, strlen(path.string().c_str()) + 1, MEM_COMMIT, PAGE_READWRITE);
-				WriteProcessMemory(handle, pDllPath, (LPVOID)path.string().c_str(), strlen(path.string().c_str()) + 1, 0);
-				HANDLE hLoadThread = CreateRemoteThread(handle, 0, 0, (LPTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandleA("Kernel32.dll"), "LoadLibraryA"), pDllPath, 0, 0);
-				WaitForSingleObject(hLoadThread, INFINITE);
-				VirtualFreeEx(handle, pDllPath, strlen(path.string().c_str()) + 1, MEM_RELEASE);
+				////std::this_thread::sleep_for(std::chrono::milliseconds(globals.injection_delay)); implement me?
+				//HWND hwnd = FindWindowA(NULL, window);
+				//DWORD pid; GetWindowThreadProcessId(hwnd, &pid);
+				//HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+				//LPVOID pDllPath = VirtualAllocEx(handle, 0, strlen(path.string().c_str()) + 1, MEM_COMMIT, PAGE_READWRITE);
+				//WriteProcessMemory(handle, pDllPath, (LPVOID)path.string().c_str(), strlen(path.string().c_str()) + 1, 0);
+				//HANDLE hLoadThread = CreateRemoteThread(handle, 0, 0, (LPTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandleA("Kernel32.dll"), "LoadLibraryA"), pDllPath, 0, 0);
+				//WaitForSingleObject(hLoadThread, INFINITE);
+				//VirtualFreeEx(handle, pDllPath, strlen(path.string().c_str()) + 1, MEM_RELEASE);
 
-				if (g.auto_close)
-					active = false;
+				//if (g.auto_close)
+				//	active = false;
 			}
 
 		).detach();
@@ -101,7 +101,7 @@ namespace loader
 		const char* _namespace = "";
 		auto _class = "Loader", _method = "Init";
 
-		switch (g_gui.tab)
+		switch (g_gui.game)
 		{
 			case LETHAL_COMPANY:
 			{
@@ -121,15 +121,15 @@ namespace loader
 				window = "REPO";
 				_namespace = "Unk";
 			}break;
-			default: return;
+			default: { g_logger.log("Game is not valid, returning"); return; }
 		}
 		g_logger.log(window);
 		g_logger.log(path.string());
 		g_logger.log(_namespace);
 		//smi.exe inject -p "Content Warning" -a "Menus/SpookSuite/spooksuite.dll" -n "SpookSuite" -c "Loader" -m "Init"
 		HWND hwnd = FindWindowA(NULL, window);
-		if (hwnd == nullptr)
-			return g_logger.log("failed to find game window, cancelling injection.");
+		//if (hwnd == nullptr) //this is always true???????????????????
+		//	return g_logger.log("failed to find game window, cancelling injection.");
 
 		DWORD pid; GetWindowThreadProcessId(hwnd, &pid);
 		std::string command = std::format(

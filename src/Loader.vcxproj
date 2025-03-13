@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -123,6 +123,9 @@
     <ClInclude Include="util\injection.hpp" />
     <ClInclude Include="util\logger.hpp" />
     <ClInclude Include="util\util.hpp" />
+    <ClInclude Include="widgets\fa_solid_900.h" />
+    <ClInclude Include="widgets\font_awesome_5.h" />
+    <ClInclude Include="widgets\imgui_notify.h" />
     <ClInclude Include="widgets\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
@@ -134,10 +137,10 @@
     <ClCompile Include="..\includes\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\includes\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\includes\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="gui\tabs\content_warning_tab.cpp" />
+    <ClCompile Include="gui\tabs\changelog_tab.cpp" />
+    <ClCompile Include="gui\tabs\chat_tab.cpp" />
+    <ClCompile Include="gui\tabs\faq_tab.cpp" />
     <ClCompile Include="gui\tabs\home_tab.cpp" />
-    <ClCompile Include="gui\tabs\lethal_company_tab.cpp" />
-    <ClCompile Include="gui\tabs\repo_tab.cpp" />
     <ClCompile Include="gui\tabs\settings_tab.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="gui\gui.cpp" />

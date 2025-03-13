@@ -10,7 +10,7 @@ namespace loader
             ImGui::Text("Settings are being worked upon, please suggest in the discord!");
             g_gui_util.centeredchild("Settings", ImVec2(180, 110), true, [] {
                 static bool checkbox = false;
-                ImGui::Checkbox("Test", &checkbox);
+                ImGui::Checkbox("Close On Inject", &g.auto_close);
                 });
             //ImGui::BeginChild("Auto Inject", ImVec2(180, 110), true);
             //g_gui_util.centertext("Auto Inject", 1);

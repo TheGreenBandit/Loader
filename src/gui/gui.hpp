@@ -16,14 +16,21 @@ namespace loader
 	enum etab : uint32_t
 	{
 		HOME,
+		CHAT,
+		CHANGELOG,
+		FAQ,
+		SETTINGS
+	};
+
+	enum egame : uint32_t
+	{
 		//mono
 		LETHAL_COMPANY,
 		CONTENT_WARNING,
 		REPO,
-		//dll
-		GTAV,
-		PHASMOPHOBIA,
-		SETTINGS
+		////dll
+		//GTAV,
+		//PHASMOPHOBIA
 	};
 
 	struct Image
@@ -35,15 +42,40 @@ namespace loader
 	inline class gui
 	{
 	public:
+		std::string_view game_to_name(egame tab)
+		{
+			switch (tab)
+			{
+				case LETHAL_COMPANY: return "Lethal Company";
+				case CONTENT_WARNING: return "Content Warning";
+				case REPO: return "R.E.P.O";
+				default: return "NULL";
+			}
+		}
+
 		std::string_view tab_to_name(etab tab)
 		{
 			switch (tab)
 			{
-			case HOME: return "Home";
-			case LETHAL_COMPANY: return "Lethal Company";
-			case CONTENT_WARNING: return "Content Warning";
-			case REPO: return "R.E.P.O";
-			case SETTINGS: return "Settings";
+				case HOME: return "Home";
+				case CHAT: return "Chat";
+				case CHANGELOG: return "Changelog";
+				case FAQ: return "FAQ";
+				case SETTINGS: return "Settings";
+				default: return "NULL";
+			}
+		}
+
+		const char* get_tab_icon(etab tab)
+		{
+			switch (tab)
+			{
+			case HOME: return ICON_FA_HOME;
+			case CHAT: return ICON_FA_BIOHAZARD;
+			case CHANGELOG: return ICON_FA_BOOK;
+			case FAQ: return ICON_FA_QUESTION_CIRCLE;
+			case SETTINGS: return ICON_FA_COG;
+			default: return "NULL";
 			}
 		}
 
@@ -51,13 +83,15 @@ namespace loader
 		void render();
 
 		void home_tab();
-		void content_warning_tab();
-		void lethal_company_tab();
-		void repo_tab();
+		void chat_tab();
+		void changelog_tab();
+		void faq_tab();
 		void settings_tab();
 
 		bool load_texture_from_file(const char* path, ID3D11Device* d3dDevice, Image** image);
 
+		ImVec2 size = { 800, 600 };
+		egame game;
 		etab tab;
 		ImFont* default_font;
 		ImFont* segoeui_font;

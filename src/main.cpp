@@ -5,6 +5,10 @@
 #include "common.hpp"
 #include "util/injection.hpp"
 #include "util/gui_util.hpp"
+#include "widgets/imgui_notify.h"
+
+#pragma warning (disable: 4996)
+
 // Forward declarations of helper functions
 bool CreateDeviceD3D(HWND hWnd);
 void CleanupDeviceD3D();
@@ -17,20 +21,19 @@ using namespace loader;
 void initialize()
 {
     g_gui.initialize();
-    //images n shit
+    g_inject.auto_inject();
+
+    //base stuff
     if (!fs::is_directory(fs::current_path() / "Resources")) fs::create_directory(fs::current_path() / "Resources");
     g_gui.icon = g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "icon.png").string().c_str(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
-    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "unkself.png").string().c_str(), "https://cdn.discordapp.com/attachments/1208846442303852555/1349159830488743957/unkself.png?ex=67d21681&is=67d0c501&hm=fc262b2764be0d6de822569eefad148a8096c31c1f7ca680b5f53e423ebfaf9e&", &g_gui.unkimages);
-    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "unksvisual.png").string().c_str(), "https://cdn.discordapp.com/attachments/1208846442303852555/1349159830836875376/unkvisual.png?ex=67d21681&is=67d0c501&hm=f6eb61d5a540f2755de788714d98d879e44412002ea7779f233e6234aa6dfcbc&", &g_gui.unkimages);
-
-
-    //if (!fs::exists(fs::current_path() / "smi.exe"))
-        util::download_file((fs::current_path() / "smi.exe").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
-    //if (!fs::exists(fs::current_path() / "SharpMonoInjector.dll"))
-        util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
+    util::download_file((fs::current_path() / "smi.exe").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
+    util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
     if (!fs::is_directory(fs::current_path() / "Menus")) fs::create_directory(fs::current_path() / "Menus");
 
-    g_inject.auto_inject();
+    //Unk images
+    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "Unk" / "unkself.png").string().c_str(), "https://cdn.discordapp.com/attachments/1208846442303852555/1349159830488743957/unkself.png?ex=67d21681&is=67d0c501&hm=fc262b2764be0d6de822569eefad148a8096c31c1f7ca680b5f53e423ebfaf9e&", &g_gui.unkimages);
+    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "Unk" / "unksvisual.png").string().c_str(), "https://cdn.discordapp.com/attachments/1208846442303852555/1349159830836875376/unkvisual.png?ex=67d21681&is=67d0c501&hm=f6eb61d5a540f2755de788714d98d879e44412002ea7779f233e6234aa6dfcbc&", &g_gui.unkimages);
+
     g_logger.log("Menu Initialized");
 }
 
@@ -84,8 +87,44 @@ int main(int, char**)
     ImGui_ImplWin32_Init(hwnd);
     ImGui_ImplDX11_Init(loader::g_pd3dDevice, loader::g_pd3dDeviceContext);
 
-    loader::g_gui.default_font = io.Fonts->AddFontDefault();
-    loader::g_gui.segoeui_font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+    fs::path w = std::getenv("SYSTEMROOT");
+    g_logger.log(w.string());
+    fs::path windows_fonts = w.string() + "//Fonts";
+    g_logger.log(windows_fonts.string());
+    fs::path font_file_path = windows_fonts /= "./msyh.ttc";
+    if (!fs::exists(font_file_path))
+        font_file_path = windows_fonts /= "./msyh.ttf";
+    g_logger.log(font_file_path.string());
+    auto font_file = std::ifstream(font_file_path, std::ios::binary | std::ios::ate);
+    const auto font_data_size = static_cast<int>(font_file.tellg());
+    const auto font_data = std::make_unique<std::uint8_t[]>(font_data_size);
+
+    font_file.seekg(0);
+    font_file.read(reinterpret_cast<char*>(font_data.get()), font_data_size);
+    font_file.close();
+
+    {
+        ImFontConfig fnt_cfg{};
+        fnt_cfg.FontDataOwnedByAtlas = false;
+        strcpy(fnt_cfg.Name, "Fnt20px");
+        g_logger.log("font = ");
+        loader::g_gui.segoeui_font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 20.0f, &fnt_cfg,
+            io.Fonts->GetGlyphRangesDefault());
+        fnt_cfg.MergeMode = true;
+        io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 20.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+        io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 20.f, &fnt_cfg, io.Fonts->GetGlyphRangesCyrillic());
+        g_logger.log("merge");
+        ImGui::MergeIconsWithLatestFont(20.f);
+        static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+        ImFontConfig icons_config;
+        icons_config.MergeMode = true;
+        icons_config.PixelSnapH = true;
+        g_logger.log("add font file");
+        io.Fonts->AddFontFromFileTTF("widgets/font_awesome_5", 20.f, &icons_config, icons_ranges);
+        g_logger.log("building");
+        io.Fonts->Build();
+        g_logger.log("yay?");
+    }
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     loader::active = true;

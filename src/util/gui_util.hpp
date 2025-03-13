@@ -5,6 +5,11 @@ namespace loader
 {
 	struct gui_util
 	{
+		inline const char* s(std::string_view string)
+		{
+			return string.data();
+		}
+
 		inline void image_showcase(int* selected, std::vector<Image*> images, ImVec2 specified_size = ImVec2(0,0))
 		{
 			ImVec2 s = (specified_size.x == 0 || specified_size.y == 0) ? ImVec2(images[*selected]->size[0],
@@ -49,8 +54,10 @@ namespace loader
 
 		inline void tab(etab tab)
 		{
-			if (ImGui::Button(g_gui.tab_to_name(tab).data()))
+			ImGui::PushStyleColor(ImGuiCol_Text, (g_gui.tab == tab) ? (&ImGui::GetStyle())->Colors[ImGuiCol_WindowBg] : (&ImGui::GetStyle())->Colors[ImGuiCol_Text]);
+			if (ImGui::Button(std::format("{} {}", g_gui.get_tab_icon(tab), g_gui.tab_to_name(tab).data()).c_str()))
 				g_gui.tab = tab;
+			ImGui::PopStyleColor();
 		}
 		//get me working
 
@@ -85,6 +92,16 @@ namespace loader
 			}
 			if (seperator)
 				ImGui::Separator();
+		}
+
+		inline void push_font_size(float size)
+		{
+			g_gui.segoeui_font->FontSize = size;
+		}
+
+		inline void pop_font_size()
+		{
+			g_gui.segoeui_font->FontSize = 20;
 		}
 
 		inline void righttext(std::string_view text, bool seperator = false)
