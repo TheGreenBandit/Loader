@@ -25,14 +25,26 @@ void initialize()
 
     //base stuff
     if (!fs::is_directory(fs::current_path() / "Resources")) fs::create_directory(fs::current_path() / "Resources");
+    if (!fs::is_directory(fs::current_path() / "Resources" / "Lethal Menu")) fs::create_directory(fs::current_path() / "Resources" / "Lethal Menu");
+    if (!fs::is_directory(fs::current_path() / "Resources" / "Spooksuite")) fs::create_directory(fs::current_path() / "Resources" / "Spooksuite");
+    if (!fs::is_directory(fs::current_path() / "Resources" / "Unk")) fs::create_directory(fs::current_path() / "Resources" / "Unk");
+    if (!fs::is_directory(fs::current_path() / "Menus")) fs::create_directory(fs::current_path() / "Menus");
     g_gui.icon = g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "icon.png").string().c_str(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
     util::download_file((fs::current_path() / "smi.exe").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
     util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
-    if (!fs::is_directory(fs::current_path() / "Menus")) fs::create_directory(fs::current_path() / "Menus");
 
     //Unk images
-    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "Unk" / "unkself.png").string().c_str(), "https://cdn.discordapp.com/attachments/1208846442303852555/1349159830488743957/unkself.png?ex=67d21681&is=67d0c501&hm=fc262b2764be0d6de822569eefad148a8096c31c1f7ca680b5f53e423ebfaf9e&", &g_gui.unkimages);
-    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "Unk" / "unksvisual.png").string().c_str(), "https://cdn.discordapp.com/attachments/1208846442303852555/1349159830836875376/unkvisual.png?ex=67d21681&is=67d0c501&hm=f6eb61d5a540f2755de788714d98d879e44412002ea7779f233e6234aa6dfcbc&", &g_gui.unkimages);
+    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "Unk" / "unkself.png").string().c_str(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/unkself.png", &g_gui.unkimages);
+    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "Unk" / "unksvisual.png").string().c_str(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/unkvisual.png", &g_gui.unkimages);
+
+    //Spooksuite images
+
+    //lethalmenu images
+
+    //changelogs
+    util::download_file((fs::current_path() / "Resources" / "Lethal Menu" / "Changelog.txt").string(), "https://github.com/IcyRelic/LethalMenu/raw/refs/heads/master/LethalMenu/Resources/Changelog.txt");
+    util::download_file((fs::current_path() / "Resources" / "Spooksuite" / "Changelog.txt").string(), "https://github.com/IcyRelic/SpookSuite/raw/refs/heads/master/SpookSuite/Resources/Changelog.txt");
+    util::download_file((fs::current_path() / "Resources" / "Unk" / "Changelog.txt").string(), "https://github.com/thegreenbandit/Unk/raw/refs/heads/master/Unk/Resources/Changelog.txt");
 
     g_logger.log("Menu Initialized");
 }
@@ -44,8 +56,14 @@ int main(int, char**)
     loader::g_logger.clear_log();
     loader::g_logger.log("Welcome!");
     loader::util::write_update_bat();
-    if (loader::util::get_release_title("TheGreenBandit", "Loader") != VERSION)
+    auto title = loader::util::get_release_title("TheGreenBandit", "Loader");
+    if (title != VERSION)
     {
+        if (title == "FAILED")
+        {
+            g_logger.log("Failed to fetch internet, check your connection");
+            exit(0);
+        }
         loader::g_logger.log("The loader is outdated! Closing and downloading the newest version.");
         system("update.bat");
         exit(0);
@@ -88,13 +106,10 @@ int main(int, char**)
     ImGui_ImplDX11_Init(loader::g_pd3dDevice, loader::g_pd3dDeviceContext);
 
     fs::path w = std::getenv("SYSTEMROOT");
-    g_logger.log(w.string());
     fs::path windows_fonts = w.string() + "//Fonts";
-    g_logger.log(windows_fonts.string());
     fs::path font_file_path = windows_fonts /= "./msyh.ttc";
     if (!fs::exists(font_file_path))
         font_file_path = windows_fonts /= "./msyh.ttf";
-    g_logger.log(font_file_path.string());
     auto font_file = std::ifstream(font_file_path, std::ios::binary | std::ios::ate);
     const auto font_data_size = static_cast<int>(font_file.tellg());
     const auto font_data = std::make_unique<std::uint8_t[]>(font_data_size);
@@ -107,23 +122,18 @@ int main(int, char**)
         ImFontConfig fnt_cfg{};
         fnt_cfg.FontDataOwnedByAtlas = false;
         strcpy(fnt_cfg.Name, "Fnt20px");
-        g_logger.log("font = ");
         loader::g_gui.segoeui_font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 20.0f, &fnt_cfg,
             io.Fonts->GetGlyphRangesDefault());
         fnt_cfg.MergeMode = true;
         io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 20.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
         io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 20.f, &fnt_cfg, io.Fonts->GetGlyphRangesCyrillic());
-        g_logger.log("merge");
         ImGui::MergeIconsWithLatestFont(20.f);
         static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
         ImFontConfig icons_config;
         icons_config.MergeMode = true;
         icons_config.PixelSnapH = true;
-        g_logger.log("add font file");
         io.Fonts->AddFontFromFileTTF("widgets/font_awesome_5", 20.f, &icons_config, icons_ranges);
-        g_logger.log("building");
         io.Fonts->Build();
-        g_logger.log("yay?");
     }
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);

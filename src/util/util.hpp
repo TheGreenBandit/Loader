@@ -108,6 +108,16 @@ namespace loader::util
         return std::vector<char>();
     }
 
+    inline std::string read_file(std::string_view path) noexcept
+    {
+        std::ifstream file(path.data());
+        if (!file.is_open())
+            return "";
+        std::stringstream buf;
+        buf << file.rdbuf();
+        return buf.str();
+    }
+
     inline std::string_view get_username()
     {
         char user[25];

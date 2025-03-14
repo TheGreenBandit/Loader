@@ -31,6 +31,8 @@ namespace loader
             selected_image = 0;
         }
         
+        ImGui::Separator();
+
         switch (selected_log)
         {
             case 0: 
@@ -39,16 +41,23 @@ namespace loader
             }break;
             case 1:
             {
-                ImGui::Text("Lethal changelog, add stuff here");
+                ImGui::BeginChild("lethalmenuchangelog", ImVec2(530, 440), true);
+                ImGui::TextWrapped(util::read_file((fs::current_path() / "Resources" / "Lethal Menu" / "Changelog.txt").string()).c_str());
+                ImGui::EndChild();
             }break;
             case 2:
             {
-                ImGui::Text("SpookSuite changelog, add stuff here");
+                ImGui::BeginChild("spooksuitechangelog", ImVec2(530, 440), true);
+                ImGui::TextWrapped(util::read_file((fs::current_path() / "Resources" / "Spooksuite" / "Changelog.txt").string()).c_str());
+                ImGui::EndChild();
             }break;
             case 3:
             {
+                //todo
                 g_gui_util.image_showcase(&selected_image, unkimages, ImVec2(400, 200));
-                ImGui::Text("Unk changelog, add stuff here");
+                ImGui::BeginChild("unkchangelog", ImVec2(530, 440), true);
+                ImGui::TextWrapped(util::read_file((fs::current_path() / "Resources" / "Unk" / "Changelog.txt").string()).c_str());
+                ImGui::EndChild();
             }break;
         }
     }

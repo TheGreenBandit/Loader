@@ -15,9 +15,9 @@ namespace loader
 			ImVec2 s = (specified_size.x == 0 || specified_size.y == 0) ? ImVec2(images[*selected]->size[0],
 				images[*selected]->size[1]) : specified_size;
 			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_WindowBg));
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(1, 0));
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-			centeredchild("", ImVec2(s.x + 15, s.y), false, [=]
+			centeredchild("", ImVec2(s.x + 20, s.y), false, [=]
 				{				
 					int ret = *selected;
 					float opos = ImGui::GetCursorPosY();
