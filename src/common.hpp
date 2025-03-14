@@ -27,7 +27,7 @@ namespace fs = std::filesystem;
 using namespace std::chrono_literals;
 
 #define WINDOW_NAME "TGB's Loader"
-#define VERSION "V2.0 Major GUI Rework"
+#define VERSION "V2.1 Polishing GUI"
 
 namespace loader
 {

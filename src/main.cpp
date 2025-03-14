@@ -56,10 +56,9 @@ int main(int, char**)
     loader::g_logger.clear_log();
     loader::g_logger.log("Welcome!");
     loader::util::write_update_bat();
-    auto title = loader::util::get_release_title("TheGreenBandit", "Loader");
-    if (title != VERSION)
+    if (loader::util::get_release_title("TheGreenBandit", "Loader") != VERSION)
     {
-        if (title == "FAILED")
+        if (loader::util::get_release_title("TheGreenBandit", "Loader") == "FAILED")
         {
             g_logger.log("Failed to fetch internet, check your connection");
             exit(0);
