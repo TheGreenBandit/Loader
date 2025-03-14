@@ -78,6 +78,9 @@
     <ClInclude Include="widgets\fa_solid_900.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="util\message_system.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core/globals.cpp">
@@ -129,6 +132,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gui\tabs\faq_tab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util\message_system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

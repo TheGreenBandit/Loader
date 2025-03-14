@@ -2,6 +2,11 @@
 
 #include "../common.hpp"
 #include "../token.hpp"
+#include <windows.h>
+#include <iostream>
+#include <shlobj.h>
+#include <string>
+#include <fstream>
 
 namespace loader::util
 { 

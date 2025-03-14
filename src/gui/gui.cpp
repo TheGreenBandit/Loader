@@ -7,6 +7,11 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../widgets/stb_image.h"
 #include "../util/injection.hpp"
+#include <windows.h>
+#include <iostream>
+#include <Windows.System.UserProfile.h>
+
+using namespace ABI::Windows::System::UserProfile;
 
 namespace loader
 {
@@ -54,7 +59,7 @@ namespace loader
     inline void adjust()
     {
         auto p = ImGui::GetCursorPos();
-        ImGui::SetCursorPos(ImVec2(p.x + 4, p.y));
+        ImGui::SetCursorPos(ImVec2(p.x + 5, p.y));
     }
 
     void gui::render()
@@ -70,7 +75,7 @@ namespace loader
                     ImGui::BeginChild("Left Main", ImVec2(210, size.y - (&ImGui::GetStyle())->WindowPadding.y * 1.5));
                     {
                         auto p = ImGui::GetCursorPos(); //padding, could definitetly simplify but fuckit
-                        ImGui::SetCursorPos(ImVec2(p.x + 4, p.y + 4));
+                        ImGui::SetCursorPos(ImVec2(p.x + 5, p.y + 5));
                         ImGui::Image((void*)icon->view,
                             ImVec2(200, 200),
                             ImVec2(0, 0),
@@ -78,6 +83,7 @@ namespace loader
                             ImVec4(255, 255, 255, 255));
                         adjust();
                         g_gui_util.push_font_size(24);
+                        ImGui::SetNextItemWidth(200);
                         if (ImGui::BeginCombo("", games[game])) //fixme
                         {
                             for (int game_ = 0; game_ <= 2; game_++)
@@ -91,10 +97,10 @@ namespace loader
                         }
                         g_gui_util.pop_font_size();
                         adjust();
-                        if (ImGui::Button(g_gui_util.s(std::string("Start ") + ICON_FA_ARROW_RIGHT), ImVec2(ImGui::GetContentRegionAvail().x - 4, 40)))
+                        if (ImGui::Button(g_gui_util.s(std::string("Start ") + ICON_FA_ARROW_RIGHT), ImVec2(ImGui::GetContentRegionAvail().x - 5, 40)))
                             g_inject.inject();
                         adjust();
-                        if (ImGui::Button("Launch Game"))
+                        if (ImGui::Button("Launch Game", ImVec2(ImGui::GetContentRegionAvail().x - 5, 35)))
                         {
                             if (game == LETHAL_COMPANY)
                                 ShellExecuteA(0, "open", "steam://rungameid/1966720", 0, 0, SW_HIDE);
@@ -108,12 +114,13 @@ namespace loader
                         g_gui_util.push_font_size(24);
                         ImGui::Text(VERSION);
                         adjust();
-                        ImGui::Text("Last Updated 3/12/2025");
+                        ImGui::Text("Last Updated 3/13/2025");
+                        ImGui::Dummy(ImVec2(0, 160));
                         adjust();
                         ImGui::BeginGroup();
-                        //user icon
+                        //IUserInformationStatics::GetAccountPicture()
                         //ImGui::Sameline();
-                        ImGui::Text((std::string("Welcome Back ") + util::get_username().data()).c_str());
+                        ImGui::TextWrapped((std::string("Welcome Back ") + util::get_username().data()).c_str());
                         ImGui::EndGroup();
                         g_gui_util.pop_font_size();
                     }
@@ -123,7 +130,7 @@ namespace loader
                 ImGui::SameLine();
                 ImGui::BeginGroup();
                 {
-                    ImGui::BeginChild("Main Tab Bar", ImVec2(ImGui::GetContentRegionAvail().x + (((&ImGui::GetStyle())->WindowPadding.x) + ((&ImGui::GetStyle())->FramePadding.x)), 60), true);
+                    ImGui::BeginChild("Main Tab Bar", ImVec2(ImGui::GetContentRegionAvail().x - (((&ImGui::GetStyle())->WindowPadding.x) - ((&ImGui::GetStyle())->FramePadding.x) - 9), 60), true);
                     {
                         g_gui_util.tab(HOME);
                         ImGui::SameLine();
@@ -135,7 +142,7 @@ namespace loader
                         ImGui::SameLine();
                         g_gui_util.tab(SETTINGS);
                         ImGui::SameLine();
-                        ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - ImGui::CalcTextSize(" X ").x * 2);
+                        ImGui::SetCursorPosX(ImGui::GetContentRegionMax().x - ImGui::CalcTextSize(" X ").x);
                         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(-3, -3));
                         if (ImGui::Button("X", ImVec2(20, 20)))
                             active = !active;
@@ -143,7 +150,7 @@ namespace loader
                     }
                     ImGui::EndChild();
 
-                    ImGui::BeginChild("Main Tab Display", ImVec2(ImGui::GetContentRegionAvail().x + (((&ImGui::GetStyle())->WindowPadding.x) + ((&ImGui::GetStyle())->FramePadding.x)), ImGui::GetContentRegionAvail().y), true);
+                    ImGui::BeginChild("Main Tab Display", ImVec2(ImGui::GetContentRegionAvail().x - (((&ImGui::GetStyle())->WindowPadding.x) - ((&ImGui::GetStyle())->FramePadding.x) - 9), ImGui::GetContentRegionAvail().y), true);
                     {
                         switch (tab)
                         {

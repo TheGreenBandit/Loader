@@ -131,7 +131,7 @@ int main(int, char**)
         static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
         ImFontConfig icons_config;
         icons_config.MergeMode = true;
-        icons_config.PixelSnapH = true;
+        icons_config.PixelSnapH = false;
         io.Fonts->AddFontFromFileTTF("widgets/font_awesome_5", 20.f, &icons_config, icons_ranges);
         io.Fonts->Build();
     }

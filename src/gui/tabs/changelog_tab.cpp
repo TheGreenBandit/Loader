@@ -3,33 +3,29 @@
 
 namespace loader
 {
+    static int selected_image = 0;
+    static int selected_log = 0;
+
+    void switchbutton(const char* name, int id)
+    {
+        ImGui::PushStyleColor(ImGuiCol_Text, (id == selected_log) ? (&ImGui::GetStyle())->Colors[ImGuiCol_WindowBg] : (&ImGui::GetStyle())->Colors[ImGuiCol_Text]);
+        if (ImGui::Button(name))
+        {
+            selected_log = id;
+            selected_image = 0;
+        }
+        ImGui::PopStyleColor();
+    }
+
     void gui::changelog_tab()
     {
-        static int selected_image = 0;
-        static int selected_log = 0;
-        if (ImGui::Button("Loader"))
-        {
-            selected_log = 0;
-            selected_image = 0;//reset image showcase for each on switch tab
-        }
+        switchbutton("Loader", 0);
         ImGui::SameLine();
-        if (ImGui::Button("Lethal Menu"))
-        {
-            selected_log = 1;
-            selected_image = 0;
-        }
+        switchbutton("Lethal Menu", 1);
         ImGui::SameLine();
-        if (ImGui::Button("SpookSuite"))
-        {
-            selected_log = 2;
-            selected_image = 0;
-        }
+        switchbutton("Spooksuite", 2);
         ImGui::SameLine();
-        if (ImGui::Button("Unk"))
-        {
-            selected_log = 3;
-            selected_image = 0;
-        }
+        switchbutton("Unk", 3);
         
         ImGui::Separator();
 

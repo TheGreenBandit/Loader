@@ -4,15 +4,17 @@
 
 namespace loader
 {
-	class message_system
+	inline class message_system
 	{
+		std::vector<std::string> messages;
+	private:
 		void loop();
 		void clear_messages();
+
 	public:
-		//i will manually remove the messages from the file once a week or so. or if reaches certain size
-		std::vector<std::string> messages;
 		
 	public:
-
-	};
+		void send_message(std::string_view message);
+		void display_messages();
+	} g_message_system;
 }

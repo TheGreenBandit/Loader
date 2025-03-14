@@ -17,20 +17,22 @@ namespace loader
 			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_WindowBg));
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-			centeredchild("", ImVec2(s.x + 20, s.y), false, [=]
+			ImVec2 c = { s.x + 40, s.y };
+			centeredchild("", c, false, [=]
 				{				
 					int ret = *selected;
 					float opos = ImGui::GetCursorPosY();
 					float npos = (ImGui::GetContentRegionAvail().y / 2) - 20;
-					ImGui::SetCursorPosY(npos);
-					if (ImGui::Button("B\nA\nC\nK"))
+					ImGui::SetCursorPosY(opos);
+					if (ImGui::Button(ICON_FA_ARROW_LEFT, ImVec2(20, c.y)))
 						ret --;
 					ImGui::SameLine();
 					ImGui::SetCursorPosY(opos);
 					ImGui::Image((void*)images[*selected]->view, s);
 					ImGui::SameLine();
-					ImGui::SetCursorPosY(npos);
-					if (ImGui::Button("N\nE\nX\nT"))
+					ImGui::SetCursorPosY(opos);
+
+					if (ImGui::Button(ICON_FA_ARROW_RIGHT, ImVec2(20, c.y)))
 						ret ++;
 					if (ret > (images.size() - 1)) ret = 0;//back and forth function
 					if (ret < 0) ret = (images.size() - 1);

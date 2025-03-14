@@ -98,7 +98,5 @@ namespace loader
 		std::vector<Image*> unkimages;
 		Image* icon;
 		Image* unkself;
-
-
 	} g_gui;
 }

@@ -1,34 +1,22 @@
 #include "../gui.hpp"
 #include "../../util/gui_util.hpp"
+#include "../../util/message_system.hpp"
 
 namespace loader
 {
-    inline void userchat(std::string user, std::string string)
-    {
-        if (user.size() > 20 || user.size() < 3)
-            return;
-
-        if (string.size() < 150)
-            messages.push_back()
-            ImGui::TextWrapped(std::format("{} {}: {}", ICON_FA_USER, user, string).c_str());
-    }
     void gui::chat_tab()
     {
-        std::vector<const char*> messages;
-        static char message = 'HI';
-        ImGui::Text("I'm still deliberating and figuring out how to add this tab.");
-        ImGui::BeginChild("chatmain", ImVec2(530, 240), true);
-        for (auto message : messages)
-            ImGui::TextWrapped(
-        userchat("TheGreenBandit", "Welcome to the loader! I'm still figuring out this tab. Check back later!");
-        userchat("Loader User", "Hi!");
+        static char message = ' ';
+        ImGui::Text("I'm still figuring out how to add this tab. Check back at a later time");
+        ImGui::BeginChild("chatmain", ImVec2(530, 360), true);
+        g_message_system.display_messages();      
         ImGui::EndChild();
         ImGui::Dummy(ImVec2(0, 20));
-        ImGui::BeginChild("chatsender", ImVec2(530, 180), true);
-        ImGui::InputText(std::format("Message {}/50:", sizeof(message)).c_str(), &message, 50);
+        ImGui::BeginChild("chatsender", ImVec2(530, 70), true);
+        ImGui::InputText(std::format("Message {}/50:", "0"/*, std::string((&message)).size() this works but every time you type it boots you out of typing*/).c_str(), &message, 50);
         ImGui::SameLine();
         if (ImGui::Button("Send"))
-            userchat("username", &message); //send chat logic
+            g_message_system.send_message(std::string(&message));
         ImGui::EndChild();
     }
 }
