@@ -114,7 +114,7 @@ namespace loader
                         g_gui_util.push_font_size(24);
                         ImGui::Text(VERSION);
                         adjust();
-                        ImGui::Text("Last Updated 3/13/2025");
+                        ImGui::Text((std::string("Last Updated ") + TIME).c_str());
                         ImGui::Dummy(ImVec2(0, 160));
                         adjust();
                         ImGui::BeginGroup();

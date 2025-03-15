@@ -28,18 +28,20 @@ namespace loader
 		{
 			case LETHAL_COMPANY:
 			{
-				g_logger.log("using mono inject");
+				g_logger.log("Injecting LethalMenu");
+				/*I have to do this here because i cant make releases for them lol*/ if (!std::filesystem::is_directory(std::filesystem::current_path() / "Menus" / "LethalMenu")) std::filesystem::create_directory(std::filesystem::current_path() / "Menus" / "LethalMenu");
 				util::download_file((fs::current_path() / "Menus" / "LethalMenu" / "lethalmenu.dll").string(), "https://icyrelic.com/release/lethalmenu/LethalMenu.dll");
+				mono_inject(g_gui.tab);
 			}break;
 			case CONTENT_WARNING:
 			{
-				g_logger.log("using mono inject");
+				g_logger.log("Injecting Spooksuite");
 				util::download_menu("IcyRelic", "SpookSuite");
 				mono_inject(g_gui.tab);
 			}break;
 			case REPO:
 			{
-				g_logger.log("using mono inject");
+				g_logger.log("Injecting Unk");
 				util::download_menu("TheGreenBandit", "Unk");
 				mono_inject(g_gui.tab);
 			}break;
