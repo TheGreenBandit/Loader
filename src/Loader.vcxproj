@@ -46,6 +46,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Final\</OutDir>
     <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\</IntDir>
+    <ExcludePath>$(CommonExcludePath);$(VC_ExecutablePath_x64);$(VC_LibraryPath_x64)</ExcludePath>
+    <LibraryPath>$C:\Users\TGB\Loader\includes\Discord\Library\lib;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -96,6 +98,8 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -103,6 +107,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);d3d11.lib;dxgi.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\includes\Discord\Library\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -119,6 +124,7 @@
     <ClInclude Include="gui\gui.hpp" />
     <ClInclude Include="..\includes\resources\resource.h" />
     <ClInclude Include="token.hpp" />
+    <ClInclude Include="util\discord_util.hpp" />
     <ClInclude Include="util\gui_util.hpp" />
     <ClInclude Include="util\injection.hpp" />
     <ClInclude Include="util\logger.hpp" />
@@ -145,6 +151,7 @@
     <ClCompile Include="gui\tabs\settings_tab.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="gui\gui.cpp" />
+    <ClCompile Include="util\discord_util.cpp" />
     <ClCompile Include="util\injection.cpp" />
     <ClCompile Include="util\logger.cpp" />
     <ClCompile Include="util\message_system.cpp" />

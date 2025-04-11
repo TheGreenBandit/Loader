@@ -49,11 +49,12 @@ namespace loader
 
     }
 
-    const char* games[3]
+    const char* games[4]
     {
         "Lethal Company",
         "Content Warning",
-        "R.E.P.O"
+        "R.E.P.O",
+        "Gorilla Tag"
     };
     //temp, needa get paddding working on the left main child
     inline void adjust()
@@ -86,7 +87,7 @@ namespace loader
                         ImGui::SetNextItemWidth(200);
                         if (ImGui::BeginCombo("", games[game])) //fixme
                         {
-                            for (int game_ = 0; game_ <= 2; game_++)
+                            for (int game_ = 0; game_ <= 3; game_++)
                             {
                                 if (ImGui::Selectable(games[game_], game_ == game))
                                     game = (egame)game_;
@@ -108,6 +109,8 @@ namespace loader
                                 ShellExecuteA(0, "open", "steam://rungameid/2881650", 0, 0, SW_HIDE);
                             if (game == REPO)
                                 ShellExecuteA(0, "open", "steam://rungameid/3241660", 0, 0, SW_HIDE);
+                            if (game == GTAG)
+                                ShellExecuteA(0, "open", "steam://rungameid/1533390", 0, 0, SW_HIDE);
                         }
                             
                         adjust();

@@ -1,6 +1,7 @@
 #include "../gui.hpp"
 #include "../../util/gui_util.hpp"
 #include "../../util/message_system.hpp"
+#include "../../util/discord_util.hpp"
 
 namespace loader
 {
@@ -16,7 +17,8 @@ namespace loader
         ImGui::InputText(std::format("Message {}/50:", "0"/*, std::string((&message)).size() this works but every time you type it boots you out of typing*/).c_str(), &message, 50);
         ImGui::SameLine();
         if (ImGui::Button("Send"))
-            g_message_system.send_message(std::string(&message));
+            discord_util.send_message(&message);
+            
         ImGui::EndChild();
     }
 }

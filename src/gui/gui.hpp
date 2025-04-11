@@ -28,6 +28,7 @@ namespace loader
 		LETHAL_COMPANY,
 		CONTENT_WARNING,
 		REPO,
+		GTAG,
 		////dll
 		//GTAV,
 		//PHASMOPHOBIA
@@ -49,6 +50,7 @@ namespace loader
 				case LETHAL_COMPANY: return "Lethal Company";
 				case CONTENT_WARNING: return "Content Warning";
 				case REPO: return "R.E.P.O";
+				case GTAG: return "Gorilla Tag";
 				default: return "NULL";
 			}
 		}

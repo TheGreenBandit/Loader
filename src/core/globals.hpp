@@ -22,6 +22,7 @@ namespace loader
 			//NLOHMANN_DEFINE_TYPE_INTRUSIVE(auto_inject, gtav, content_warning, lethal_company, phasmophobia)
 		} auto_inject;
 		bool auto_close = false;
+		std::chrono::system_clock::time_point start_time = std::chrono::system_clock::now();
 		//NLOHMANN_DEFINE_TYPE_INTRUSIVE(globals, auto_inject)
 	};
 	static globals g;

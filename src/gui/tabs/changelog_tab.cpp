@@ -26,7 +26,9 @@ namespace loader
         switchbutton("Spooksuite", 2);
         ImGui::SameLine();
         switchbutton("Unk", 3);
-        
+        ImGui::SameLine();
+        switchbutton("Acid", 4);
+
         ImGui::Separator();
 
         switch (selected_log)
@@ -55,6 +57,12 @@ namespace loader
                 ImGui::TextWrapped(util::read_file((fs::current_path() / "Resources" / "Unk" / "Changelog.txt").string()).c_str());
                 ImGui::EndChild();
             }break;
+            case 4:
+            {
+                ImGui::BeginChild("acidchangelog", ImVec2(530, 440), true);
+                ImGui::TextWrapped(util::read_file((fs::current_path() / "Resources" / "Acid" / "Changelog.txt").string()).c_str());
+                ImGui::EndChild();
+            }
         }
     }
 }

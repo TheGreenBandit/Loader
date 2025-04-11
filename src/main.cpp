@@ -22,12 +22,14 @@ void initialize()
 {
     g_gui.initialize();
     g_inject.auto_inject();
+    g.start_time = std::chrono::system_clock::now();
 
     //base stuff
     if (!fs::is_directory(fs::current_path() / "Resources")) fs::create_directory(fs::current_path() / "Resources");
     if (!fs::is_directory(fs::current_path() / "Resources" / "Lethal Menu")) fs::create_directory(fs::current_path() / "Resources" / "Lethal Menu");
     if (!fs::is_directory(fs::current_path() / "Resources" / "Spooksuite")) fs::create_directory(fs::current_path() / "Resources" / "Spooksuite");
     if (!fs::is_directory(fs::current_path() / "Resources" / "Unk")) fs::create_directory(fs::current_path() / "Resources" / "Unk");
+    if (!fs::is_directory(fs::current_path() / "Resources" / "Acid")) fs::create_directory(fs::current_path() / "Resources" / "Acid");
     if (!fs::is_directory(fs::current_path() / "Menus")) fs::create_directory(fs::current_path() / "Menus");
     g_gui.icon = g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "icon.png").string().c_str(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
     util::download_file((fs::current_path() / "smi.exe").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
@@ -45,7 +47,7 @@ void initialize()
     util::download_file((fs::current_path() / "Resources" / "Lethal Menu" / "Changelog.txt").string(), "https://github.com/IcyRelic/LethalMenu/raw/refs/heads/master/LethalMenu/Resources/Changelog.txt");
     util::download_file((fs::current_path() / "Resources" / "Spooksuite" / "Changelog.txt").string(), "https://github.com/IcyRelic/SpookSuite/raw/refs/heads/master/SpookSuite/Resources/Changelog.txt");
     util::download_file((fs::current_path() / "Resources" / "Unk" / "Changelog.txt").string(), "https://github.com/thegreenbandit/Unk/raw/refs/heads/master/Unk/Resources/Changelog.txt");
-
+    util::download_file((fs::current_path() / "Resources" / "Acid" / "Changelog.txt").string(), "https://github.com/TheGreenBandit/Acid/raw/refs/heads/master/Changelog.txt");
     g_logger.log("Menu Initialized");
 }
 
@@ -136,11 +138,10 @@ int main(int, char**)
     }
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    loader::active = true;
+    active = true;
     initialize();
     // Main
-    static bool done = false;
-    while (!done)
+    while (active)
     {
         // Poll and handle messages (inputs, window resize, etc.)
         // See the WndProc() function below for our to dispatch events to the Win32 backend.
@@ -150,9 +151,9 @@ int main(int, char**)
             ::TranslateMessage(&msg);
             ::DispatchMessage(&msg);
             if (msg.message == WM_QUIT)
-                done = true;
+                active = false;
         }
-        if (done)
+        if (!active)
             break;
         // Handle window being minimized or screen locked
         if (loader::g_SwapChainOccluded && loader::g_pSwapChain->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED)
