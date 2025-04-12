@@ -27,8 +27,8 @@ namespace fs = std::filesystem;
 using namespace std::chrono_literals;
 
 #define WINDOW_NAME "TGB's Loader"
-#define VERSION "V2.31 Finally Injecting Lethalmenu"
-#define TIME "3/15/2025"
+#define VERSION "V2.4 Added Acid Menu"
+#define TIME "4/11/2025"
 
 namespace loader
 {
