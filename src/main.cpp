@@ -23,7 +23,7 @@ void initialize()
     g_gui.initialize();
     g_inject.auto_inject();
     g.start_time = std::chrono::system_clock::now();
-
+#ifdef USE_INTERENT
     //base stuff
     if (!fs::is_directory(fs::current_path() / "Resources")) fs::create_directory(fs::current_path() / "Resources");
     if (!fs::is_directory(fs::current_path() / "Resources" / "Lethal Menu")) fs::create_directory(fs::current_path() / "Resources" / "Lethal Menu");
@@ -47,7 +47,8 @@ void initialize()
     util::download_file((fs::current_path() / "Resources" / "Lethal Menu" / "Changelog.txt").string(), "https://github.com/IcyRelic/LethalMenu/raw/refs/heads/master/LethalMenu/Resources/Changelog.txt");
     util::download_file((fs::current_path() / "Resources" / "Spooksuite" / "Changelog.txt").string(), "https://github.com/IcyRelic/SpookSuite/raw/refs/heads/master/SpookSuite/Resources/Changelog.txt");
     util::download_file((fs::current_path() / "Resources" / "Unk" / "Changelog.txt").string(), "https://github.com/thegreenbandit/Unk/raw/refs/heads/master/Unk/Resources/Changelog.txt");
-    util::download_file((fs::current_path() / "Resources" / "Acid" / "Changelog.txt").string(), "https://github.com/TheGreenBandit/Acid/raw/refs/heads/master/Changelog.txt");
+    util::download_file((fs::current_path() / "Resources" / "Acid" / "Changelog.txt").string(), "https://raw.githubusercontent.com/TheGreenBandit/Acid/refs/heads/main/Changelog.txt");
+#endif
     g_logger.log("Menu Initialized");
 }
 
@@ -58,6 +59,7 @@ int main(int, char**)
     loader::g_logger.clear_log();
     loader::g_logger.log("Welcome!");
     loader::util::write_update_bat();
+#ifdef USE_INTERENT
     if (loader::util::get_release_title("TheGreenBandit", "Loader") != VERSION)
     {
         if (loader::util::get_release_title("TheGreenBandit", "Loader") == "FAILED")
@@ -65,11 +67,11 @@ int main(int, char**)
             g_logger.log("Failed to fetch internet, check your connection");
             exit(0);
         }
-        loader::g_logger.log("The loader is outdated! Closing and downloading the newest version.");
+        loader::g_logger.log(std::format("The loader is outdated! Closing and downloading the newest version. \nCurrent Version: {}\nNew Version: {}", VERSION, loader::util::get_release_title("TheGreenBandit", "Loader")));
         system("update.bat");
         exit(0);
     }
-
+#endif
     WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T(WINDOW_NAME), NULL };
     RegisterClassEx(&wc);
     HWND hwnd = ::CreateWindow(wc.lpszClassName, _T(WINDOW_NAME), WS_POPUPWINDOW, 0, 0, 50, 50, NULL, NULL, wc.hInstance, NULL);

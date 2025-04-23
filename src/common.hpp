@@ -29,6 +29,7 @@ using namespace std::chrono_literals;
 #define WINDOW_NAME "TGB's Loader"
 #define VERSION "V2.4 Added Acid Menu"
 #define TIME "4/11/2025"
+#define USE_INTERENT 1//crappy wifi or messing with version/resources
 
 namespace loader
 {

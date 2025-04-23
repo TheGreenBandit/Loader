@@ -53,7 +53,7 @@ namespace loader
             {
                 //todo
                 g_gui_util.image_showcase(&selected_image, unkimages, ImVec2(400, 200));
-                ImGui::BeginChild("unkchangelog", ImVec2(530, 440), true);
+                ImGui::BeginChild("unkchangelog", ImVec2(530, 240), true);
                 ImGui::TextWrapped(util::read_file((fs::current_path() / "Resources" / "Unk" / "Changelog.txt").string()).c_str());
                 ImGui::EndChild();
             }break;
