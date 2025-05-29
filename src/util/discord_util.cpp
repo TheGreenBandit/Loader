@@ -34,47 +34,72 @@ namespace loader
         //Discord_RunCallbacks();
     }
 
-    std::string escape_json_string(const std::string& input)
-    {
-        std::string output;
+    std::string escape_json_string(const std::string& input) {
+        std::ostringstream oss;
         for (char c : input) {
-            if (c == '"') output += "\\\"";
-            else if (c == '\\') output += "\\\\";
-            else if (c == '\n') output += "\\n";
-            else if (c == '\r') output += "\\r";
-            else if (c == '\t') output += "\\t";
-            else output += c;
+            switch (c) {
+            case '"':  oss << "\\\""; break;
+            case '\\': oss << "\\\\"; break;
+            case '\b': oss << "\\b"; break;
+            case '\f': oss << "\\f"; break;
+            case '\n': oss << "\\n"; break;
+            case '\r': oss << "\\r"; break;
+            case '\t': oss << "\\t"; break;
+            default:
+                if (static_cast<unsigned char>(c) < 0x20)
+                    oss << "\\u" << std::hex << std::setw(4) << std::setfill('0') << (int)c;
+                else
+                    oss << c;
+            }
         }
-        return output;
+        return oss.str();
     }
 
-    void discord_util::send_message(std::string_view message) //todo, nomatter what i get error 400
+    void discord_util::send_message(std::string_view message) //with webhook
     {
-        try
-        {
-            std::string escaped_message = escape_json_string(std::string(message.data()));
-            std::string json_data = "{\n  \"content\": \"" + escaped_message + "\"\n}";
+        try {
+            std::string escaped_message = escape_json_string(std::string(message));
+            std::string json_data = "{ \"content\": \"" + escaped_message + "\" }";
+            URL_COMPONENTSA urlComp = { sizeof(URL_COMPONENTSA) };
+            char hostName[256], urlPath[1024];
 
-            g_logger.log("Sending JSON: " + json_data);
-            g_logger.log("Webhook URL: " + webhook);
+            urlComp.lpszHostName = hostName;
+            urlComp.dwHostNameLength = sizeof(hostName);
+            urlComp.lpszUrlPath = urlPath;
+            urlComp.dwUrlPathLength = sizeof(urlPath);
 
-            HINTERNET hInternet = InternetOpen(L"Discord Webhook Shit", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
-            if (hInternet == NULL)
-                return g_logger.log("InternetOpen failed!");
-
-            HINTERNET hConnect = InternetOpenUrlA(hInternet, webhook.c_str(), NULL, 0, INTERNET_FLAG_RELOAD, 0);
-            if (hConnect == NULL) 
+            if (!InternetCrackUrlA(webhook.c_str(), 0, 0, &urlComp)) 
             {
-                InternetCloseHandle(hInternet);
-                return g_logger.log("InternetOpenUrlA failed!");
+                g_logger.log("Failed to parse webhook URL.");
+                return;
+            }
+            HINTERNET hInternet = InternetOpenA("DiscordWebhookClient", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+            if (!hInternet)
+            {
+                g_logger.log("InternetOpenA failed!");
+                return;
             }
 
-            std::string content_length = "Content-Length: " + std::to_string(json_data.size()) + "\r\n";
-            std::string headers = "Content-Type: application/json\r\n" + content_length;
-            headers += "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36\r\n";
+            HINTERNET hConnect = InternetConnectA(hInternet, hostName, urlComp.nPort, NULL, NULL, INTERNET_SERVICE_HTTP, 0, 0);
+            if (!hConnect) 
+            {
+                g_logger.log("InternetConnectA failed!");
+                InternetCloseHandle(hInternet);
+                return;
+            }
 
-            DWORD bytesWritten;
-            BOOL result = HttpSendRequestA(hConnect, headers.c_str(), headers.length(), (LPVOID)json_data.c_str(), json_data.size());
+            const char* acceptTypes[] = { "application/json", NULL };
+            HINTERNET hRequest = HttpOpenRequestA(hConnect, "POST", urlPath, NULL, NULL, acceptTypes, INTERNET_FLAG_RELOAD | INTERNET_FLAG_SECURE, 0);
+            if (!hRequest) 
+            {
+                g_logger.log("HttpOpenRequestA failed!");
+                InternetCloseHandle(hConnect);
+                InternetCloseHandle(hInternet);
+                return;
+            }
+
+            std::string headers = "Content-Type: application/json\r\n";
+            BOOL result = HttpSendRequestA(hRequest, headers.c_str(), headers.length(), (LPVOID)json_data.c_str(), json_data.length());
 
             if (!result)
                 g_logger.log("HttpSendRequestA failed!");
@@ -82,32 +107,182 @@ namespace loader
             {
                 DWORD statusCode = 0;
                 DWORD size = sizeof(statusCode);
-                if (HttpQueryInfoA(hConnect, HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER, &statusCode, &size, NULL)) {
+                if (HttpQueryInfoA(hRequest, HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER, &statusCode, &size, NULL))
+                {
                     if (statusCode == 204)
                         g_logger.log("Message sent successfully!");
                     else 
                     {
-                        DWORD bufferSize = 4096;
+                        g_logger.log("Failed to send message. Status Code: " + std::to_string(statusCode));
+
                         char buffer[4096] = { 0 };
                         DWORD bytesRead;
-                        if (InternetReadFile(hConnect, buffer, bufferSize, &bytesRead)) {
+                        if (InternetReadFile(hRequest, buffer, sizeof(buffer) - 1, &bytesRead)) 
+                        {
                             std::string response_body(buffer, bytesRead);
-                            g_logger.log("Failed to send message. Status Code: " + std::to_string(statusCode));
                             g_logger.log("Response Body: " + response_body);
                         }
-                        else
-                            g_logger.log("Failed to read response body!");
                     }
                 }
                 else
-                    g_logger.log("Failed to get status code!");
+                    g_logger.log("Failed to query status code.");
             }
 
+            InternetCloseHandle(hRequest);
             InternetCloseHandle(hConnect);
             InternetCloseHandle(hInternet);
+
         }
-        catch (std::exception& e) {
-            g_logger.log(e.what());
+        catch (const std::exception& e) 
+        {
+            g_logger.log(std::string("Exception: ") + e.what());
         }
+    }
+
+    void discord_util::send_bot_message(const std::string& channel_id, const std::string& bot_token, const std::string& message)
+    {
+        std::string escaped_message = escape_json_string(message);
+        std::string json_data = "{ \"content\": \"" + escaped_message + "\" }";
+        std::string endpoint = "/api/v10/channels/" + channel_id + "/messages";
+        HINTERNET hInternet = InternetOpenA("DiscordBotClient", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+        if (!hInternet) return;
+
+        HINTERNET hConnect = InternetConnectA(hInternet, "discord.com", INTERNET_DEFAULT_HTTPS_PORT, NULL, NULL, INTERNET_SERVICE_HTTP, 0, 0);
+        if (!hConnect) 
+        {
+            InternetCloseHandle(hInternet);
+            return;
+        }
+
+        HINTERNET hRequest = HttpOpenRequestA(hConnect, "POST", endpoint.c_str(), NULL, NULL, NULL, INTERNET_FLAG_SECURE | INTERNET_FLAG_RELOAD, 0);
+        if (!hRequest) 
+        {
+            InternetCloseHandle(hConnect);
+            InternetCloseHandle(hInternet);
+            return;
+        }
+
+        std::string headers = "Authorization: Bot " + bot_token + "\r\nContent-Type: application/json\r\n";
+
+        BOOL result = HttpSendRequestA(hRequest, headers.c_str(), headers.length(), (LPVOID)json_data.c_str(), json_data.length());
+
+        DWORD status_code = 0;
+        DWORD size = sizeof(status_code);
+        if (HttpQueryInfoA(hRequest, HTTP_QUERY_STATUS_CODE | HTTP_QUERY_FLAG_NUMBER, &status_code, &size, NULL)) 
+        {
+            g_logger.log("Status Code: " + std::to_string(status_code));
+
+            if (status_code != 200 && status_code != 204) 
+            {
+                char buffer[4096] = { 0 };
+                DWORD bytes_read = 0;
+                if (InternetReadFile(hRequest, buffer, sizeof(buffer) - 1, &bytes_read)) 
+                {
+                    std::string response_body(buffer, bytes_read);
+                    g_logger.log("Response Body: " + response_body);
+                }
+            }
+        }
+        else
+            g_logger.log("Failed to get status code");
+
+        InternetCloseHandle(hRequest);
+        InternetCloseHandle(hConnect);
+        InternetCloseHandle(hInternet);
+    }
+
+    std::vector<std::string> discord_util::read_channel_messages(const std::string& channel_id, const std::string& bot_token)
+    {
+        std::vector<std::string> messages;
+
+        std::string endpoint = "/api/v10/channels/" + channel_id + "/messages";
+
+        HINTERNET internet = InternetOpenA("discord_bot_reader", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+        if (!internet) return messages;
+
+        HINTERNET connection = InternetConnectA(internet, "discord.com", INTERNET_DEFAULT_HTTPS_PORT,
+            NULL, NULL, INTERNET_SERVICE_HTTP, 0, 0);
+        if (!connection) 
+        {
+            InternetCloseHandle(internet);
+            return messages;
+        }
+
+        HINTERNET request = HttpOpenRequestA(connection, "GET", endpoint.c_str(), NULL, NULL, NULL,
+            INTERNET_FLAG_SECURE | INTERNET_FLAG_RELOAD, 0);
+        if (!request) 
+        {
+            InternetCloseHandle(connection);
+            InternetCloseHandle(internet);
+            return messages;
+        }
+
+        std::string headers =
+            "Authorization: Bot " + bot_token + "\r\n"
+            "Content-Type: application/json\r\n";
+
+        BOOL result = HttpSendRequestA(request, headers.c_str(), headers.length(), NULL, 0);
+        if (!result) 
+        {
+            InternetCloseHandle(request);
+            InternetCloseHandle(connection);
+            InternetCloseHandle(internet);
+            return messages;
+        }
+
+        char buffer[8192];
+        DWORD bytes_read;
+        std::string response;
+
+        while (InternetReadFile(request, buffer, sizeof(buffer), &bytes_read) && bytes_read != 0)
+            response.append(buffer, bytes_read);
+
+        InternetCloseHandle(request);
+        InternetCloseHandle(connection);
+        InternetCloseHandle(internet);
+
+        try
+        {
+            const std::string key = "\"content\":\"";
+            size_t pos = 0;
+
+            while ((pos = response.find(key, pos)) != std::string::npos)
+            {
+                pos += key.length();
+                std::string content;
+                bool in_escape = false;
+
+                while (pos < response.size())
+                {
+                    char c = response[pos++];
+
+                    if (in_escape)
+                    {
+                        switch (c)
+                        {
+                        case 'n': content += '\n'; break;
+                        case 't': content += '\t'; break;
+                        case '\\': content += '\\'; break;
+                        case '"': content += '"'; break;
+                            // skip others
+                        default: break;
+                        }
+                        in_escape = false;
+                    }
+                    else if (c == '\\')
+                        in_escape = true;
+                    else if (c == '"')
+                        break;
+                    else
+                        content += c;
+                }
+
+                messages.push_back(content);
+            }
+        }
+        catch (const std::exception& e) 
+        {}
+
+        return messages;
     }
 }

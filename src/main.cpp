@@ -6,7 +6,7 @@
 #include "util/injection.hpp"
 #include "util/gui_util.hpp"
 #include "widgets/imgui_notify.h"
-
+#include "util/message_system.hpp"
 #pragma warning (disable: 4996)
 
 // Forward declarations of helper functions
@@ -22,6 +22,7 @@ void initialize()
 {
     g_gui.initialize();
     g_inject.auto_inject();
+    g_message_system.loop();
     g.start_time = std::chrono::system_clock::now();
 #ifdef USE_INTERENT
     //base stuff
@@ -65,6 +66,11 @@ int main(int, char**)
         if (loader::util::get_release_title("TheGreenBandit", "Loader") == "FAILED")
         {
             g_logger.log("Failed to fetch internet, check your connection");
+            exit(0);
+        }
+        if (loader::util::get_release_title("TheGreenBandit", "Loader") == "Release title not found!")
+        {
+            g_logger.log("FAILED TO FIND RELEASE TITLE");
             exit(0);
         }
         loader::g_logger.log(std::format("The loader is outdated! Closing and downloading the newest version. \nCurrent Version: {}\nNew Version: {}", VERSION, loader::util::get_release_title("TheGreenBandit", "Loader")));

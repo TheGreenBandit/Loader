@@ -81,6 +81,9 @@
     <ClInclude Include="util\message_system.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="util\discord_util.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core/globals.cpp">
@@ -135,6 +138,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="util\message_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util\discord_util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
