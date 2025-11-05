@@ -16,7 +16,7 @@ namespace loader
 
 	void message_system::update_messages()
 	{
-		auto raw = discord_util.read_channel_messages(CHANNEL_ID, BOT_TOKEN);
+		auto raw = discord_util.read_channel_messages(xorstr_("1376337342612115466"));
 		std::reverse(raw.begin(), raw.end());
 		messages = raw;
 	}
@@ -47,13 +47,30 @@ namespace loader
 
 			std::string formatted_message = std::format("[{}] {}: {}", time_str, user, message);//temp fix for username 
 			g_logger.log(formatted_message);
-			discord_util.send_bot_message(CHANNEL_ID, BOT_TOKEN, formatted_message);
+			discord_util.send_bot_message(xorstr_("1376337342612115466"), formatted_message);
 			g_logger.log("message should be sent");
 		}
 	}
 
 	void message_system::display_messages()
 	{
+		//for (int i = 0; i < messages.size(); i++)
+		//{
+		//	auto message = messages[i];
+		//	if (message.find("TGB") != std::string::npos) //dev thing, yes it is important
+		//	{
+		//		ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_Button));
+		//		if (messages[messages.size()].con == message)
+		//		{
+		//			ImGui::SetItemDefaultFocus();
+		//			ImGui::TextWrapped(message.c_str());
+		//		}
+		//			
+		//		ImGui::PopStyleColor();
+		//	}
+		//	else
+		//		ImGui::TextWrapped(message.c_str());
+		//}
 		for (auto message : messages)
 		{
 			if (message.find("TGB") != std::string::npos) //dev thing, yes it is important

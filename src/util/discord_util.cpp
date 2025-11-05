@@ -139,7 +139,7 @@ namespace loader
         }
     }
 
-    void discord_util::send_bot_message(const std::string& channel_id, const std::string& bot_token, const std::string& message)
+    void discord_util::send_bot_message(const std::string& channel_id, const std::string& message)
     {
         std::string escaped_message = escape_json_string(message);
         std::string json_data = "{ \"content\": \"" + escaped_message + "\" }";
@@ -161,8 +161,9 @@ namespace loader
             InternetCloseHandle(hInternet);
             return;
         }
-
-        std::string headers = "Authorization: Bot " + bot_token + "\r\nContent-Type: application/json\r\n";
+        auto auth = std::format("Authorization: Bot {}\r\n", DISCORD_TOKEN).c_str();
+        auto contentType = xorstr_("Content-Type: application/json\r\n");
+        std::string headers = std::string(auth) + std::string(contentType);
 
         BOOL result = HttpSendRequestA(hRequest, headers.c_str(), headers.length(), (LPVOID)json_data.c_str(), json_data.length());
 
@@ -191,7 +192,7 @@ namespace loader
         InternetCloseHandle(hInternet);
     }
 
-    std::vector<std::string> discord_util::read_channel_messages(const std::string& channel_id, const std::string& bot_token)
+    std::vector<std::string> discord_util::read_channel_messages(const std::string& channel_id)
     {
         std::vector<std::string> messages;
 
@@ -216,11 +217,9 @@ namespace loader
             InternetCloseHandle(internet);
             return messages;
         }
-
-        std::string headers =
-            "Authorization: Bot " + bot_token + "\r\n"
-            "Content-Type: application/json\r\n";
-
+        auto auth = std::format("Authorization: Bot {}\r\n", DISCORD_TOKEN).c_str();
+        auto contentType = xorstr_("Content-Type: application/json\r\n");
+        std::string headers = std::string(auth) + std::string(contentType);
         BOOL result = HttpSendRequestA(request, headers.c_str(), headers.length(), NULL, 0);
         if (!result) 
         {

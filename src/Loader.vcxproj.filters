@@ -84,6 +84,12 @@
     <ClInclude Include="util\discord_util.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="security\xorstr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="security\applicationchecker.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core/globals.cpp">
@@ -141,6 +147,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="util\discord_util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="security\applicationchecker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -151,6 +151,7 @@ int main(int, char**)
     // Main
     while (active)
     {
+        security.loop();
         // Poll and handle messages (inputs, window resize, etc.)
         // See the WndProc() function below for our to dispatch events to the Win32 backend.
         MSG msg;

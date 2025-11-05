@@ -123,6 +123,8 @@
     <ClInclude Include="..\includes\ImGui\imstb_truetype.h" />
     <ClInclude Include="gui\gui.hpp" />
     <ClInclude Include="..\includes\resources\resource.h" />
+    <ClInclude Include="security\applicationchecker.hpp" />
+    <ClInclude Include="security\xorstr.h" />
     <ClInclude Include="token.hpp" />
     <ClInclude Include="util\discord_util.hpp" />
     <ClInclude Include="util\gui_util.hpp" />
@@ -151,6 +153,7 @@
     <ClCompile Include="gui\tabs\settings_tab.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="gui\gui.cpp" />
+    <ClCompile Include="security\applicationchecker.cpp" />
     <ClCompile Include="util\discord_util.cpp" />
     <ClCompile Include="util\injection.cpp" />
     <ClCompile Include="util\logger.cpp" />
