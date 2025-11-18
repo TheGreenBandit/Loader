@@ -9,7 +9,7 @@ namespace loader
 			while (true)
 			{
 				update_messages();
-				std::this_thread::sleep_for(1s);
+				std::this_thread::sleep_for(5s);
 			}
 			}).detach();
 	}
@@ -17,7 +17,6 @@ namespace loader
 	void message_system::update_messages()
 	{
 		auto raw = discord_util.read_channel_messages(xorstr_("1376337342612115466"));
-		std::reverse(raw.begin(), raw.end());
 		messages = raw;
 	}
 

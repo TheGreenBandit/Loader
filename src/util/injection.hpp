@@ -14,6 +14,6 @@ namespace loader
 		void auto_inject();
 		void inject();
 		void mono_inject(etab tab);
-		void inject_dll(etab tab, std::string_view npath = "", std::string_view nwindow = "");
+		void inject_dll(egame tab, std::string_view npath = "", std::string_view nwindow = "");
 	} g_inject;
 }

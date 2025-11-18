@@ -49,12 +49,13 @@ namespace loader
 
     }
 
-    const char* games[4]
+    const char* games[5]
     {
         "Lethal Company",
         "Content Warning",
         "R.E.P.O",
-        "Gorilla Tag"
+        "Gorilla Tag",
+        "GTAV"
     };
     //temp, needa get paddding working on the left main child
     inline void adjust()
@@ -87,7 +88,7 @@ namespace loader
                         ImGui::SetNextItemWidth(200);
                         if (ImGui::BeginCombo("", games[game])) //fixme
                         {
-                            for (int game_ = 0; game_ <= 3; game_++)
+                            for (int game_ = 0; game_ <= GTAV; game_++)
                             {
                                 if (ImGui::Selectable(games[game_], game_ == game))
                                     game = (egame)game_;
@@ -100,8 +101,14 @@ namespace loader
                         adjust();
                         if (ImGui::Button(g_gui_util.s(std::string("Start ") + ICON_FA_ARROW_RIGHT), ImVec2(ImGui::GetContentRegionAvail().x - 5, 40)))
                             g_inject.inject();
+                        if ((util::get_username() == "TGB") && (game == GTAV))
+                        {
+                            adjust();
+                            if (ImGui::Button(g_gui_util.s(std::string("Dev ") + ICON_FA_COGS), ImVec2(ImGui::GetContentRegionAvail().x - 5, 35)))
+                                g_inject.inject_dll(g_gui.game, "C:\\Users\\TGB\\Blade\\build\\RelWithDebInfo\\Blade.dll");
+                        }
                         adjust();
-                        if (ImGui::Button("Launch Game", ImVec2(ImGui::GetContentRegionAvail().x - 5, 35)))
+                        if (ImGui::Button("Launch Game", ImVec2(ImGui::GetContentRegionAvail().x - 5, ((util::get_username() == "TGB") && (game == GTAV)) ? 30 : 35)))
                         {
                             if (game == LETHAL_COMPANY)
                                 ShellExecuteA(0, "open", "steam://rungameid/1966720", 0, 0, SW_HIDE);
@@ -111,6 +118,8 @@ namespace loader
                                 ShellExecuteA(0, "open", "steam://rungameid/3241660", 0, 0, SW_HIDE);
                             if (game == GTAG)
                                 ShellExecuteA(0, "open", "steam://rungameid/1533390", 0, 0, SW_HIDE);
+                            if (game == GTAV)//todo detect which one user has, steam vs epic games vs rockstar launcher
+                                ShellExecuteA(0, "open", "com.epicgames.launcher://apps/0584d2013f0149a791e7b9bad0eec102%3A6e563a2c0f5f46e3b4e88b5f4ed50cca%3A9d2d0eb64d5c44529cece33fe2a46482?action=launch&silent=true", 0, 0, SW_HIDE);
                         }
                             
                         adjust();
@@ -118,7 +127,7 @@ namespace loader
                         ImGui::Text(VERSION);
                         adjust();
                         ImGui::Text((std::string("Last Updated ") + TIME).c_str());
-                        ImGui::Dummy(ImVec2(0, 160));
+                        ImGui::Dummy(ImVec2(0, ((util::get_username() == "TGB") && (game == GTAV)) ? 135 : 160));
                         adjust();
                         ImGui::BeginGroup();
                         //IUserInformationStatics::GetAccountPicture()

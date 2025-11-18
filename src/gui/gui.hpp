@@ -29,8 +29,8 @@ namespace loader
 		CONTENT_WARNING,
 		REPO,
 		GTAG,
-		////dll
-		//GTAV,
+		//dll
+		GTAV,
 		//PHASMOPHOBIA
 	};
 
@@ -51,6 +51,7 @@ namespace loader
 				case CONTENT_WARNING: return "Content Warning";
 				case REPO: return "R.E.P.O";
 				case GTAG: return "Gorilla Tag";
+				case GTAV: return "GTAV";
 				default: return "NULL";
 			}
 		}

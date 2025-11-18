@@ -51,11 +51,11 @@ namespace loader
 				util::download_menu("TheGreenBandit", "Acid");
 				mono_inject(g_gui.tab);
 			}
-			//case GTAV: //this and under shouldnt call as not implemented! also i havent made phasmo menu yet and blade is outdated
-			//{
-			//	util::download_menu("TheGreenBandit", "Blade");
-			//	inject_dll(g_gui.tab);
-			//}break;
+			case GTAV: //this and under shouldnt call as not implemented! also i havent made phasmo menu yet and blade is outdated
+			{
+				util::download_menu("TheGreenBandit", "Blade");
+				inject_dll(g_gui.game);
+			}break;
 			//case PHASMOPHOBIA:
 			//{
 			//	util::download_menu("TheGreenBandit", "PhasmoMenu");
@@ -65,44 +65,40 @@ namespace loader
 		}
 	}
 
-	void injection::inject_dll(etab tab, std::string_view npath, std::string_view nwindow) {
+	void injection::inject_dll(egame game, std::string_view npath, std::string_view nwindow) {
 		std::thread([=] 
 			{
-				//fs::path path = npath;
-				//if (npath == "")
-				//{
-				//	if (tab == GTAV)
-				//		g.gtav.alternate_path != "" ? path = g.gtav.alternate_path : path = fs::current_path() / "Blade" / "Blade.dll";
-				//	else
-				//		path = fs::current_path() / "Phasmenu" / "Phasmenu.dll";
-				//}
-				//auto window = nwindow.data();
-				//if (nwindow == "")
-				//{
-				//	if (tab == GTAV)
-				//		window = "Grand Theft Auto V";
-				//	else
-				//		window = "Phasmophobia";
-				//}
+				fs::path path = npath;
+				if (npath == "")
+				{
+					if (game == GTAV)
+						g.gtav.alternate_path != "" ? path = g.gtav.alternate_path : path = fs::current_path() / "Blade" / "Blade.dll";
+				}
+				auto window = nwindow.data();
+				if (nwindow == "")
+				{
+					if (game == GTAV)
+						window = "Grand Theft Auto V";
+				}
 
-				////std::this_thread::sleep_for(std::chrono::milliseconds(globals.injection_delay)); implement me?
-				//HWND hwnd = FindWindowA(NULL, window);
-				//DWORD pid; GetWindowThreadProcessId(hwnd, &pid);
-				//HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
-				//LPVOID pDllPath = VirtualAllocEx(handle, 0, strlen(path.string().c_str()) + 1, MEM_COMMIT, PAGE_READWRITE);
-				//WriteProcessMemory(handle, pDllPath, (LPVOID)path.string().c_str(), strlen(path.string().c_str()) + 1, 0);
-				//HANDLE hLoadThread = CreateRemoteThread(handle, 0, 0, (LPTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandleA("Kernel32.dll"), "LoadLibraryA"), pDllPath, 0, 0);
-				//WaitForSingleObject(hLoadThread, INFINITE);
-				//VirtualFreeEx(handle, pDllPath, strlen(path.string().c_str()) + 1, MEM_RELEASE);
+				//std::this_thread::sleep_for(std::chrono::milliseconds(globals.injection_delay)); implement me?
+				HWND hwnd = FindWindowA(NULL, window);
+				DWORD pid; GetWindowThreadProcessId(hwnd, &pid);
+				HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+				LPVOID pDllPath = VirtualAllocEx(handle, 0, strlen(path.string().c_str()) + 1, MEM_COMMIT, PAGE_READWRITE);
+				WriteProcessMemory(handle, pDllPath, (LPVOID)path.string().c_str(), strlen(path.string().c_str()) + 1, 0);
+				HANDLE hLoadThread = CreateRemoteThread(handle, 0, 0, (LPTHREAD_START_ROUTINE)GetProcAddress(GetModuleHandleA("Kernel32.dll"), "LoadLibraryA"), pDllPath, 0, 0);
+				WaitForSingleObject(hLoadThread, INFINITE);
+				VirtualFreeEx(handle, pDllPath, strlen(path.string().c_str()) + 1, MEM_RELEASE);
 
-				//if (g.auto_close)
-				//	active = false;
+				if (g.auto_close)
+					active = false;
 			}
 
 		).detach();
 	};
 
-	void injection::mono_inject(etab tab)
+	void injection::mono_inject(etab tab)//todo remove legacy etab usage
 	{
 		fs::path path;
 		const char* window = "";
