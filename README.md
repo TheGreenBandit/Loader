@@ -2,11 +2,8 @@ A loader made in dx11, using imgui to display.
 
 based upon [Niplix's dx9 loader](https://github.com/ALEHACKsp/Loader-Base/tree/main)
 
-to build, create a token.hpp file in the src folder, then write
-```
-#define "yourtoken"
-```
-releases come with one built in but github doesnt let me post one for the source and requires users to use their own.
+to build, define your tokens in the token.hpp file to have the ability to download releases,
+the discord token is unimportant as it is just required for chatting through the loader.
 
 # Menu Preview
 <img width="400" height="300" alt="l1" src="https://github.com/user-attachments/assets/f1203c48-509d-447e-9d04-21a6ddee4756" />
