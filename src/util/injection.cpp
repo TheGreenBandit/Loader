@@ -50,7 +50,7 @@ namespace loader
 				g_logger.log("Injecting Acid");
 				util::download_menu("TheGreenBandit", "Acid");
 				mono_inject(g_gui.tab);
-			}
+			}break;
 			case GTAV: //this and under shouldnt call as not implemented! also i havent made phasmo menu yet and blade is outdated
 			{
 				util::download_menu("TheGreenBandit", "Blade");
@@ -92,7 +92,7 @@ namespace loader
 				VirtualFreeEx(handle, pDllPath, strlen(path.string().c_str()) + 1, MEM_RELEASE);
 
 				if (g.auto_close)
-					active = false;
+					exit(0);
 			}
 
 		).detach();
@@ -149,6 +149,6 @@ namespace loader
 		g_logger.log(command);
 		system(command.c_str()); 
 		if (g.auto_close)
-			active = false;
+			exit(0);
 	}
 }

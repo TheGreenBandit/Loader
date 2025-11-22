@@ -12,8 +12,10 @@ namespace loader
         g_message_system.display_messages();      
         ImGui::EndChild();
         ImGui::Dummy(ImVec2(0, 20));
-        ImGui::BeginChild("chatsender", ImVec2(530, 70), true);
-        ImGui::InputText(std::format("Message {}/50:", "0"/*, std::string((&message)).size() this works but every time you type it boots you out of typing*/).c_str(), &message, 50);
+        ImGui::BeginChild("chatsender", ImVec2(530, 60), true);
+        ImGui::InputText("", &message, 50);
+        ImGui::SameLine();
+        ImGui::Text(std::format("Message {}/50:", std::string((&message)).size() - 1).c_str());
         ImGui::SameLine();
         if (ImGui::Button("Send"))
             g_message_system.send_message(&message);

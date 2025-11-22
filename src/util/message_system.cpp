@@ -16,8 +16,7 @@ namespace loader
 
 	void message_system::update_messages()
 	{
-		auto raw = discord_util.read_channel_messages(xorstr_("1376337342612115466"));
-		messages = raw;
+		messages = discord_util.read_channel_messages(xorstr_("1376337342612115466"));
 	}
 
 	void message_system::send_message(std::string_view message)
