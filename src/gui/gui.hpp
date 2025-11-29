@@ -100,6 +100,6 @@ namespace loader
 		ImFont* segoeui_font;
 		std::vector<Image*> unkimages;
 		Image* icon;
-		Image* unkself;
+		Image* gta_icon;
 	} g_gui;
 }

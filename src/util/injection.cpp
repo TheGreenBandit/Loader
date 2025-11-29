@@ -51,8 +51,9 @@ namespace loader
 				util::download_menu("TheGreenBandit", "Acid");
 				mono_inject(g_gui.tab);
 			}
-			case GTAV: //this and under shouldnt call as not implemented! also i havent made phasmo menu yet and blade is outdated
+			case GTAV:
 			{
+				g_logger.log("Injecting Blade");
 				util::download_menu("TheGreenBandit", "Blade");
 				inject_dll(g_gui.game);
 			}break;

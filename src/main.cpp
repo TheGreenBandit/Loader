@@ -17,6 +17,30 @@ void CleanupRenderTarget();
 LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 using namespace loader;
+static inline bool outdated = false;
+//util functions todo move me, maybe just incorporte into original functions ffs
+void create_dir_if_noexist(fs::path path)
+{
+    if (!fs::is_directory(path)) fs::create_directory(path);
+}
+void download_if_noexist(fs::path path, const char* link)
+{
+    if (!fs::exists(path) || outdated)
+        util::download_file(path.string(), link);
+}
+Image* download_img_if_noexist(fs::path path, const char* link, std::vector<loader::Image*>* image_dir = nullptr)
+{
+    loader::Image* ret = new loader::Image();
+    if (!fs::exists(path) || outdated)
+        ret = g_gui_util.download_and_load_image_to_list(path.string().c_str(), link, image_dir);
+    else
+    {
+        g_gui.load_texture_from_file(path.string().c_str(), g_pd3dDevice, &ret);
+        if (image_dir != nullptr)
+            image_dir->push_back(ret);
+    }
+    return ret;
+}
 
 void initialize()
 {
@@ -26,29 +50,37 @@ void initialize()
     g.start_time = std::chrono::system_clock::now();
 #ifdef USE_INTERENT
     //base stuff
-    if (!fs::is_directory(fs::current_path() / "Resources")) fs::create_directory(fs::current_path() / "Resources");
-    if (!fs::is_directory(fs::current_path() / "Resources" / "Lethal Menu")) fs::create_directory(fs::current_path() / "Resources" / "Lethal Menu");
-    if (!fs::is_directory(fs::current_path() / "Resources" / "Spooksuite")) fs::create_directory(fs::current_path() / "Resources" / "Spooksuite");
-    if (!fs::is_directory(fs::current_path() / "Resources" / "Unk")) fs::create_directory(fs::current_path() / "Resources" / "Unk");
-    if (!fs::is_directory(fs::current_path() / "Resources" / "Acid")) fs::create_directory(fs::current_path() / "Resources" / "Acid");
-    if (!fs::is_directory(fs::current_path() / "Menus")) fs::create_directory(fs::current_path() / "Menus");
-    g_gui.icon = g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "icon.png").string().c_str(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
-    util::download_file((fs::current_path() / "smi.exe").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
-    util::download_file((fs::current_path() / "SharpMonoInjector.dll").string(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
+    create_dir_if_noexist(fs::current_path() / "Resources");
+    create_dir_if_noexist(fs::current_path() / "Resources" / "Lethal Menu");
+    create_dir_if_noexist(fs::current_path() / "Resources" / "Spooksuite");
+    create_dir_if_noexist(fs::current_path() / "Resources" / "Unk");
+    create_dir_if_noexist(fs::current_path() / "Resources" / "Acid");
+    create_dir_if_noexist(fs::current_path() / "Menus");
+
+    g_gui.icon = download_img_if_noexist((fs::current_path() / "Resources" / "icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
+    g_gui.gta_icon = download_img_if_noexist((fs::current_path() / "Resources" / "gta_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/gta_icon.png");
+
+    download_if_noexist((fs::current_path() / "smi.exe"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
+    download_if_noexist((fs::current_path() / "SharpMonoInjector.dll"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
 
     //Unk images
-    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "Unk" / "unkself.png").string().c_str(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/unkself.png", &g_gui.unkimages);
-    g_gui_util.download_and_load_image_to_list((fs::current_path() / "Resources" / "Unk" / "unksvisual.png").string().c_str(), "https://github.com/TheGreenBandit/Loader/releases/download/resources/unkvisual.png", &g_gui.unkimages);
+    download_img_if_noexist((fs::current_path() / "Resources" / "Unk" / "unkself.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/unkself.png", &g_gui.unkimages);
+    download_img_if_noexist((fs::current_path() / "Resources" / "Unk" / "unksvisual.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/unkvisual.png", &g_gui.unkimages);
 
     //Spooksuite images
 
     //lethalmenu images
 
     //changelogs
-    util::download_file((fs::current_path() / "Resources" / "Lethal Menu" / "Changelog.txt").string(), "https://github.com/IcyRelic/LethalMenu/raw/refs/heads/master/LethalMenu/Resources/Changelog.txt");
-    util::download_file((fs::current_path() / "Resources" / "Spooksuite" / "Changelog.txt").string(), "https://github.com/IcyRelic/SpookSuite/raw/refs/heads/master/SpookSuite/Resources/Changelog.txt");
-    util::download_file((fs::current_path() / "Resources" / "Unk" / "Changelog.txt").string(), "https://github.com/thegreenbandit/Unk/raw/refs/heads/master/Unk/Resources/Changelog.txt");
-    util::download_file((fs::current_path() / "Resources" / "Acid" / "Changelog.txt").string(), "https://raw.githubusercontent.com/TheGreenBandit/Acid/refs/heads/main/Changelog.txt");
+    download_if_noexist((fs::current_path() / "Resources" / "Lethal Menu" / "Changelog.txt"), "https://github.com/IcyRelic/LethalMenu/raw/refs/heads/master/LethalMenu/Resources/Changelog.txt");
+    download_if_noexist((fs::current_path() / "Resources" / "Spooksuite" / "Changelog.txt"), "https://github.com/IcyRelic/SpookSuite/raw/refs/heads/master/SpookSuite/Resources/Changelog.txt");
+    download_if_noexist((fs::current_path() / "Resources" / "Unk" / "Changelog.txt"), "https://github.com/thegreenbandit/Unk/raw/refs/heads/master/Unk/Resources/Changelog.txt");
+    download_if_noexist((fs::current_path() / "Resources" / "Acid" / "Changelog.txt"), "https://raw.githubusercontent.com/TheGreenBandit/Acid/refs/heads/main/Changelog.txt");
+    if (outdated)
+    {
+        system("update.bat");
+        exit(0);
+    }
 #endif
     g_logger.log("Menu Initialized");
 }
@@ -74,8 +106,9 @@ int main(int, char**)
             exit(0);
         }
         loader::g_logger.log(std::format("The loader is outdated! Closing and downloading the newest version. \nCurrent Version: {}\nNew Version: {}", VERSION, loader::util::get_release_title("TheGreenBandit", "Loader")));
-        system("update.bat");
-        exit(0);
+        outdated = true;
+        //system("update.bat");
+        //exit(0);
     }
 #endif
     WNDCLASSEX wc = { sizeof(WNDCLASSEX), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(NULL), NULL, NULL, NULL, NULL, _T(WINDOW_NAME), NULL };
@@ -145,7 +178,6 @@ int main(int, char**)
         io.Fonts->Build();
     }
 
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     active = true;
     initialize();
     // Main
@@ -188,9 +220,8 @@ int main(int, char**)
         ImGui::EndFrame();
 
         ImGui::Render();
-        const float clear_color_with_alpha[4] = { clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w };
         loader::g_pd3dDeviceContext->OMSetRenderTargets(1, &loader::g_mainRenderTargetView, nullptr);
-        loader::g_pd3dDeviceContext->ClearRenderTargetView(loader::g_mainRenderTargetView, clear_color_with_alpha);
+        loader::g_pd3dDeviceContext->ClearRenderTargetView(loader::g_mainRenderTargetView, g.gui.color.WindowBg);
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
