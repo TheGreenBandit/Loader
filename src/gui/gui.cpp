@@ -10,6 +10,7 @@
 #include <windows.h>
 #include <iostream>
 #include <Windows.System.UserProfile.h>
+#include "../util/message_system.hpp"
 
 using namespace ABI::Windows::System::UserProfile;
 
@@ -132,13 +133,12 @@ namespace loader
 
     }
 
-    const char* games[5]
+    const char* games[4]
     {
-        "Lethal Company",
-        "Content Warning",
+        "GTAV",
         "R.E.P.O",
-        "Gorilla Tag",
-        "GTAV"
+        "Content Warning",
+        "Lethal Company"
     };
     //temp, needa get paddding working on the left main child
     inline void adjust()
@@ -379,90 +379,141 @@ namespace loader
                     ImGui::BeginGroup();
                     ImVec2 c = ImGui::GetCursorPos();
 
-                    switch (game)
+                    int changelog_game = 1;
+                    if (menu == 0)
                     {
-                    case 0:
-                    {
-                        //ImGui::GetWindowDrawList()->AddImage(gta_background->view, ImVec2(c.x, c.y + 530), ImVec2(c.x + 730, c.y));
-                        ImGui::Image(gta_background->view, ImVec2(578, 325));//todo now make this a image selector with pictures of menus
-                        ImGui::SameLine();
                         ImGui::BeginGroup();
-                        ImGui::PushFont(segoeui_font_35px);
-                        ImGui::TextColored(ImVec4(0, 255, 0, 255), "Blade");
-                        ImGui::SameLine();
-                        ImGui::Text("Menu");
-                        ImGui::PopFont();
-                        ImGui::Text("For GTAV");
-                        ImGui::BeginChild("Desc Framing", ImVec2(155, 190));
-                        ImGui::TextWrapped("A dual UI, personal pet project of mine. Not meant for online as there is zero protection from the anticheat in it.");
+                        ImGui::SetNextItemWidth(300);
+                        if (ImGui::BeginCombo("", games[game])) //fixme
+                        {
+                            for (int game_ = 0; game_ <= GTAV; game_++)
+                            {
+                                if (ImGui::Selectable(games[game_], game_ == game))
+                                    changelog_game = game_;
+                                //if (games[changelog_game] == games[game_])
+                                //    ImGui::SetItemDefaultFocus();
+                            }
+                            ImGui::EndCombo();
+                        }
+                        ImGui::BeginChild("changelogs", ImVec2(300, 290));
+                        //old game selector for changelogs
+                        std::string menu = "";
+                        if (changelog_game == 0) menu = "Blade";
+                        if (changelog_game == 1) menu = "Unk";
+                        if (changelog_game == 2) menu = "Spook Suite";
+                        if (changelog_game == 3) menu = "Lethal Menu";
+                        ImGui::TextWrapped(util::read_file((fs::current_path() / "Resources" / menu / "Changelog.txt").string()).c_str());
                         ImGui::EndChild();
-                        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0);
-                        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-                        ImGui::PushFont(segoeui_font_25px);
-                        ImGui::Button("Launch Game", ImVec2(155, 30));
-                        ImGui::Button("Run Menu", ImVec2(155, 30));
-                        ImGui::PopFont();
-                        ImGui::PopStyleVar();
-                        ImGui::PopStyleVar();
                         ImGui::EndGroup();
+                        ImGui::SameLine();
+                        ImGui::BeginGroup();
+                        static char message = ' ';
+                        ImGui::BeginChild("chatmain", ImVec2(430, 255), true);
+                        g_message_system.display_messages();
+                        ImGui::EndChild();
+                        ImGui::Dummy(ImVec2(0, 5));
+                        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10, 10));
+                        ImGui::BeginChild("chatsender", ImVec2(430, 50), true);
+                        ImGui::SetNextItemWidth(250);
+                        ImGui::InputText("Message", &message, 50);
+                        ImGui::SameLine();
+                        ImGui::Text(std::format("{}/50", std::string((&message)).size()).c_str());
+                        ImGui::SameLine();
+                        if (ImGui::Button("Send"))
+                            g_message_system.send_message(&message);
 
-                    }break;
-                    case 1:
-                    {
-                        ImGui::Image(repo_background->view, ImVec2(578, 325));
-                        ImGui::SameLine();
-                        ImGui::BeginGroup();
-                        ImGui::PushFont(segoeui_font_35px);
-                        ImGui::TextColored(ImVec4(255, 0, 255, 255), "Unk");
-                        ImGui::PopFont();
-                        ImGui::Text("For R.E.P.O");
-                        ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
-                        ImGui::TextWrapped("The most advanced menu for R.E.P.O.");
-                        ImGui::EndChild();//center these buttons
-                        ImGui::Button("Launch Game");
-                        ImGui::Button("Run Menu");
+                        ImGui::EndChild();
+                        ImGui::PopStyleVar();
                         ImGui::EndGroup();
-                    }break;
-                    case 2:
+                            //right side chat, left side changelogs
+                    }
+                    if (menu == 1)
                     {
-                        ImGui::Image(content_warning_background->view, ImVec2(578, 325));
-                        ImGui::SameLine();
-                        ImGui::BeginGroup();
-                        ImGui::PushFont(segoeui_font_35px);
-                        ImGui::TextColored(ImVec4(255, 0, 255, 255), "Spook");
-                        ImGui::SameLine();
-                        ImGui::Text("Suite");
-                        ImGui::PopFont();
-                        ImGui::Text("For Content Warning");
-                        ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
-                        ImGui::TextWrapped("A old joint collaboration.");
-                        ImGui::EndChild();//center these buttons
-                        ImGui::Button("Launch Game");
-                        ImGui::Button("Run Menu");
-                        ImGui::EndGroup();
-                    }break;
-                    case 3:
-                    {
-                        ImGui::Image(lethal_company_background->view, ImVec2(578, 325));
-                        ImGui::SameLine();
-                        ImGui::BeginGroup();
-                        ImGui::PushFont(segoeui_font_35px);
-                        ImGui::TextColored(ImVec4(255, 0, 0, 255), "Lethal");
-                        ImGui::SameLine();
-                        ImGui::Text("Menu");
-                        ImGui::PopFont();
-                        ImGui::Text("For Lethal Company");
-                        ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
-                        ImGui::TextWrapped("A menu for Lethal Company.");
-                        ImGui::EndChild();//center these buttons
-                        ImGui::Button("Launch Game");
-                        ImGui::Button("Run Menu");
-                        ImGui::EndGroup();
-                    }break;
-                    default:
-                    {
+                        switch (game)
+                        {
+                        case 0:
+                        {
+                            //ImGui::GetWindowDrawList()->AddImage(gta_background->view, ImVec2(c.x, c.y + 530), ImVec2(c.x + 730, c.y));
+                            ImGui::Image(gta_background->view, ImVec2(578, 325));//todo now make this a image selector with pictures of menus
+                            ImGui::SameLine();
+                            ImGui::BeginGroup();
+                            ImGui::PushFont(segoeui_font_35px);
+                            ImGui::TextColored(ImVec4(0, 255, 0, 255), "Blade");
+                            ImGui::SameLine();
+                            ImGui::Text("Menu");
+                            ImGui::PopFont();
+                            ImGui::Text("For GTAV");
+                            ImGui::BeginChild("Desc Framing", ImVec2(155, 190));
+                            ImGui::TextWrapped("A dual UI, personal pet project of mine. Not meant for online as there is zero protection from the anticheat in it.");
+                            ImGui::EndChild();
+                            ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0);
+                            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+                            ImGui::PushFont(segoeui_font_25px);
+                            ImGui::Button("Launch Game", ImVec2(155, 30));
+                            ImGui::Button("Run Menu", ImVec2(155, 30));
+                            ImGui::PopFont();
+                            ImGui::PopStyleVar();
+                            ImGui::PopStyleVar();
+                            ImGui::EndGroup();
 
-                    }break;
+                        }break;
+                        case 1:
+                        {
+                            ImGui::Image(repo_background->view, ImVec2(578, 325));
+                            ImGui::SameLine();
+                            ImGui::BeginGroup();
+                            ImGui::PushFont(segoeui_font_35px);
+                            ImGui::TextColored(ImVec4(255, 0, 255, 255), "Unk");
+                            ImGui::PopFont();
+                            ImGui::Text("For R.E.P.O");
+                            ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                            ImGui::TextWrapped("The most advanced menu for R.E.P.O.");
+                            ImGui::EndChild();//center these buttons
+                            ImGui::Button("Launch Game");
+                            ImGui::Button("Run Menu");
+                            ImGui::EndGroup();
+                        }break;
+                        case 2:
+                        {
+                            ImGui::Image(content_warning_background->view, ImVec2(578, 325));
+                            ImGui::SameLine();
+                            ImGui::BeginGroup();
+                            ImGui::PushFont(segoeui_font_35px);
+                            ImGui::TextColored(ImVec4(255, 0, 255, 255), "Spook");
+                            ImGui::SameLine();
+                            ImGui::Text("Suite");
+                            ImGui::PopFont();
+                            ImGui::Text("For Content Warning");
+                            ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                            ImGui::TextWrapped("A old joint collaboration.");
+                            ImGui::EndChild();//center these buttons
+                            ImGui::Button("Launch Game");
+                            ImGui::Button("Run Menu");
+                            ImGui::EndGroup();
+                        }break;
+                        case 3:
+                        {
+                            ImGui::Image(lethal_company_background->view, ImVec2(578, 325));
+                            ImGui::SameLine();
+                            ImGui::BeginGroup();
+                            ImGui::PushFont(segoeui_font_35px);
+                            ImGui::TextColored(ImVec4(255, 0, 0, 255), "Lethal");
+                            ImGui::SameLine();
+                            ImGui::Text("Menu");
+                            ImGui::PopFont();
+                            ImGui::Text("For Lethal Company");
+                            ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                            ImGui::TextWrapped("A menu for Lethal Company.");
+                            ImGui::EndChild();//center these buttons
+                            ImGui::Button("Launch Game");
+                            ImGui::Button("Run Menu");
+                            ImGui::EndGroup();
+                        }break;
+                        default:
+                        {
+
+                        }break;
+                        }
                     }
                     ImGui::EndGroup();
                 }
