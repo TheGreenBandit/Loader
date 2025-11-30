@@ -1,18 +1,63 @@
 #include "../gui.hpp"
-#include "../../util/gui_util.hpp"
+#include "../../util/message_system.hpp"
 
 namespace loader
 {
 	void gui::home_tab()
 	{
-		ImGui::TextWrapped("You may receive anti-virus alerts where it'll detect the loader as a virus. If this happens follow this video to fix it!");
-		g_gui_util.push_font_size(20);
-		ImGui::Text("Announcement!");
-		g_gui_util.pop_font_size();
-		ImGui::Text("");
-		if (ImGui::Button("Video Tutorial")) 
-			ShellExecuteA(0, 0, "https://www.youtube.com/watch?v=BonLkFNnO9w", 0, 0, SW_HIDE);
-		if (ImGui::Button("Community Discord!"))
-			ShellExecuteA(0, 0, "https://discord.gg/cMMwtUQhpE", 0, 0, SW_HIDE);
+        static int changelog_game = 1;
+        const char* games[4]
+        {
+            "GTAV",
+            "R.E.P.O",
+            "Content Warning",
+            "Lethal Company"
+        };
+
+        ImGui::BeginGroup();
+        ImGui::Text("Changelog");//center me
+        ImGui::SetNextItemWidth(300);
+        if (ImGui::BeginCombo("", games[changelog_game]))
+        {
+            for (int game_ = 0; game_ <= LETHAL_COMPANY; game_++)
+            {
+                if (ImGui::Selectable(games[game_], game_ == changelog_game))
+                    changelog_game = game_;
+                if (games[changelog_game] == games[game_])
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+        ImGui::BeginChild("changelogs", ImVec2(300, 265), 1);
+        std::string menu = "";
+        if (changelog_game == 0) menu = "Blade";
+        if (changelog_game == 1) menu = "Unk";
+        if (changelog_game == 2) menu = "Spooksuite";
+        if (changelog_game == 3) menu = "Lethal Menu";
+        ImGui::TextWrapped(util::read_file((fs::current_path() / "Resources" / menu / "Changelog.txt").string()).c_str());
+        ImGui::EndChild();
+        ImGui::EndGroup();
+
+        ImGui::SameLine();
+
+        ImGui::BeginGroup();
+        static char message;
+        ImGui::BeginChild("chatmain", ImVec2(430, 255), true);
+        g_message_system.display_messages();
+        ImGui::EndChild();
+        ImGui::Dummy(ImVec2(0, 5));
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10, 10));
+        ImGui::BeginChild("chatsender", ImVec2(430, 50), true);
+        ImGui::SetNextItemWidth(250);
+        ImGui::InputText("Message", &message, 50);
+        ImGui::SameLine();
+        ImGui::Text(std::format("{}/50", std::string((&message)).size()).c_str());
+        ImGui::SameLine();
+        if (ImGui::Button("Send"))
+            g_message_system.send_message(&message);
+
+        ImGui::EndChild();
+        ImGui::PopStyleVar();
+        ImGui::EndGroup();
 	}
 }

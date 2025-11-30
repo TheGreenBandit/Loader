@@ -54,15 +54,6 @@ namespace loader
 			return ret;
 		}
 
-		inline void tab(etab tab)
-		{
-			ImGui::PushStyleColor(ImGuiCol_Text, (g_gui.tab == tab) ? (&ImGui::GetStyle())->Colors[ImGuiCol_WindowBg] : (&ImGui::GetStyle())->Colors[ImGuiCol_Text]);
-			if (ImGui::Button(std::format("{} {}", g_gui.get_tab_icon(tab), g_gui.tab_to_name(tab).data()).c_str()))
-				g_gui.tab = tab;
-			ImGui::PopStyleColor();
-		}
-		//get me working
-
 		inline void centeredchild(const char* name, ImVec2 size, bool border, std::function<void()> options) // works!
 		{
 			ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x / 2) - (size.x / 2));

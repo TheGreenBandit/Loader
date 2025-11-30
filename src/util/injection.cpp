@@ -45,12 +45,6 @@ namespace loader
 				util::download_menu("TheGreenBandit", "Unk");
 				mono_inject(g_gui.tab);
 			}break;
-			case GTAG:
-			{
-				g_logger.log("Injecting Acid");
-				util::download_menu("TheGreenBandit", "Acid");
-				mono_inject(g_gui.tab);
-			}
 			case GTAV:
 			{
 				g_logger.log("Injecting Blade");
@@ -104,7 +98,7 @@ namespace loader
 		fs::path path;
 		const char* window = "";
 		const char* _namespace = "";
-		auto _class = "Loader", _method = ((g_gui.game == GTAG) ? "Load" : "Init");//
+		auto _class = "Loader", _method = "Init";//
 
 		switch (g_gui.game)
 		{
@@ -125,12 +119,6 @@ namespace loader
 				path = "Menus\\Unk\\Unk.dll";
 				window = "REPO";
 				_namespace = "Unk";
-			}break;
-			case GTAG:
-			{
-				path = "Menus\\Acid\\Acid.dll";
-				window = "REPO";
-				_namespace = "Acid";
 			}break;
 			default: { g_logger.log("Game is not valid, returning"); return; }
 		}

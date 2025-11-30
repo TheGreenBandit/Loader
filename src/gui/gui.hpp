@@ -16,22 +16,17 @@ namespace loader
 	enum etab : uint32_t
 	{
 		HOME,
-		CHAT,
-		CHANGELOG,
-		FAQ,
+		GAMES,
 		SETTINGS
 	};
 
 	enum egame : uint32_t
 	{
-		//mono
-		LETHAL_COMPANY,
-		CONTENT_WARNING,
-		REPO,
-		GTAG,
-		//dll
 		GTAV,
-		//PHASMOPHOBIA
+		//PHASMOPHOBIA maybe make menu for me, or minecraft java
+		REPO,
+		CONTENT_WARNING,
+		LETHAL_COMPANY
 	};
 
 	struct Image
@@ -43,42 +38,50 @@ namespace loader
 	inline class gui
 	{
 	public:
+		void game_select_button(egame game)
+		{
+			if (ImGui::ImageButton(game_to_icon(game)->view, ImVec2(45, 45)))
+			{
+				g_gui.game = game;
+				tab = GAMES;
+			}
+		}
+		Image* game_to_icon(egame game)
+		{
+			switch (game)
+			{
+				case GTAV: return gta_icon; break;
+				case REPO: return repo_icon; break;
+				case CONTENT_WARNING: return content_warning_icon; break;
+				case LETHAL_COMPANY: return lethal_company_icon; break;
+				default: return new Image();//
+			}
+			return new Image();//this should never happen but still catching it
+		}
+
+		Image* game_to_background(egame game)
+		{
+			switch (game)
+			{
+			case GTAV: return gta_background; break;
+			case REPO: return repo_background; break;
+			case CONTENT_WARNING: return content_warning_background; break;
+			case LETHAL_COMPANY: return lethal_company_background; break;
+			default: return new Image();//
+			}
+			return new Image();//this should never happen but still catching it
+		}
+
 		std::string_view game_to_name(egame tab)
 		{
 			switch (tab)
-			{
-				case LETHAL_COMPANY: return "Lethal Company";
-				case CONTENT_WARNING: return "Content Warning";
-				case REPO: return "R.E.P.O";
-				case GTAG: return "Gorilla Tag";
+			{				
 				case GTAV: return "GTAV";
-				default: return "NULL";
-			}
-		}
+				case REPO: return "R.E.P.O";
+				case CONTENT_WARNING: return "Content Warning";
+				case LETHAL_COMPANY: return "Lethal Company";
 
-		std::string_view tab_to_name(etab tab)
-		{
-			switch (tab)
-			{
-				case HOME: return "Home";
-				case CHAT: return "Chat";
-				case CHANGELOG: return "Changelog";
-				case FAQ: return "FAQ";
-				case SETTINGS: return "Settings";
 				default: return "NULL";
-			}
-		}
-
-		const char* get_tab_icon(etab tab)
-		{
-			switch (tab)
-			{
-			case HOME: return ICON_FA_HOME;
-			case CHAT: return ICON_FA_BIOHAZARD;
-			case CHANGELOG: return ICON_FA_BOOK;
-			case FAQ: return ICON_FA_QUESTION_CIRCLE;
-			case SETTINGS: return ICON_FA_COG;
-			default: return "NULL";
 			}
 		}
 
@@ -86,9 +89,7 @@ namespace loader
 		void render();
 
 		void home_tab();
-		void chat_tab();
-		void changelog_tab();
-		void faq_tab();
+		void game_tab();
 		void settings_tab();
 
 		bool load_texture_from_file(const char* path, ID3D11Device* d3dDevice, Image** image);
@@ -103,6 +104,8 @@ namespace loader
 		ImFont* segoeui_font_35px;
 		ImFont* segoeui_font_40px;
 		std::vector<Image*> unkimages;
+		std::map<Image*, std::string> icon_map;
+		std::map<Image*, std::string> background_map;
 		Image* icon;
 		Image* gta_icon;
 		Image* repo_icon;

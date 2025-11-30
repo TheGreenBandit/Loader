@@ -134,13 +134,7 @@
     <ClCompile Include="util\logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gui\tabs\changelog_tab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\chat_tab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gui\tabs\faq_tab.cpp">
+    <ClCompile Include="gui\tabs\game_tab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="util\message_system.cpp">

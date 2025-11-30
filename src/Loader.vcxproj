@@ -146,9 +146,7 @@
     <ClCompile Include="..\includes\ImGui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\includes\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\includes\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="gui\tabs\changelog_tab.cpp" />
-    <ClCompile Include="gui\tabs\chat_tab.cpp" />
-    <ClCompile Include="gui\tabs\faq_tab.cpp" />
+    <ClCompile Include="gui\tabs\game_tab.cpp" />
     <ClCompile Include="gui\tabs\home_tab.cpp" />
     <ClCompile Include="gui\tabs\settings_tab.cpp" />
     <ClCompile Include="main.cpp" />
