@@ -105,10 +105,13 @@ namespace loader
 		std::vector<Image*> unkimages;
 		Image* icon;
 		Image* gta_icon;
-		Image* gta_background;
 		Image* repo_icon;
 		Image* content_warning_icon;
 		Image* lethal_company_icon;
+		Image* gta_background;
+		Image* repo_background;
+		Image* content_warning_background;
+		Image* lethal_company_background;
 
 		//debug
 		float x = 200, y = 305, custom_float = 40;

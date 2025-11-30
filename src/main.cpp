@@ -61,10 +61,14 @@ void initialize()
 
     g_gui.icon = download_img_if_noexist((fs::current_path() / "Resources" / "icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
     g_gui.gta_icon = download_img_if_noexist((fs::current_path() / "Resources" / "gta_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/gta_icon.png");
-    g_gui.gta_background = download_img_if_noexist((fs::current_path() / "Resources" / "gta_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/gta_background.png");
     g_gui.repo_icon = download_img_if_noexist((fs::current_path() / "Resources" / "repo_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/repo_icon.png");
     g_gui.content_warning_icon = download_img_if_noexist((fs::current_path() / "Resources" / "content_warning_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/Content-Warning-Logo-500x281.png");
     g_gui.lethal_company_icon = download_img_if_noexist((fs::current_path() / "Resources" / "lethal_company_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/lethal_company_icon.png");
+    g_gui.gta_background = download_img_if_noexist((fs::current_path() / "Resources" / "gta_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/gta_background.png");
+    g_gui.repo_background = download_img_if_noexist((fs::current_path() / "Resources" / "repo_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/repo_background.png");
+    g_gui.content_warning_background = download_img_if_noexist((fs::current_path() / "Resources" / "content_warning_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/content_warning_background.png");
+    g_gui.lethal_company_background = download_img_if_noexist((fs::current_path() / "Resources" / "lethal_company_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/lethal_company_background.png");
+
     download_if_noexist((fs::current_path() / "smi.exe"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
     download_if_noexist((fs::current_path() / "SharpMonoInjector.dll"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
 

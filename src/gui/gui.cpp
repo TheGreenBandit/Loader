@@ -154,13 +154,11 @@ namespace loader
 
     void gui::render()
     {
-        static float x = 5, y = 5;
         updatecolstyl();
         if (loader::active)
         {
             if (ImGui::Begin("Blade", &active, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar))
-            {
-                
+            {           
                 static char search = ' ';//feature search
                 ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0, 0, 0, 0));
                 ImGui::BeginChild("titlebar", ImVec2(ImGui::GetContentRegionAvail().x, 50));
@@ -194,31 +192,28 @@ namespace loader
                 ImGui::Separator();
                 ImGui::BeginGroup();
                 ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 0, 0, 1));
-                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));//todo why tf wont these center nicely
+                //ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));//todo why tf wont these center nicely
                 ImGui::Button(ICON_FA_USER, ImVec2(50, 50));
                 ImGui::Button(ICON_FA_CAR, ImVec2(50, 50));
                 ImGui::Button(ICON_FA_SKULL_CROSSBONES, ImVec2(50, 50));
                 ImGui::Button(ICON_FA_DOLLAR_SIGN, ImVec2(50, 50));
                 ImGui::Button(ICON_FA_GLOBE, ImVec2(50, 50));
                 ImGui::PopFont();
-                ImGui::PopStyleVar();
+                //ImGui::PopStyleVar();
                 ImGui::PopStyleColor();
                 ImGui::EndGroup();
                 ImGui::SameLine();
                 ImGui::BeginGroup();
                 ImGui::BeginChild("testc", ImVec2(200, 300), 1);
-                ImGui::Checkbox("Example", &active);
-                ImGui::Checkbox("Example", &active);
-                ImGui::Checkbox("Example", &active);
-                ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Example").x * .65);
-                ImGui::SliderFloat("Examplea", &x, 0, 20);
-                ImGui::EndChild();
-                ImGui::BeginChild("testb", ImVec2(200, 300), 1);
-                ImGui::Checkbox("Example", &active);
-                ImGui::Checkbox("Example", &active);
-                ImGui::Checkbox("Example", &active);
-                ImGui::SetNextItemWidth((ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Example").x) * .65);
-                ImGui::SliderFloat("Exampleb", &x, 0, 20);
+                ImGui::Checkbox("Godmode", &active);
+                ImGui::Checkbox("No Ragdoll", &active);
+                ImGui::Checkbox("Air Walk", &active);
+                ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Wanted Level").x * .65);
+                ImGui::SliderFloat("Wanted Level", &x, 0, 20);
+                ImGui::Checkbox("NoClip", &active);
+                ImGui::SameLine();
+                ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Speed").x * .65);
+                ImGui::SliderFloat("", &x, 0, 20);
                 ImGui::EndChild();
                 ImGui::EndGroup();
                 ImGui::End();
@@ -316,10 +311,10 @@ namespace loader
                 }
                 ImGui::End();
             }
-            ImGui::SetNextWindowSize(size);
+            ImGui::SetNextWindowSize(ImVec2(790, 415));
             if (ImGui::Begin(WINDOW_NAME, &active, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
             {
-                ImGui::BeginChild("Top Row + Logo", ImVec2(size.x, 50));
+                ImGui::BeginChild("Top Row + Logo", ImVec2(size.x, 50));//maybe remove top row, move changelogs to each game select, 
                 ImGui::Image(icon->view, ImVec2(50, 50));
                 ImGui::SameLine();
                 ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(.1, .1, .1, 0));
@@ -338,7 +333,7 @@ namespace loader
                 
                 ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Border , ImVec4(0, 0, 0, 0));
                 ImGui::BeginGroup();
-                ImGui::BeginChild("SideBar", ImVec2(50, size.y - 50));
+                ImGui::BeginChild("SideBar", ImVec2(50, 315));
                 static int menu = 0;
                 static int game = 0;
                 if (ImGui::ImageButton(g_gui.gta_icon->view, ImVec2(45, 45)))
@@ -366,6 +361,7 @@ namespace loader
                     return;
                 }
                 ImGui::PopStyleColor();
+                ImGui::PopStyleColor();
                 ImGui::PopStyleVar();
                 ImGui::EndChild();
                 ImGui::EndGroup();
@@ -379,18 +375,81 @@ namespace loader
                 {
                 case 0:
                 {
-                    ImGui::GetWindowDrawList()->AddImage(gta_background->view, ImVec2(c.x, c.y + 530), ImVec2(c.x + 730, c.y));
-                    ImGui::Button("Launch");
-                    ImGui::Button("Inject");
-                    //ImGui::Image(g_gui.gta_background->view, ImVec2(730, 530)); 
+                    //ImGui::GetWindowDrawList()->AddImage(gta_background->view, ImVec2(c.x, c.y + 530), ImVec2(c.x + 730, c.y));
+                    ImGui::Image(g_gui.gta_background->view, ImVec2(560, 315)); 
+                    ImGui::SameLine();
+                    ImGui::BeginGroup();
+                    ImGui::PushFont(segoeui_font_35px);
+                    ImGui::TextColored(ImVec4(0, 255, 0, 255), "Blade");
+                    ImGui::SameLine();
+                    ImGui::Text("Menu");
+                    ImGui::PopFont();
+                    ImGui::Text("For GTAV");
+                    ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                    ImGui::TextWrapped("A dual UI, personal pet project of mine. Not meant for online as there is zero protection from the anticheat in it.");
+                    ImGui::EndChild();//center these buttons
+                    ImGui::Button("Launch Game");
+                    ImGui::Button("Run Menu");
+                    ImGui::EndGroup();
+
+                }break;
+                case 1:
+                {
+                    ImGui::Image(g_gui.repo_background->view, ImVec2(560, 315));
+                    ImGui::SameLine();
+                    ImGui::BeginGroup();
+                    ImGui::PushFont(segoeui_font_35px);
+                    ImGui::TextColored(ImVec4(255, 0, 255, 255), "Unk");
+                    ImGui::PopFont();
+                    ImGui::Text("For R.E.P.O");
+                    ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                    ImGui::TextWrapped("The most advanced menu for R.E.P.O.");
+                    ImGui::EndChild();//center these buttons
+                    ImGui::Button("Launch Game");
+                    ImGui::Button("Run Menu");
+                    ImGui::EndGroup();
+                }break;
+                case 2:
+                {
+                    ImGui::Image(g_gui.content_warning_background->view, ImVec2(560, 315));
+                    ImGui::SameLine();
+                    ImGui::BeginGroup();
+                    ImGui::PushFont(segoeui_font_35px);
+                    ImGui::TextColored(ImVec4(255, 0, 255, 255), "Spook");
+                    ImGui::SameLine();
+                    ImGui::Text("Suite");
+                    ImGui::PopFont();
+                    ImGui::Text("For Content Warning");
+                    ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                    ImGui::TextWrapped("A old joint collaboration.");
+                    ImGui::EndChild();//center these buttons
+                    ImGui::Button("Launch Game");
+                    ImGui::Button("Run Menu");
+                    ImGui::EndGroup();
+                }break;
+                case 3:
+                {
+                    ImGui::Image(g_gui.lethal_company_background->view, ImVec2(560, 315));
+                    ImGui::SameLine();
+                    ImGui::BeginGroup();
+                    ImGui::PushFont(segoeui_font_35px);
+                    ImGui::TextColored(ImVec4(255, 0, 0, 255), "Lethal");
+                    ImGui::SameLine();
+                    ImGui::Text("Menu");
+                    ImGui::PopFont();
+                    ImGui::Text("For Lethal Company");
+                    ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                    ImGui::TextWrapped("A menu for Lethal Company.");
+                    ImGui::EndChild();//center these buttons
+                    ImGui::Button("Launch Game");
+                    ImGui::Button("Run Menu");
+                    ImGui::EndGroup();
                 }break;
                 default:
                 {
 
                 }break;
                 }
-                //game background image https://imgs.search.brave.com/Gjz7rBGy5hALKJVl1mlkV7mGG9A-BUPE7Xob-jOXzcg/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDc2NDQ4/MzUuanBn
-                //launch button
                 ImGui::EndGroup();
             }
             ImGui::End();
