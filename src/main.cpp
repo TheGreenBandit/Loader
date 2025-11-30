@@ -64,6 +64,7 @@ void initialize()
     g_gui.repo_icon = download_img_if_noexist((fs::current_path() / "Resources" / "repo_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/repo_icon.png");
     g_gui.content_warning_icon = download_img_if_noexist((fs::current_path() / "Resources" / "content_warning_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/Content-Warning-Logo-500x281.png");
     g_gui.lethal_company_icon = download_img_if_noexist((fs::current_path() / "Resources" / "lethal_company_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/lethal_company_icon.png");
+    g_gui.gear_icon = download_img_if_noexist((fs::current_path() / "Resources" / "gear_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/gear_icon.png");
     g_gui.gta_background = download_img_if_noexist((fs::current_path() / "Resources" / "gta_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/gta_background.png");
     g_gui.repo_background = download_img_if_noexist((fs::current_path() / "Resources" / "repo_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/repo_background.png");
     g_gui.content_warning_background = download_img_if_noexist((fs::current_path() / "Resources" / "content_warning_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/content_warning_background.png");

@@ -324,57 +324,46 @@ namespace loader
             }
             if (menu_to_test == 0)
             {
-                ImGui::SetNextWindowSize(ImVec2(790, 415));
+                ImGui::SetNextWindowSize(ImVec2(803, 364));
                 if (ImGui::Begin(WINDOW_NAME, &active, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
                 {
-                    ImGui::BeginChild("Top Row + Logo", ImVec2(size.x, 50));//maybe remove top row, move changelogs to each game select, 
-                    //IDER: MAKE LOADER ICON HOME SCREEN BUTTON, PUT CHAT ON RIGHT SIDE WITH CHANGELOG SELECTOR ON LEFT!!! SETTINGS CAN BE ON BOTTOM RIGHT OF EACH THING
-                    ImGui::Image(icon->view, ImVec2(50, 50));
-                    ImGui::SameLine();
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(.1, .1, .1, 0));
-                    ImGui::PushFont(segoeui_font_35px);
-                    ImGui::Button(ICON_FA_COMPASS);
-                    ImGui::SameLine();
-                    ImGui::Button(ICON_FA_BOOK);
-                    ImGui::SameLine();
-                    ImGui::Button(ICON_FA_COMMENT);
-                    ImGui::SameLine();
-                    ImGui::Button(ICON_FA_COGS);
-
-                    ImGui::PopFont();
-                    ImGui::EndChild();
                     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.5, 2.5));
-
-                    ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Border, ImVec4(0, 0, 0, 0));
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(.1, .1, .1, 0));
+                    ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0, 0, 0));
                     ImGui::BeginGroup();
-                    ImGui::BeginChild("SideBar", ImVec2(50, 315));
+                    ImGui::BeginChild("SideBar", ImVec2(50, 325));
                     static int menu = 0;
                     static int game = 0;
-                    if (ImGui::ImageButton(g_gui.gta_icon->view, ImVec2(45, 45)))
+                    if (ImGui::ImageButton(icon->view, ImVec2(45, 45)))
+                    {
+                        menu = 0;
+                        return;
+                    }
+                    if (ImGui::ImageButton(gta_icon->view, ImVec2(45, 45)))
                     {
                         game = 0;
                         menu = 1;
                         return;
                     }
-                    if (ImGui::ImageButton(g_gui.repo_icon->view, ImVec2(45, 45)))
+                    if (ImGui::ImageButton(repo_icon->view, ImVec2(45, 45)))
                     {
                         game = 1;
                         menu = 1;
                         return;
                     }
-                    if (ImGui::ImageButton(g_gui.content_warning_icon->view, ImVec2(45, 45)))
+                    if (ImGui::ImageButton(content_warning_icon->view, ImVec2(45, 45)))
                     {
                         game = 2;
                         menu = 1;
                         return;
                     }
-                    if (ImGui::ImageButton(g_gui.lethal_company_icon->view, ImVec2(45, 45)))
+                    if (ImGui::ImageButton(lethal_company_icon->view, ImVec2(45, 45)))
                     {
                         game = 3;
                         menu = 1;
                         return;
                     }
-                    if (ImGui::Button(ICON_FA_COGS, ImVec2(50, 50)))
+                    if (ImGui::ImageButton(gear_icon->view, ImVec2(45, 45)))
                     {
                         menu = 2;
                         return;
@@ -395,7 +384,7 @@ namespace loader
                     case 0:
                     {
                         //ImGui::GetWindowDrawList()->AddImage(gta_background->view, ImVec2(c.x, c.y + 530), ImVec2(c.x + 730, c.y));
-                        ImGui::Image(g_gui.gta_background->view, ImVec2(560, 315));
+                        ImGui::Image(gta_background->view, ImVec2(578, 325));//todo now make this a image selector with pictures of menus
                         ImGui::SameLine();
                         ImGui::BeginGroup();
                         ImGui::PushFont(segoeui_font_35px);
@@ -404,7 +393,7 @@ namespace loader
                         ImGui::Text("Menu");
                         ImGui::PopFont();
                         ImGui::Text("For GTAV");
-                        ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                        ImGui::BeginChild("Desc Framing", ImVec2(155, 190));
                         ImGui::TextWrapped("A dual UI, personal pet project of mine. Not meant for online as there is zero protection from the anticheat in it.");
                         ImGui::EndChild();
                         ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0);
@@ -420,7 +409,7 @@ namespace loader
                     }break;
                     case 1:
                     {
-                        ImGui::Image(g_gui.repo_background->view, ImVec2(560, 315));
+                        ImGui::Image(repo_background->view, ImVec2(578, 325));
                         ImGui::SameLine();
                         ImGui::BeginGroup();
                         ImGui::PushFont(segoeui_font_35px);
@@ -436,7 +425,7 @@ namespace loader
                     }break;
                     case 2:
                     {
-                        ImGui::Image(g_gui.content_warning_background->view, ImVec2(560, 315));
+                        ImGui::Image(content_warning_background->view, ImVec2(578, 325));
                         ImGui::SameLine();
                         ImGui::BeginGroup();
                         ImGui::PushFont(segoeui_font_35px);
@@ -454,7 +443,7 @@ namespace loader
                     }break;
                     case 3:
                     {
-                        ImGui::Image(g_gui.lethal_company_background->view, ImVec2(560, 315));
+                        ImGui::Image(lethal_company_background->view, ImVec2(578, 325));
                         ImGui::SameLine();
                         ImGui::BeginGroup();
                         ImGui::PushFont(segoeui_font_35px);

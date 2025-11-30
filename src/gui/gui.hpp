@@ -108,12 +108,13 @@ namespace loader
 		Image* repo_icon;
 		Image* content_warning_icon;
 		Image* lethal_company_icon;
+		Image* gear_icon;
 		Image* gta_background;
 		Image* repo_background;
 		Image* content_warning_background;
 		Image* lethal_company_background;
 
 		//debug
-		float x = 200, y = 305, custom_float = 40;
+		float x = 200, y = 415, custom_float = 40;
 	} g_gui;
 }

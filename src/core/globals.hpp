@@ -32,7 +32,7 @@ namespace loader
 			float fontscale = 1.f;
 			struct style
 			{
-				float WindowPadding[2] = { 10.f, 10.f };
+				float WindowPadding[2] = { 5.f, 5.f };
 				float PopupRounding = 1.f;
 				float FramePadding[2] = { 6.f, 4.f };
 				float ItemSpacing[2] = { 5.f, 5.f };
