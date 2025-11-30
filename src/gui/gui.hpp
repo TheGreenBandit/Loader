@@ -97,9 +97,20 @@ namespace loader
 		egame game;
 		etab tab;
 		ImFont* default_font;
-		ImFont* segoeui_font;
+		ImFont* segoeui_font_20px;
+		ImFont* segoeui_font_25px;
+		ImFont* segoeui_font_30px;
+		ImFont* segoeui_font_35px;
+		ImFont* segoeui_font_40px;
 		std::vector<Image*> unkimages;
 		Image* icon;
 		Image* gta_icon;
+		Image* gta_background;
+		Image* repo_icon;
+		Image* content_warning_icon;
+		Image* lethal_company_icon;
+
+		//debug
+		float x = 200, y = 305, custom_float = 40;
 	} g_gui;
 }

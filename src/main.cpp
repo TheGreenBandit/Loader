@@ -7,6 +7,8 @@
 #include "util/gui_util.hpp"
 #include "widgets/imgui_notify.h"
 #include "util/message_system.hpp"
+#include "util/discord_util.hpp"
+
 #pragma warning (disable: 4996)
 
 // Forward declarations of helper functions
@@ -59,7 +61,10 @@ void initialize()
 
     g_gui.icon = download_img_if_noexist((fs::current_path() / "Resources" / "icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
     g_gui.gta_icon = download_img_if_noexist((fs::current_path() / "Resources" / "gta_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/gta_icon.png");
-
+    g_gui.gta_background = download_img_if_noexist((fs::current_path() / "Resources" / "gta_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/gta_background.png");
+    g_gui.repo_icon = download_img_if_noexist((fs::current_path() / "Resources" / "repo_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/repo_icon.png");
+    g_gui.content_warning_icon = download_img_if_noexist((fs::current_path() / "Resources" / "content_warning_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/Content-Warning-Logo-500x281.png");
+    g_gui.lethal_company_icon = download_img_if_noexist((fs::current_path() / "Resources" / "lethal_company_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/lethal_company_icon.png");
     download_if_noexist((fs::current_path() / "smi.exe"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
     download_if_noexist((fs::current_path() / "SharpMonoInjector.dll"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
 
@@ -164,7 +169,7 @@ int main(int, char**)
         ImFontConfig fnt_cfg{};
         fnt_cfg.FontDataOwnedByAtlas = false;
         strcpy(fnt_cfg.Name, "Fnt20px");
-        loader::g_gui.segoeui_font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 20.0f, &fnt_cfg,
+        loader::g_gui.segoeui_font_20px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 20.0f, &fnt_cfg,
             io.Fonts->GetGlyphRangesDefault());
         fnt_cfg.MergeMode = true;
         io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 20.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
@@ -177,13 +182,81 @@ int main(int, char**)
         io.Fonts->AddFontFromFileTTF("widgets/font_awesome_5", 20.f, &icons_config, icons_ranges);
         io.Fonts->Build();
     }
-
+    {
+        ImFontConfig fnt_cfg{};
+        fnt_cfg.FontDataOwnedByAtlas = false;
+        strcpy(fnt_cfg.Name, "Fnt25px");
+        loader::g_gui.segoeui_font_25px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 25.f, &fnt_cfg,
+            io.Fonts->GetGlyphRangesDefault());
+        fnt_cfg.MergeMode = true;
+        io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 25.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+        io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 25.f, &fnt_cfg, io.Fonts->GetGlyphRangesCyrillic());
+        ImGui::MergeIconsWithLatestFont(25.f);
+        static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+        ImFontConfig icons_config;
+        icons_config.MergeMode = true;
+        icons_config.PixelSnapH = false;
+        io.Fonts->AddFontFromFileTTF("widgets/font_awesome_5", 25.f, &icons_config, icons_ranges);
+        io.Fonts->Build();
+    }
+    {
+        ImFontConfig fnt_cfg{};
+        fnt_cfg.FontDataOwnedByAtlas = false;
+        strcpy(fnt_cfg.Name, "Fnt30px");
+        loader::g_gui.segoeui_font_30px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 30.f, &fnt_cfg,
+            io.Fonts->GetGlyphRangesDefault());
+        fnt_cfg.MergeMode = true;
+        io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 30.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+        io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 30.f, &fnt_cfg, io.Fonts->GetGlyphRangesCyrillic());
+        ImGui::MergeIconsWithLatestFont(30.f);
+        static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+        ImFontConfig icons_config;
+        icons_config.MergeMode = true;
+        icons_config.PixelSnapH = false;
+        io.Fonts->AddFontFromFileTTF("widgets/font_awesome_5", 30.f, &icons_config, icons_ranges);
+        io.Fonts->Build();
+    }
+    {
+        ImFontConfig fnt_cfg{};
+        fnt_cfg.FontDataOwnedByAtlas = false;
+        strcpy(fnt_cfg.Name, "Fnt35px");
+        loader::g_gui.segoeui_font_35px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 35.f, &fnt_cfg,
+            io.Fonts->GetGlyphRangesDefault());
+        fnt_cfg.MergeMode = true;
+        io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 35.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+        io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 35.f, &fnt_cfg, io.Fonts->GetGlyphRangesCyrillic());
+        ImGui::MergeIconsWithLatestFont(35.f);
+        static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+        ImFontConfig icons_config;
+        icons_config.MergeMode = true;
+        icons_config.PixelSnapH = false;
+        io.Fonts->AddFontFromFileTTF("widgets/font_awesome_5", 35.f, &icons_config, icons_ranges);
+        io.Fonts->Build();
+    }
+    {
+        ImFontConfig fnt_cfg{};
+        fnt_cfg.FontDataOwnedByAtlas = false;
+        strcpy(fnt_cfg.Name, "Fnt40px");
+        loader::g_gui.segoeui_font_40px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 40.f, &fnt_cfg,
+            io.Fonts->GetGlyphRangesDefault());
+        fnt_cfg.MergeMode = true;
+        io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 40.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
+        io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 40.f, &fnt_cfg, io.Fonts->GetGlyphRangesCyrillic());
+        ImGui::MergeIconsWithLatestFont(40.f);
+        static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
+        ImFontConfig icons_config;
+        icons_config.MergeMode = true;
+        icons_config.PixelSnapH = false;
+        io.Fonts->AddFontFromFileTTF("widgets/font_awesome_5", 40.f, &icons_config, icons_ranges);
+        io.Fonts->Build();
+    }
     active = true;
     initialize();
     // Main
     while (active)
     {
         security.loop();
+        discord_util.update();
         // Poll and handle messages (inputs, window resize, etc.)
         // See the WndProc() function below for our to dispatch events to the Win32 backend.
         MSG msg;

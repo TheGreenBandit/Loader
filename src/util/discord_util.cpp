@@ -6,8 +6,8 @@ namespace loader
 	discord_util::discord_util()//discord rpc is also a todo
 	{
         ZeroMemory(&handlers, sizeof(handlers));
-
-        //Discord_Initialize("", &handlers, TRUE, "");
+        
+        Discord_Initialize("1376339260239642625", &handlers, TRUE, "");
 	}
 
 	discord_util::~discord_util()
@@ -23,15 +23,16 @@ namespace loader
 
     void discord_util::update_rpc()
     {
-        if (rpc_enabled)
         {
             ZeroMemory(&presence, sizeof(presence));
-            presence.state = std::format("Modding {}", g_gui.game_to_name(g_gui.game)).c_str();
+            presence.state = "Creating the future";
             presence.startTimestamp = std::chrono::system_clock::to_time_t(g.start_time);
+            presence.largeImageKey = "gta_background";
         }
         //else
             //Discord_ClearPresence();
-        //Discord_RunCallbacks();
+        Discord_UpdatePresence(&presence);
+        Discord_RunCallbacks();
     }
 
     std::string escape_json_string(const std::string& input) {

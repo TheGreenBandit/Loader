@@ -154,42 +154,80 @@ namespace loader
 
     void gui::render()
     {
+        static float x = 5, y = 5;
         updatecolstyl();
         if (loader::active)
         {
             if (ImGui::Begin("Blade", &active, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar))
             {
-                static char search;//feature search
-                g_logger.log("b1");
+                
+                static char search = ' ';//feature search
+                ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0, 0, 0, 0));
+                ImGui::BeginChild("titlebar", ImVec2(ImGui::GetContentRegionAvail().x, 50));
                 ImGui::Image(icon->view, ImVec2(50, 50));
                 ImGui::SameLine();
-                g_gui.segoeui_font->FontSize = 10;
+                ImGui::PushFont(segoeui_font_40px);           
                 ImGui::TextColored(ImVec4(0, 255, 0, 255), "Blade");
                 ImGui::SameLine();
                 ImGui::Text("Menu");
-                g_gui.segoeui_font->FontSize = 20;
+                ImGui::PopFont();
                 ImGui::SameLine();
-                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 15);
-                ImGui::BeginGroup();
+                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 15);//todo find way to not have to use this on each fucking thing
                 //ImGui::PushStyleVar(ImGuiStyleVar_::, ImVec2(5, 20)); todo figure out way to center
                 ImGui::Text(ICON_FA_SEARCH);
                 ImGui::SameLine();
-                ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - 70);
-                ImGui::InputTextWithHint("", "Search...", &search, sizeof(search) + 1);
+                ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - 80);
+                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
+                ImGui::InputTextWithHint("", "Search...", &search, sizeof(search));
                 ImGui::SameLine();
+                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
                 if (ImGui::Button(ICON_FA_COGS))
                     active = false;
                 ImGui::SameLine();
-                if (ImGui::Button("X"))
-                    active = false;
-                ImGui::EndGroup();
+                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
+                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5, 5));
+                if (ImGui::Button(ICON_FA_HAND_MIDDLE_FINGER))
+                    active = false; 
+                ImGui::PushFont(segoeui_font_30px);
+                ImGui::PopStyleVar();
+                ImGui::EndChild();
                 ImGui::Separator();
-                ImGui::Text("stuff");
+                ImGui::BeginGroup();
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 0, 0, 1));
+                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));//todo why tf wont these center nicely
+                ImGui::Button(ICON_FA_USER, ImVec2(50, 50));
+                ImGui::Button(ICON_FA_CAR, ImVec2(50, 50));
+                ImGui::Button(ICON_FA_SKULL_CROSSBONES, ImVec2(50, 50));
+                ImGui::Button(ICON_FA_DOLLAR_SIGN, ImVec2(50, 50));
+                ImGui::Button(ICON_FA_GLOBE, ImVec2(50, 50));
+                ImGui::PopFont();
+                ImGui::PopStyleVar();
+                ImGui::PopStyleColor();
+                ImGui::EndGroup();
+                ImGui::SameLine();
+                ImGui::BeginGroup();
+                ImGui::BeginChild("testc", ImVec2(200, 300), 1);
+                ImGui::Checkbox("Example", &active);
+                ImGui::Checkbox("Example", &active);
+                ImGui::Checkbox("Example", &active);
+                ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Example").x * .65);
+                ImGui::SliderFloat("Examplea", &x, 0, 20);
+                ImGui::EndChild();
+                ImGui::BeginChild("testb", ImVec2(200, 300), 1);
+                ImGui::Checkbox("Example", &active);
+                ImGui::Checkbox("Example", &active);
+                ImGui::Checkbox("Example", &active);
+                ImGui::SetNextItemWidth((ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Example").x) * .65);
+                ImGui::SliderFloat("Exampleb", &x, 0, 20);
+                ImGui::EndChild();
+                ImGui::EndGroup();
                 ImGui::End();
             }
 
             if (ImGui::Begin("debug menu", &active))
             {
+                ImGui::InputFloat("x", &x);
+                ImGui::InputFloat("y", &y);
                 static int menu_select = 0;
                 if (ImGui::Button("STYLE"))
                     menu_select = 0;
@@ -279,33 +317,54 @@ namespace loader
                 ImGui::End();
             }
             ImGui::SetNextWindowSize(size);
-            if (ImGui::Begin(WINDOW_NAME, &active, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar))
+            if (ImGui::Begin(WINDOW_NAME, &active, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
             {
                 ImGui::BeginChild("Top Row + Logo", ImVec2(size.x, 50));
                 ImGui::Image(icon->view, ImVec2(50, 50));
                 ImGui::SameLine();
-                ImGui::Button("Home");
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(.1, .1, .1, 0));
+                ImGui::PushFont(segoeui_font_35px);
+                ImGui::Button(ICON_FA_COMPASS);
                 ImGui::SameLine();
-                ImGui::Button("Changelog");
+                ImGui::Button(ICON_FA_BOOK);
                 ImGui::SameLine();
-                ImGui::Button("Chat");
+                ImGui::Button(ICON_FA_COMMENT);
                 ImGui::SameLine();
-                ImGui::Button("Settings");
-                ImGui::SameLine();
-                ImGui::Button("X");
+                ImGui::Button(ICON_FA_COGS);
+
+                ImGui::PopFont();
                 ImGui::EndChild();
-                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.5, 2.5));
+                
                 ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Border , ImVec4(0, 0, 0, 0));
                 ImGui::BeginGroup();
                 ImGui::BeginChild("SideBar", ImVec2(50, size.y - 50));
+                static int menu = 0;
+                static int game = 0;
                 if (ImGui::ImageButton(g_gui.gta_icon->view, ImVec2(45, 45)))
                 {
+                    game = 0;
+                    menu = 0;
                     return;
                 }
-                ImGui::Button("REPO Logo");
-                ImGui::Button("CONTENTW Logo");
-                ImGui::Button("LC Logo");
+                if (ImGui::ImageButton(g_gui.repo_icon->view, ImVec2(45, 45)))
+                {
+                    game = 1;
+                    menu = 0;
+                    return;
+                }
+                if (ImGui::ImageButton(g_gui.content_warning_icon->view, ImVec2(45, 45)))
+                {
+                    game = 2;
+                    menu = 0;
+                    return;
+                }
+                if (ImGui::ImageButton(g_gui.lethal_company_icon->view, ImVec2(45, 45)))
+                {
+                    game = 3;
+                    menu = 0;
+                    return;
+                }
                 ImGui::PopStyleColor();
                 ImGui::PopStyleVar();
                 ImGui::EndChild();
@@ -314,6 +373,22 @@ namespace loader
                 ImGui::SameLine();
 
                 ImGui::BeginGroup();
+                ImVec2 c = ImGui::GetCursorPos();
+                
+                switch (game)
+                {
+                case 0:
+                {
+                    ImGui::GetWindowDrawList()->AddImage(gta_background->view, ImVec2(c.x, c.y + 530), ImVec2(c.x + 730, c.y));
+                    ImGui::Button("Launch");
+                    ImGui::Button("Inject");
+                    //ImGui::Image(g_gui.gta_background->view, ImVec2(730, 530)); 
+                }break;
+                default:
+                {
+
+                }break;
+                }
                 //game background image https://imgs.search.brave.com/Gjz7rBGy5hALKJVl1mlkV7mGG9A-BUPE7Xob-jOXzcg/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJjYXZlLmNv/bS93cC93cDc2NDQ4/MzUuanBn
                 //launch button
                 ImGui::EndGroup();

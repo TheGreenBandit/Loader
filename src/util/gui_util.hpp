@@ -96,14 +96,14 @@ namespace loader
 				ImGui::Separator();
 		}
 
-		inline void push_font_size(float size)
+		inline void push_font_size(float size)//remove me
 		{
-			g_gui.segoeui_font->FontSize = size;
+			g_gui.segoeui_font_20px->FontSize = size;
 		}
 
 		inline void pop_font_size()
 		{
-			g_gui.segoeui_font->FontSize = 20;
+			g_gui.segoeui_font_20px->FontSize = 20;
 		}
 
 		inline void righttext(std::string_view text, bool seperator = false)
