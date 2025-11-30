@@ -151,308 +151,334 @@ namespace loader
     {
         //ImGui::ImageButton
     }
-
+    inline int menu_to_test = 0;
     void gui::render()
     {
+        if (GetAsyncKeyState(VK_NUMPAD1))
+            menu_to_test = 0;
+        if (GetAsyncKeyState(VK_NUMPAD2))
+            menu_to_test = 1;
+        if (GetAsyncKeyState(VK_NUMPAD3))
+            menu_to_test = 2;
         updatecolstyl();
         if (loader::active)
         {
-            if (ImGui::Begin("Blade", &active, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar))
-            {           
-                static char search = ' ';//feature search
-                ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0, 0, 0, 0));
-                ImGui::BeginChild("titlebar", ImVec2(ImGui::GetContentRegionAvail().x, 50));
-                ImGui::Image(icon->view, ImVec2(50, 50));
-                ImGui::SameLine();
-                ImGui::PushFont(segoeui_font_40px);           
-                ImGui::TextColored(ImVec4(0, 255, 0, 255), "Blade");
-                ImGui::SameLine();
-                ImGui::Text("Menu");
-                ImGui::PopFont();
-                ImGui::SameLine();
-                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 15);//todo find way to not have to use this on each fucking thing
-                //ImGui::PushStyleVar(ImGuiStyleVar_::, ImVec2(5, 20)); todo figure out way to center
-                ImGui::Text(ICON_FA_SEARCH);
-                ImGui::SameLine();
-                ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - 80);
-                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
-                ImGui::InputTextWithHint("", "Search...", &search, sizeof(search));
-                ImGui::SameLine();
-                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
-                if (ImGui::Button(ICON_FA_COGS))
-                    active = false;
-                ImGui::SameLine();
-                ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
-                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5, 5));
-                if (ImGui::Button(ICON_FA_HAND_MIDDLE_FINGER))
-                    active = false; 
-                ImGui::PushFont(segoeui_font_30px);
-                ImGui::PopStyleVar();
-                ImGui::EndChild();
-                ImGui::Separator();
-                ImGui::BeginGroup();
-                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 0, 0, 1));
-                //ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));//todo why tf wont these center nicely
-                ImGui::Button(ICON_FA_USER, ImVec2(50, 50));
-                ImGui::Button(ICON_FA_CAR, ImVec2(50, 50));
-                ImGui::Button(ICON_FA_SKULL_CROSSBONES, ImVec2(50, 50));
-                ImGui::Button(ICON_FA_DOLLAR_SIGN, ImVec2(50, 50));
-                ImGui::Button(ICON_FA_GLOBE, ImVec2(50, 50));
-                ImGui::PopFont();
-                //ImGui::PopStyleVar();
-                ImGui::PopStyleColor();
-                ImGui::EndGroup();
-                ImGui::SameLine();
-                ImGui::BeginGroup();
-                ImGui::BeginChild("testc", ImVec2(200, 300), 1);
-                ImGui::Checkbox("Godmode", &active);
-                ImGui::Checkbox("No Ragdoll", &active);
-                ImGui::Checkbox("Air Walk", &active);
-                ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Wanted Level").x * .65);
-                ImGui::SliderFloat("Wanted Level", &x, 0, 20);
-                ImGui::Checkbox("NoClip", &active);
-                ImGui::SameLine();
-                ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Speed").x * .65);
-                ImGui::SliderFloat("", &x, 0, 20);
-                ImGui::EndChild();
-                ImGui::EndGroup();
-                ImGui::End();
-            }
-
-            if (ImGui::Begin("debug menu", &active))
+            if (menu_to_test == 1)
             {
-                ImGui::InputFloat("x", &x);
-                ImGui::InputFloat("y", &y);
-                static int menu_select = 0;
-                if (ImGui::Button("STYLE"))
-                    menu_select = 0;
-                ImGui::SameLine();
-                if (ImGui::Button("COLOR"))
-                    menu_select = 1;
-                ImGui::Separator();
-                if (!menu_select)
+                if (ImGui::Begin("Blade", &active, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar))
                 {
-                    ImGui::SetNextItemWidth(100);
-                    ImGui::InputFloat2("WindowPadding", g.gui.style.WindowPadding, "%.1f");
-                    ImGui::InputFloat("PopupRounding", &g.gui.style.PopupRounding);
-                    ImGui::InputFloat2("FramePadding", g.gui.style.FramePadding);
-                    ImGui::InputFloat2("ItemSpacing", g.gui.style.ItemSpacing);
-                    ImGui::InputFloat2("ItemInnerSpacing", g.gui.style.ItemInnerSpacing);
-                    ImGui::InputFloat2("TouchExtraPadding", g.gui.style.TouchExtraPadding);
-                    ImGui::InputFloat("IndentSpacing", &g.gui.style.IndentSpacing);
-                    ImGui::InputFloat("ScrollbarSize", &g.gui.style.ScrollbarSize);
-                    ImGui::InputFloat("GrabMinSize", &g.gui.style.GrabMinSize);
-                    ImGui::InputFloat("WindowBorderSize", &g.gui.style.WindowBorderSize);
-                    ImGui::InputFloat("ChildBorderSize", &g.gui.style.ChildBorderSize);
-                    ImGui::InputFloat("PopupBorderSize", &g.gui.style.PopupBorderSize);
-                    ImGui::InputFloat("FrameBorderSize", &g.gui.style.FrameBorderSize);
-                    ImGui::InputFloat("TabBorderSize", &g.gui.style.TabBorderSize);
-                    ImGui::InputFloat("WindowRounding", &g.gui.style.WindowRounding);
-                    ImGui::InputFloat("ChildRounding", &g.gui.style.ChildRounding);
-                    ImGui::InputFloat("FrameRounding", &g.gui.style.FrameRounding);
-                    ImGui::InputFloat("ScrollbarRounding", &g.gui.style.ScrollbarRounding);
-                    ImGui::InputFloat("GrabRounding", &g.gui.style.GrabRounding);
-                    ImGui::InputFloat("TabRounding", &g.gui.style.TabRounding);
-                    ImGui::InputFloat2("WindowTitleAlign", g.gui.style.WindowTitleAlign);
-                    ImGui::InputFloat2("ButtonTextAlign", g.gui.style.ButtonTextAlign);
-                    ImGui::InputFloat2("DisplaySafeAreaPadding", g.gui.style.DisplaySafeAreaPadding);
-                }
-                else
-                {
-                    ImGui::Text("color bs");
-                    ImGui::InputFloat4("text", g.gui.color.Text);
-                    ImGui::InputFloat4("textdisabled", g.gui.color.TextDisabled);
-                    ImGui::InputFloat4("window bg", g.gui.color.WindowBg);
-                    ImGui::InputFloat4("child bg", g.gui.color.ChildBg);
-                    ImGui::InputFloat4("PopupBg", g.gui.color.PopupBg);
-                    ImGui::InputFloat4("Border", g.gui.color.Border);
-                    ImGui::InputFloat4("BorderShadow", g.gui.color.BorderShadow);
-                    ImGui::InputFloat4("FrameBg", g.gui.color.FrameBg);
-                    ImGui::InputFloat4("FrameBgHovered", g.gui.color.FrameBgHovered);
-                    ImGui::InputFloat4("FrameBgActive", g.gui.color.FrameBgActive);
-                    ImGui::InputFloat4("TitleBg", g.gui.color.TitleBg);
-                    ImGui::InputFloat4("TitleBgActive", g.gui.color.TitleBgActive);
-                    ImGui::InputFloat4("TitleBgCollapsed", g.gui.color.TitleBgCollapsed);
-                    ImGui::InputFloat4("MenuBarBg", g.gui.color.MenuBarBg);
-                    ImGui::InputFloat4("ScrollbarBg", g.gui.color.ScrollbarBg);
-                    ImGui::InputFloat4("ScrollbarGrab", g.gui.color.ScrollbarGrab);
-                    ImGui::InputFloat4("ScrollbarGrabHovered", g.gui.color.ScrollbarGrabHovered);
-                    ImGui::InputFloat4("ScrollbarGrabActive", g.gui.color.ScrollbarGrabActive);
-                    ImGui::InputFloat4("CheckMark", g.gui.color.CheckMark);
-                    ImGui::InputFloat4("SliderGrab", g.gui.color.SliderGrab);
-                    ImGui::InputFloat4("SliderGrabActive", g.gui.color.SliderGrabActive);
-                    ImGui::InputFloat4("Button", g.gui.color.Button);
-                    ImGui::InputFloat4("ButtonHovered", g.gui.color.ButtonHovered);
-                    ImGui::InputFloat4("ButtonActive", g.gui.color.ButtonActive);
-                    ImGui::InputFloat4("Header", g.gui.color.Header);
-                    ImGui::InputFloat4("HeaderHovered", g.gui.color.HeaderHovered);
-                    ImGui::InputFloat4("HeaderActive", g.gui.color.HeaderActive);
-                    ImGui::InputFloat4("Separator", g.gui.color.Separator);
-                    ImGui::InputFloat4("SeparatorHovered", g.gui.color.SeparatorHovered);
-                    ImGui::InputFloat4("SeparatorActive", g.gui.color.SeparatorActive);
-                    ImGui::InputFloat4("ResizeGrip", g.gui.color.ResizeGrip);
-                    ImGui::InputFloat4("ResizeGripHovered", g.gui.color.ResizeGripHovered);
-                    ImGui::InputFloat4("ResizeGripActive", g.gui.color.ResizeGripActive);
-                    ImGui::InputFloat4("Tab", g.gui.color.Tab);
-                    ImGui::InputFloat4("TabHovered", g.gui.color.TabHovered);
-                    ImGui::InputFloat4("TabActive", g.gui.color.TabActive);
-                    ImGui::InputFloat4("TabUnfocused", g.gui.color.TabUnfocused);
-                    ImGui::InputFloat4("TabUnfocusedActive", g.gui.color.TabUnfocusedActive);
-                    ImGui::InputFloat4("PlotLines", g.gui.color.PlotLines);
-                    ImGui::InputFloat4("PlotLinesHovered", g.gui.color.PlotLinesHovered);
-                    ImGui::InputFloat4("PlotHistogram", g.gui.color.PlotHistogram);
-                    ImGui::InputFloat4("PlotHistogramHovered", g.gui.color.PlotHistogramHovered);
-                    ImGui::InputFloat4("TextSelectedBg", g.gui.color.TextSelectedBg);
-                    ImGui::InputFloat4("DragDropTarget", g.gui.color.DragDropTarget);
-                    ImGui::InputFloat4("NavHighlight", g.gui.color.NavHighlight);
-                    ImGui::InputFloat4("NavWindowingHighlight", g.gui.color.NavWindowingHighlight);
-                    ImGui::InputFloat4("NavWindowingDimBg", g.gui.color.NavWindowingDimBg);
-                    ImGui::InputFloat4("ModalWindowDimBg", g.gui.color.ModalWindowDimBg);
-                }
-                ImGui::End();
-            }
-            ImGui::SetNextWindowSize(ImVec2(790, 415));
-            if (ImGui::Begin(WINDOW_NAME, &active, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
-            {
-                ImGui::BeginChild("Top Row + Logo", ImVec2(size.x, 50));//maybe remove top row, move changelogs to each game select, 
-                ImGui::Image(icon->view, ImVec2(50, 50));
-                ImGui::SameLine();
-                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(.1, .1, .1, 0));
-                ImGui::PushFont(segoeui_font_35px);
-                ImGui::Button(ICON_FA_COMPASS);
-                ImGui::SameLine();
-                ImGui::Button(ICON_FA_BOOK);
-                ImGui::SameLine();
-                ImGui::Button(ICON_FA_COMMENT);
-                ImGui::SameLine();
-                ImGui::Button(ICON_FA_COGS);
-
-                ImGui::PopFont();
-                ImGui::EndChild();
-                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.5, 2.5));
-                
-                ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Border , ImVec4(0, 0, 0, 0));
-                ImGui::BeginGroup();
-                ImGui::BeginChild("SideBar", ImVec2(50, 315));
-                static int menu = 0;
-                static int game = 0;
-                if (ImGui::ImageButton(g_gui.gta_icon->view, ImVec2(45, 45)))
-                {
-                    game = 0;
-                    menu = 0;
-                    return;
-                }
-                if (ImGui::ImageButton(g_gui.repo_icon->view, ImVec2(45, 45)))
-                {
-                    game = 1;
-                    menu = 0;
-                    return;
-                }
-                if (ImGui::ImageButton(g_gui.content_warning_icon->view, ImVec2(45, 45)))
-                {
-                    game = 2;
-                    menu = 0;
-                    return;
-                }
-                if (ImGui::ImageButton(g_gui.lethal_company_icon->view, ImVec2(45, 45)))
-                {
-                    game = 3;
-                    menu = 0;
-                    return;
-                }
-                ImGui::PopStyleColor();
-                ImGui::PopStyleColor();
-                ImGui::PopStyleVar();
-                ImGui::EndChild();
-                ImGui::EndGroup();
-
-                ImGui::SameLine();
-
-                ImGui::BeginGroup();
-                ImVec2 c = ImGui::GetCursorPos();
-                
-                switch (game)
-                {
-                case 0:
-                {
-                    //ImGui::GetWindowDrawList()->AddImage(gta_background->view, ImVec2(c.x, c.y + 530), ImVec2(c.x + 730, c.y));
-                    ImGui::Image(g_gui.gta_background->view, ImVec2(560, 315)); 
+                    static char search = ' ';//feature search
+                    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0, 0, 0, 0));
+                    ImGui::BeginChild("titlebar", ImVec2(ImGui::GetContentRegionAvail().x, 50));
+                    ImGui::Image(icon->view, ImVec2(50, 50));
                     ImGui::SameLine();
-                    ImGui::BeginGroup();
-                    ImGui::PushFont(segoeui_font_35px);
+                    ImGui::PushFont(segoeui_font_40px);
                     ImGui::TextColored(ImVec4(0, 255, 0, 255), "Blade");
                     ImGui::SameLine();
                     ImGui::Text("Menu");
                     ImGui::PopFont();
-                    ImGui::Text("For GTAV");
-                    ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
-                    ImGui::TextWrapped("A dual UI, personal pet project of mine. Not meant for online as there is zero protection from the anticheat in it.");
-                    ImGui::EndChild();//center these buttons
-                    ImGui::Button("Launch Game");
-                    ImGui::Button("Run Menu");
+                    ImGui::SameLine();
+                    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 15);//todo find way to not have to use this on each fucking thing
+                    //ImGui::PushStyleVar(ImGuiStyleVar_::, ImVec2(5, 20)); todo figure out way to center
+                    ImGui::Text(ICON_FA_SEARCH);
+                    ImGui::SameLine();
+                    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - 80);
+                    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
+                    ImGui::InputTextWithHint("", "Search...", &search, sizeof(search));
+                    ImGui::SameLine();
+                    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
+                    if (ImGui::Button(ICON_FA_COGS))
+                        active = false;
+                    ImGui::SameLine();
+                    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
+                    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5, 5));
+                    if (ImGui::Button(ICON_FA_HAND_MIDDLE_FINGER))
+                        active = false;
+                    ImGui::PushFont(segoeui_font_30px);
+                    ImGui::PopStyleVar();
+                    ImGui::EndChild();
+                    ImGui::Separator();
+                    ImGui::BeginGroup();
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 0, 0, 1));
+                    //ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));//todo why tf wont these center nicely
+                    ImGui::Button(ICON_FA_USER, ImVec2(50, 50));
+                    ImGui::Button(ICON_FA_CAR, ImVec2(50, 50));
+                    ImGui::Button(ICON_FA_SKULL_CROSSBONES, ImVec2(50, 50));
+                    ImGui::Button(ICON_FA_DOLLAR_SIGN, ImVec2(50, 50));
+                    ImGui::Button(ICON_FA_GLOBE, ImVec2(50, 50));
+                    ImGui::PopFont();
+                    //ImGui::PopStyleVar();
+                    ImGui::PopStyleColor();
                     ImGui::EndGroup();
-
-                }break;
-                case 1:
-                {
-                    ImGui::Image(g_gui.repo_background->view, ImVec2(560, 315));
                     ImGui::SameLine();
                     ImGui::BeginGroup();
-                    ImGui::PushFont(segoeui_font_35px);
-                    ImGui::TextColored(ImVec4(255, 0, 255, 255), "Unk");
-                    ImGui::PopFont();
-                    ImGui::Text("For R.E.P.O");
-                    ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
-                    ImGui::TextWrapped("The most advanced menu for R.E.P.O.");
-                    ImGui::EndChild();//center these buttons
-                    ImGui::Button("Launch Game");
-                    ImGui::Button("Run Menu");
+                    ImGui::BeginChild("testc", ImVec2(200, 300), 1);
+                    ImGui::Checkbox("Godmode", &active);
+                    ImGui::Checkbox("No Ragdoll", &active);
+                    ImGui::Checkbox("Air Walk", &active);
+                    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Wanted Level").x * .65);
+                    ImGui::SliderFloat("Wanted Level", &x, 0, 20);
+                    ImGui::Checkbox("NoClip", &active);
+                    ImGui::SameLine();
+                    ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize("Speed").x * .65);
+                    ImGui::SliderFloat("", &x, 0, 20);
+                    ImGui::EndChild();
                     ImGui::EndGroup();
-                }break;
-                case 2:
-                {
-                    ImGui::Image(g_gui.content_warning_background->view, ImVec2(560, 315));
-                    ImGui::SameLine();
-                    ImGui::BeginGroup();
-                    ImGui::PushFont(segoeui_font_35px);
-                    ImGui::TextColored(ImVec4(255, 0, 255, 255), "Spook");
-                    ImGui::SameLine();
-                    ImGui::Text("Suite");
-                    ImGui::PopFont();
-                    ImGui::Text("For Content Warning");
-                    ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
-                    ImGui::TextWrapped("A old joint collaboration.");
-                    ImGui::EndChild();//center these buttons
-                    ImGui::Button("Launch Game");
-                    ImGui::Button("Run Menu");
-                    ImGui::EndGroup();
-                }break;
-                case 3:
-                {
-                    ImGui::Image(g_gui.lethal_company_background->view, ImVec2(560, 315));
-                    ImGui::SameLine();
-                    ImGui::BeginGroup();
-                    ImGui::PushFont(segoeui_font_35px);
-                    ImGui::TextColored(ImVec4(255, 0, 0, 255), "Lethal");
-                    ImGui::SameLine();
-                    ImGui::Text("Menu");
-                    ImGui::PopFont();
-                    ImGui::Text("For Lethal Company");
-                    ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
-                    ImGui::TextWrapped("A menu for Lethal Company.");
-                    ImGui::EndChild();//center these buttons
-                    ImGui::Button("Launch Game");
-                    ImGui::Button("Run Menu");
-                    ImGui::EndGroup();
-                }break;
-                default:
-                {
-
-                }break;
+                    ImGui::End();
                 }
-                ImGui::EndGroup();
             }
-            ImGui::End();
+            if (menu_to_test == 2)
+            {
+                if (ImGui::Begin("debug menu", &active))
+                {
+                    ImGui::InputFloat("x", &x);
+                    ImGui::InputFloat("y", &y);
+                    static int menu_select = 0;
+                    if (ImGui::Button("STYLE"))
+                        menu_select = 0;
+                    ImGui::SameLine();
+                    if (ImGui::Button("COLOR"))
+                        menu_select = 1;
+                    ImGui::Separator();
+                    if (!menu_select)
+                    {
+                        ImGui::SetNextItemWidth(100);
+                        ImGui::InputFloat2("WindowPadding", g.gui.style.WindowPadding, "%.1f");
+                        ImGui::InputFloat("PopupRounding", &g.gui.style.PopupRounding);
+                        ImGui::InputFloat2("FramePadding", g.gui.style.FramePadding);
+                        ImGui::InputFloat2("ItemSpacing", g.gui.style.ItemSpacing);
+                        ImGui::InputFloat2("ItemInnerSpacing", g.gui.style.ItemInnerSpacing);
+                        ImGui::InputFloat2("TouchExtraPadding", g.gui.style.TouchExtraPadding);
+                        ImGui::InputFloat("IndentSpacing", &g.gui.style.IndentSpacing);
+                        ImGui::InputFloat("ScrollbarSize", &g.gui.style.ScrollbarSize);
+                        ImGui::InputFloat("GrabMinSize", &g.gui.style.GrabMinSize);
+                        ImGui::InputFloat("WindowBorderSize", &g.gui.style.WindowBorderSize);
+                        ImGui::InputFloat("ChildBorderSize", &g.gui.style.ChildBorderSize);
+                        ImGui::InputFloat("PopupBorderSize", &g.gui.style.PopupBorderSize);
+                        ImGui::InputFloat("FrameBorderSize", &g.gui.style.FrameBorderSize);
+                        ImGui::InputFloat("TabBorderSize", &g.gui.style.TabBorderSize);
+                        ImGui::InputFloat("WindowRounding", &g.gui.style.WindowRounding);
+                        ImGui::InputFloat("ChildRounding", &g.gui.style.ChildRounding);
+                        ImGui::InputFloat("FrameRounding", &g.gui.style.FrameRounding);
+                        ImGui::InputFloat("ScrollbarRounding", &g.gui.style.ScrollbarRounding);
+                        ImGui::InputFloat("GrabRounding", &g.gui.style.GrabRounding);
+                        ImGui::InputFloat("TabRounding", &g.gui.style.TabRounding);
+                        ImGui::InputFloat2("WindowTitleAlign", g.gui.style.WindowTitleAlign);
+                        ImGui::InputFloat2("ButtonTextAlign", g.gui.style.ButtonTextAlign);
+                        ImGui::InputFloat2("DisplaySafeAreaPadding", g.gui.style.DisplaySafeAreaPadding);
+                    }
+                    else
+                    {
+                        ImGui::Text("color bs");
+                        ImGui::InputFloat4("text", g.gui.color.Text);
+                        ImGui::InputFloat4("textdisabled", g.gui.color.TextDisabled);
+                        ImGui::InputFloat4("window bg", g.gui.color.WindowBg);
+                        ImGui::InputFloat4("child bg", g.gui.color.ChildBg);
+                        ImGui::InputFloat4("PopupBg", g.gui.color.PopupBg);
+                        ImGui::InputFloat4("Border", g.gui.color.Border);
+                        ImGui::InputFloat4("BorderShadow", g.gui.color.BorderShadow);
+                        ImGui::InputFloat4("FrameBg", g.gui.color.FrameBg);
+                        ImGui::InputFloat4("FrameBgHovered", g.gui.color.FrameBgHovered);
+                        ImGui::InputFloat4("FrameBgActive", g.gui.color.FrameBgActive);
+                        ImGui::InputFloat4("TitleBg", g.gui.color.TitleBg);
+                        ImGui::InputFloat4("TitleBgActive", g.gui.color.TitleBgActive);
+                        ImGui::InputFloat4("TitleBgCollapsed", g.gui.color.TitleBgCollapsed);
+                        ImGui::InputFloat4("MenuBarBg", g.gui.color.MenuBarBg);
+                        ImGui::InputFloat4("ScrollbarBg", g.gui.color.ScrollbarBg);
+                        ImGui::InputFloat4("ScrollbarGrab", g.gui.color.ScrollbarGrab);
+                        ImGui::InputFloat4("ScrollbarGrabHovered", g.gui.color.ScrollbarGrabHovered);
+                        ImGui::InputFloat4("ScrollbarGrabActive", g.gui.color.ScrollbarGrabActive);
+                        ImGui::InputFloat4("CheckMark", g.gui.color.CheckMark);
+                        ImGui::InputFloat4("SliderGrab", g.gui.color.SliderGrab);
+                        ImGui::InputFloat4("SliderGrabActive", g.gui.color.SliderGrabActive);
+                        ImGui::InputFloat4("Button", g.gui.color.Button);
+                        ImGui::InputFloat4("ButtonHovered", g.gui.color.ButtonHovered);
+                        ImGui::InputFloat4("ButtonActive", g.gui.color.ButtonActive);
+                        ImGui::InputFloat4("Header", g.gui.color.Header);
+                        ImGui::InputFloat4("HeaderHovered", g.gui.color.HeaderHovered);
+                        ImGui::InputFloat4("HeaderActive", g.gui.color.HeaderActive);
+                        ImGui::InputFloat4("Separator", g.gui.color.Separator);
+                        ImGui::InputFloat4("SeparatorHovered", g.gui.color.SeparatorHovered);
+                        ImGui::InputFloat4("SeparatorActive", g.gui.color.SeparatorActive);
+                        ImGui::InputFloat4("ResizeGrip", g.gui.color.ResizeGrip);
+                        ImGui::InputFloat4("ResizeGripHovered", g.gui.color.ResizeGripHovered);
+                        ImGui::InputFloat4("ResizeGripActive", g.gui.color.ResizeGripActive);
+                        ImGui::InputFloat4("Tab", g.gui.color.Tab);
+                        ImGui::InputFloat4("TabHovered", g.gui.color.TabHovered);
+                        ImGui::InputFloat4("TabActive", g.gui.color.TabActive);
+                        ImGui::InputFloat4("TabUnfocused", g.gui.color.TabUnfocused);
+                        ImGui::InputFloat4("TabUnfocusedActive", g.gui.color.TabUnfocusedActive);
+                        ImGui::InputFloat4("PlotLines", g.gui.color.PlotLines);
+                        ImGui::InputFloat4("PlotLinesHovered", g.gui.color.PlotLinesHovered);
+                        ImGui::InputFloat4("PlotHistogram", g.gui.color.PlotHistogram);
+                        ImGui::InputFloat4("PlotHistogramHovered", g.gui.color.PlotHistogramHovered);
+                        ImGui::InputFloat4("TextSelectedBg", g.gui.color.TextSelectedBg);
+                        ImGui::InputFloat4("DragDropTarget", g.gui.color.DragDropTarget);
+                        ImGui::InputFloat4("NavHighlight", g.gui.color.NavHighlight);
+                        ImGui::InputFloat4("NavWindowingHighlight", g.gui.color.NavWindowingHighlight);
+                        ImGui::InputFloat4("NavWindowingDimBg", g.gui.color.NavWindowingDimBg);
+                        ImGui::InputFloat4("ModalWindowDimBg", g.gui.color.ModalWindowDimBg);
+                    }
+                    ImGui::End();
+                }
+            }
+            if (menu_to_test == 0)
+            {
+                ImGui::SetNextWindowSize(ImVec2(790, 415));
+                if (ImGui::Begin(WINDOW_NAME, &active, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
+                {
+                    ImGui::BeginChild("Top Row + Logo", ImVec2(size.x, 50));//maybe remove top row, move changelogs to each game select, 
+                    //IDER: MAKE LOADER ICON HOME SCREEN BUTTON, PUT CHAT ON RIGHT SIDE WITH CHANGELOG SELECTOR ON LEFT!!! SETTINGS CAN BE ON BOTTOM RIGHT OF EACH THING
+                    ImGui::Image(icon->view, ImVec2(50, 50));
+                    ImGui::SameLine();
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(.1, .1, .1, 0));
+                    ImGui::PushFont(segoeui_font_35px);
+                    ImGui::Button(ICON_FA_COMPASS);
+                    ImGui::SameLine();
+                    ImGui::Button(ICON_FA_BOOK);
+                    ImGui::SameLine();
+                    ImGui::Button(ICON_FA_COMMENT);
+                    ImGui::SameLine();
+                    ImGui::Button(ICON_FA_COGS);
+
+                    ImGui::PopFont();
+                    ImGui::EndChild();
+                    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.5, 2.5));
+
+                    ImGui::PushStyleColor(ImGuiCol_::ImGuiCol_Border, ImVec4(0, 0, 0, 0));
+                    ImGui::BeginGroup();
+                    ImGui::BeginChild("SideBar", ImVec2(50, 315));
+                    static int menu = 0;
+                    static int game = 0;
+                    if (ImGui::ImageButton(g_gui.gta_icon->view, ImVec2(45, 45)))
+                    {
+                        game = 0;
+                        menu = 1;
+                        return;
+                    }
+                    if (ImGui::ImageButton(g_gui.repo_icon->view, ImVec2(45, 45)))
+                    {
+                        game = 1;
+                        menu = 1;
+                        return;
+                    }
+                    if (ImGui::ImageButton(g_gui.content_warning_icon->view, ImVec2(45, 45)))
+                    {
+                        game = 2;
+                        menu = 1;
+                        return;
+                    }
+                    if (ImGui::ImageButton(g_gui.lethal_company_icon->view, ImVec2(45, 45)))
+                    {
+                        game = 3;
+                        menu = 1;
+                        return;
+                    }
+                    if (ImGui::Button(ICON_FA_COGS, ImVec2(50, 50)))
+                    {
+                        menu = 2;
+                        return;
+                    }
+                    ImGui::PopStyleColor();
+                    ImGui::PopStyleColor();
+                    ImGui::PopStyleVar();
+                    ImGui::EndChild();
+                    ImGui::EndGroup();
+
+                    ImGui::SameLine();
+
+                    ImGui::BeginGroup();
+                    ImVec2 c = ImGui::GetCursorPos();
+
+                    switch (game)
+                    {
+                    case 0:
+                    {
+                        //ImGui::GetWindowDrawList()->AddImage(gta_background->view, ImVec2(c.x, c.y + 530), ImVec2(c.x + 730, c.y));
+                        ImGui::Image(g_gui.gta_background->view, ImVec2(560, 315));
+                        ImGui::SameLine();
+                        ImGui::BeginGroup();
+                        ImGui::PushFont(segoeui_font_35px);
+                        ImGui::TextColored(ImVec4(0, 255, 0, 255), "Blade");
+                        ImGui::SameLine();
+                        ImGui::Text("Menu");
+                        ImGui::PopFont();
+                        ImGui::Text("For GTAV");
+                        ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                        ImGui::TextWrapped("A dual UI, personal pet project of mine. Not meant for online as there is zero protection from the anticheat in it.");
+                        ImGui::EndChild();
+                        ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0);
+                        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+                        ImGui::PushFont(segoeui_font_25px);
+                        ImGui::Button("Launch Game", ImVec2(155, 30));
+                        ImGui::Button("Run Menu", ImVec2(155, 30));
+                        ImGui::PopFont();
+                        ImGui::PopStyleVar();
+                        ImGui::PopStyleVar();
+                        ImGui::EndGroup();
+
+                    }break;
+                    case 1:
+                    {
+                        ImGui::Image(g_gui.repo_background->view, ImVec2(560, 315));
+                        ImGui::SameLine();
+                        ImGui::BeginGroup();
+                        ImGui::PushFont(segoeui_font_35px);
+                        ImGui::TextColored(ImVec4(255, 0, 255, 255), "Unk");
+                        ImGui::PopFont();
+                        ImGui::Text("For R.E.P.O");
+                        ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                        ImGui::TextWrapped("The most advanced menu for R.E.P.O.");
+                        ImGui::EndChild();//center these buttons
+                        ImGui::Button("Launch Game");
+                        ImGui::Button("Run Menu");
+                        ImGui::EndGroup();
+                    }break;
+                    case 2:
+                    {
+                        ImGui::Image(g_gui.content_warning_background->view, ImVec2(560, 315));
+                        ImGui::SameLine();
+                        ImGui::BeginGroup();
+                        ImGui::PushFont(segoeui_font_35px);
+                        ImGui::TextColored(ImVec4(255, 0, 255, 255), "Spook");
+                        ImGui::SameLine();
+                        ImGui::Text("Suite");
+                        ImGui::PopFont();
+                        ImGui::Text("For Content Warning");
+                        ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                        ImGui::TextWrapped("A old joint collaboration.");
+                        ImGui::EndChild();//center these buttons
+                        ImGui::Button("Launch Game");
+                        ImGui::Button("Run Menu");
+                        ImGui::EndGroup();
+                    }break;
+                    case 3:
+                    {
+                        ImGui::Image(g_gui.lethal_company_background->view, ImVec2(560, 315));
+                        ImGui::SameLine();
+                        ImGui::BeginGroup();
+                        ImGui::PushFont(segoeui_font_35px);
+                        ImGui::TextColored(ImVec4(255, 0, 0, 255), "Lethal");
+                        ImGui::SameLine();
+                        ImGui::Text("Menu");
+                        ImGui::PopFont();
+                        ImGui::Text("For Lethal Company");
+                        ImGui::BeginChild("Desc Framing", ImVec2(155, 180));
+                        ImGui::TextWrapped("A menu for Lethal Company.");
+                        ImGui::EndChild();//center these buttons
+                        ImGui::Button("Launch Game");
+                        ImGui::Button("Run Menu");
+                        ImGui::EndGroup();
+                    }break;
+                    default:
+                    {
+
+                    }break;
+                    }
+                    ImGui::EndGroup();
+                }
+                ImGui::End();
+            }
         }
         else
             exit(0);

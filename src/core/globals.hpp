@@ -42,12 +42,12 @@ namespace loader
 				float ScrollbarSize = 5.f;
 				float GrabMinSize = 2.f;
 				float WindowBorderSize = 1.f;
-				float ChildBorderSize = 5.f;
+				float ChildBorderSize = 1.f;
 				float PopupBorderSize = 1.f;
 				float FrameBorderSize = 1.f;
 				float TabBorderSize = 1.f;
 				float WindowRounding = 0.f;
-				float ChildRounding = 10.f;
+				float ChildRounding = 5.f;
 				float FrameRounding = 30.f;
 				float ScrollbarRounding = 10.f;
 				float GrabRounding = 10.f;
@@ -116,7 +116,7 @@ namespace loader
 					float Text[4] = { 1.00f, 1.00f, 1.00f, 1.00f };
 					float TextDisabled[4] = { 0.10f, 0.40f, 0.1f, 1.00f };
 					float WindowBg[4] = { 0.f, 0.f, 0.f, .8f };
-					float ChildBg[4] = { 1.f, 1.f, 1.f, 1.07f };
+					float ChildBg[4] = { 0.05f, 0.05f, 0.05f, 1.00f };
 					float PopupBg[4] = { 0.08f, 0.08f, 0.08f, 0.94f };
 					float Border[4] = { 0.0f, 0.50f, 0.00f, 1.0f };
 					float BorderShadow[4] = { 0.00f, 0.00f, 0.00f, 0.00f };
