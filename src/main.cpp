@@ -44,6 +44,15 @@ Image* download_img_if_noexist(fs::path path, const char* link, std::vector<load
     return ret;
 }
 
+void add_to_map(std::map<std::string, Image*>& image_map, std::string name, const char* semilink)//semilink for naming descrepancies, name can be used for titling/searching
+{
+    image_map.emplace(name, download_img_if_noexist(fs::current_path() / "Resources" / std::format("{}.png", name), std::format("https://github.com/TheGreenBandit/Loader/releases/download/resources/{}.png", semilink).c_str()));
+}
+void add_to_menu_map(std::map<int, std::pair<std::string, Image*>>& image_map, int position, std::string menu, std::string name, const char* semilink)//semilink for naming descrepancies, name can be used for titling/searching
+{
+    image_map.emplace(position, std::make_pair(name, download_img_if_noexist(fs::current_path() / "Resources" / menu / std::format("{}.png", name), std::format("https://github.com/TheGreenBandit/Loader/releases/download/resources/{}.png", semilink).c_str())));
+}
+
 void initialize()
 {
     g_gui.initialize();
@@ -58,18 +67,25 @@ void initialize()
     create_dir_if_noexist(fs::current_path() / "Resources" / "Unk");
     create_dir_if_noexist(fs::current_path() / "Resources" / "Acid");
     create_dir_if_noexist(fs::current_path() / "Menus");
-
-    g_gui.icon = download_img_if_noexist((fs::current_path() / "Resources" / "icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/106003542.png");
-    g_gui.gta_icon = download_img_if_noexist((fs::current_path() / "Resources" / "gta_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/gta_icon.png");
-    g_gui.repo_icon = download_img_if_noexist((fs::current_path() / "Resources" / "repo_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/repo_icon.png");
-    g_gui.content_warning_icon = download_img_if_noexist((fs::current_path() / "Resources" / "content_warning_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/Content-Warning-Logo-500x281.png");
-    g_gui.lethal_company_icon = download_img_if_noexist((fs::current_path() / "Resources" / "lethal_company_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/lethal_company_icon.png");
-    g_gui.gear_icon = download_img_if_noexist((fs::current_path() / "Resources" / "gear_icon.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/gear_icon.png");
-    g_gui.gta_background = download_img_if_noexist((fs::current_path() / "Resources" / "gta_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/gta_background.png");
-    g_gui.repo_background = download_img_if_noexist((fs::current_path() / "Resources" / "repo_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/repo_background.png");
-    g_gui.content_warning_background = download_img_if_noexist((fs::current_path() / "Resources" / "content_warning_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/content_warning_background.png");
-    g_gui.lethal_company_background = download_img_if_noexist((fs::current_path() / "Resources" / "lethal_company_background.png"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/lethal_company_background.png");
-
+    //icon mapping
+    add_to_map(g_gui.icon_map, "main_icon", "106003542");
+    add_to_map(g_gui.icon_map, "gta_icon", "gta_icon");
+    add_to_map(g_gui.icon_map, "repo_icon", "repo_icon");
+    add_to_map(g_gui.icon_map, "content_warning_icon", "Content-Warning-Logo-500x281");
+    add_to_map(g_gui.icon_map, "lethal_company_icon", "lethal_company_icon");
+    add_to_map(g_gui.icon_map, "gear_icon", "gear_icon");
+    //background mapping
+    add_to_map(g_gui.background_map, "gta_background", "gta_background");
+    add_to_map(g_gui.background_map, "repo_background", "repo_background");
+    add_to_map(g_gui.background_map, "content_warning_background", "content_warning_background");
+    add_to_map(g_gui.background_map, "lethal_company_background", "lethal_company_background");
+    //menus
+    //blade
+    //add_to_map(g_gui.menus_map, "", "");
+    //Unk
+    add_to_menu_map(g_gui.unk_map, 1, "Unk", "unk_self", "unkself");
+    add_to_menu_map(g_gui.unk_map, 2, "Unk", "unk_visual", "unkvisual");
+    //todo add menu images to their own maps
     download_if_noexist((fs::current_path() / "smi.exe"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
     download_if_noexist((fs::current_path() / "SharpMonoInjector.dll"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");
 
@@ -255,7 +271,7 @@ int main(int, char**)
         io.Fonts->AddFontFromFileTTF("widgets/font_awesome_5", 40.f, &icons_config, icons_ranges);
         io.Fonts->Build();
     }
-    active = true;
+    active = true;//hmm
     initialize();
     // Main
     while (active)

@@ -5,18 +5,17 @@ namespace loader
 {
     void gui::game_tab()
     {
-        Image* img = new Image();
         const char* name = "";
         const char* name2 = "";
         ImVec4 col = ImVec4(0, 0, 0, 0);
         const char* gamename = "";
         const char* desc = "";
-
+        std::map<int, std::pair<std::string, Image*>> map;
         switch (game)
         {
         case 0:
         {
-            img = gta_background;
+            map = blade_map;
             name = "Blade";
             name2 = "Menu";
             col = ImVec4(0, 1, 0, 1);
@@ -25,7 +24,7 @@ namespace loader
         }break;
         case 1:
         {
-            img = repo_background;
+            map = unk_map;
             name = "Unk";
             name2 = "";
             col = ImVec4(1, 0, 1, 1);
@@ -34,16 +33,16 @@ namespace loader
         }break;
         case 2:
         {
-            img = content_warning_background;
-            name = "Blade";
-            name2 = "Menu";
+            map = spooksuite_map;
+            name = "Spook";
+            name2 = "Suite";
             col = ImVec4(1, 0, 1, 1);
             gamename = "Content Warning";
             desc = "A old joint collaboration.";
         }break;
         case 3:
         {
-            img = lethal_company_background;
+            map = lethalmenu_map;
             name = "Lethal";
             name2 = "Menu";
             col = ImVec4(1, 0, 0, 1);
@@ -51,8 +50,45 @@ namespace loader
             desc = "A menu for Lethal Company.";
         }break;
         }
+        static int img = 0;//make this in gui.hpp and reset it when clicking on a different game tab
         ImGui::BeginGroup();
-        ImGui::Image(img->view, ImVec2(578, 325));//todo now make this a image selector with pictures of menus
+        ImVec2 c = ImGui::GetCursorPos();
+        
+        if (img == 0)
+            ImGui::Image(game_to_background(game)->view, ImVec2(578, 325));
+        else
+            ImGui::Image(map.find(img)->second.second->view, ImVec2(578, 325));
+        
+        ImGui::PushStyleColor(ImGuiCol_Border, col);
+        ImGui::PushStyleColor(ImGuiCol_Button, col);
+        ImVec4 hov = ImVec4(col.x - .3, col.y - .3, col.z - .3, col.w);
+        ImVec4 act = ImVec4(col.x - .4, col.y - .4, col.z - .4, col.w);
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, hov);
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, act);
+        ImGui::SetCursorPos(ImVec2(c.x, c.y + 162));
+        if (ImGui::Button(ICON_FA_ARROW_LEFT))
+        {
+            img--;
+            if (img < 0)
+                img = map.size();
+        }
+        ImGui::SetCursorPos(ImVec2(c.x + 548, c.y + 162));
+        if (ImGui::Button(ICON_FA_ARROW_RIGHT))
+        {
+            img++;
+            if (img > map.size())
+                img = 0;
+        }
+        if (img == 0)
+        {
+            ImGui::SetCursorPos(ImVec2(c.x + (572 - ImGui::CalcTextSize("Press on the arrows to see pictures of the menu!").x) / 2, c.y + 300));
+            ImGui::Text("Press on the arrows to see pictures of the menu!");
+        }
+        else
+        {
+            ImGui::SetCursorPos(ImVec2(c.x + (572 - ImGui::CalcTextSize(map.find(img)->second.first.c_str()).x) / 2, c.y + 300));
+            ImGui::Text(map.find(img)->second.first.c_str());
+        }
         ImGui::EndGroup();
         ImGui::SameLine();
         ImGui::BeginGroup();
@@ -70,14 +106,8 @@ namespace loader
         ImGui::EndChild();
         ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0);
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-        ImGui::PushStyleColor(ImGuiCol_Border, col);
-        ImGui::PushStyleColor(ImGuiCol_Button, col);
-        ImVec4 hov = ImVec4(col.x - .3, col.y - .3, col.z - .3, col.w);//fixme
-        ImVec4 act = ImVec4(col.x - .4, col.y - .4, col.z - .4, col.w);
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, hov);
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, act);
         ImGui::PushFont(segoeui_font_25px);
-        if (ImGui::Button("Launch Game", ImVec2(155, 30))) active = false;//these buttons are static and broken somehow
+        if (ImGui::Button("Launch Game", ImVec2(155, 30))) active = false;
         if (ImGui::Button("Run Menu", ImVec2(155, 30))) active = false;
         ImGui::PopFont();
         ImGui::PopStyleColor();

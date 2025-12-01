@@ -50,10 +50,10 @@ namespace loader
 		{
 			switch (game)
 			{
-				case GTAV: return gta_icon; break;
-				case REPO: return repo_icon; break;
-				case CONTENT_WARNING: return content_warning_icon; break;
-				case LETHAL_COMPANY: return lethal_company_icon; break;
+				case GTAV: return icon_map.find("gta_icon")->second; break;
+				case REPO: return icon_map.find("repo_icon")->second; break;
+				case CONTENT_WARNING: return icon_map.find("content_warning_icon")->second; break;
+				case LETHAL_COMPANY: return icon_map.find("lethal_company_icon")->second; break;
 				default: return new Image();//
 			}
 			return new Image();//this should never happen but still catching it
@@ -63,10 +63,10 @@ namespace loader
 		{
 			switch (game)
 			{
-			case GTAV: return gta_background; break;
-			case REPO: return repo_background; break;
-			case CONTENT_WARNING: return content_warning_background; break;
-			case LETHAL_COMPANY: return lethal_company_background; break;
+			case GTAV: return background_map.find("gta_background")->second; break;
+			case REPO: return background_map.find("repo_background")->second; break;
+			case CONTENT_WARNING: return background_map.find("content_warning_background")->second; break;
+			case LETHAL_COMPANY: return background_map.find("lethal_company_background")->second; break;
 			default: return new Image();//
 			}
 			return new Image();//this should never happen but still catching it
@@ -104,19 +104,12 @@ namespace loader
 		ImFont* segoeui_font_35px;
 		ImFont* segoeui_font_40px;
 		std::vector<Image*> unkimages;
-		std::map<Image*, std::string> icon_map;
-		std::map<Image*, std::string> background_map;
-		Image* icon;
-		Image* gta_icon;
-		Image* repo_icon;
-		Image* content_warning_icon;
-		Image* lethal_company_icon;
-		Image* gear_icon;
-		Image* gta_background;
-		Image* repo_background;
-		Image* content_warning_background;
-		Image* lethal_company_background;
-
+		std::map<std::string, Image*> icon_map;
+		std::map<std::string, Image*> background_map;
+		std::map<int, std::pair<std::string, Image*>> blade_map;
+		std::map<int, std::pair<std::string, Image*>> unk_map;
+		std::map<int, std::pair<std::string, Image*>> spooksuite_map;
+		std::map<int, std::pair<std::string, Image*>> lethalmenu_map;
 		//debug
 		float x = 200, y = 415, custom_float = 40;
 	} g_gui;

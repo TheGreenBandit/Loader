@@ -132,7 +132,6 @@ namespace loader
 
     }
 
-
     inline int menu_to_test = 0;
     void gui::render()
     {
@@ -152,7 +151,7 @@ namespace loader
                     static char search = ' ';//feature search
                     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0, 0, 0, 0));
                     ImGui::BeginChild("titlebar", ImVec2(ImGui::GetContentRegionAvail().x, 50));
-                    ImGui::Image(icon->view, ImVec2(50, 50));
+                    ImGui::Image(icon_map.find("main_icon")->second->view, ImVec2(50, 50));
                     ImGui::SameLine();
                     ImGui::PushFont(segoeui_font_40px);
                     ImGui::TextColored(ImVec4(0, 255, 0, 255), "Blade");
@@ -314,11 +313,11 @@ namespace loader
                     ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0, 0, 0));
                     ImGui::BeginGroup();
                     ImGui::BeginChild("SideBar", ImVec2(50, 325));
-                    if (ImGui::ImageButton(icon->view, ImVec2(45, 45)))//home
+                    if (ImGui::ImageButton(icon_map.find("main_icon")->second->view, ImVec2(45, 45)))//home
                         tab = HOME;
                     for (int i = 0; i <= LETHAL_COMPANY; i++)
                         game_select_button((egame)i);
-                    if (ImGui::ImageButton(gear_icon->view, ImVec2(45, 45)))//settings
+                    if (ImGui::ImageButton(icon_map.find("gear_icon")->second->view, ImVec2(45, 45)))//settings
                         tab = SETTINGS;
                     ImGui::EndChild();
                     ImGui::EndGroup();
@@ -341,7 +340,10 @@ namespace loader
             }
         }
         else
+        {
+            g_logger.log("loader not active?");
             exit(0);
+        }
     }
 
     bool gui::load_texture_from_file(const char* path, ID3D11Device* d3dDevice, Image** image) 
