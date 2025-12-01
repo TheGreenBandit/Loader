@@ -85,6 +85,8 @@ void initialize()
     //Unk
     add_to_menu_map(g_gui.unk_map, 1, "Unk", "unk_self", "unkself");
     add_to_menu_map(g_gui.unk_map, 2, "Unk", "unk_visual", "unkvisual");
+    //SpookSuite
+    add_to_menu_map(g_gui.spooksuite_map, 1, "Spooksuite", "spooksuite_self", "spooksuite_self");
     //todo add menu images to their own maps
     download_if_noexist((fs::current_path() / "smi.exe"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/smi.exe");
     download_if_noexist((fs::current_path() / "SharpMonoInjector.dll"), "https://github.com/TheGreenBandit/Loader/releases/download/resources/SharpMonoInjector.dll");

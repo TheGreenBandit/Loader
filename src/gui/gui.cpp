@@ -17,7 +17,6 @@ namespace loader
 {
     void updatecolstyl()
     {
-
         auto& style = ImGui::GetStyle();
         style.WindowPadding = { g.gui.style.WindowPadding[0], g.gui.style.WindowPadding[1] };
         style.PopupRounding = g.gui.style.PopupRounding;
@@ -149,7 +148,6 @@ namespace loader
                 if (ImGui::Begin("Blade", &active, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar))
                 {
                     static char search = ' ';//feature search
-                    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0, 0, 0, 0));
                     ImGui::BeginChild("titlebar", ImVec2(ImGui::GetContentRegionAvail().x, 50));
                     ImGui::Image(icon_map.find("main_icon")->second->view, ImVec2(50, 50));
                     ImGui::SameLine();
@@ -305,6 +303,7 @@ namespace loader
             }
             if (menu_to_test == 0)
             {
+                ImGui::PushStyleColor(ImGuiCol_Border, accent_color);
                 ImGui::SetNextWindowSize(ImVec2(803, 364));
                 if (ImGui::Begin(WINDOW_NAME, &active, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
                 {
@@ -329,14 +328,26 @@ namespace loader
 
                     switch (tab)
                     {
-                        case HOME: home_tab(); break;
-                        case GAMES: game_tab(); break;
-                        case SETTINGS: settings_tab(); break;
+                        case HOME:
+                        {
+                            accent_color = ImVec4(g.gui.color.Border[0], g.gui.color.Border[1], g.gui.color.Border[2], g.gui.color.Border[3]);
+                            home_tab();
+                        }break;
+                        case GAMES:
+                        {
+                            game_tab();
+                        } break;
+                        case SETTINGS:
+                        {
+                            accent_color = ImVec4(g.gui.color.Border[0], g.gui.color.Border[1], g.gui.color.Border[2], g.gui.color.Border[3]);
+                            settings_tab();
+                        } break;
                     }
 
                     ImGui::EndGroup();
                 }
                 ImGui::End();
+                ImGui::PopStyleColor();
             }
         }
         else
@@ -346,7 +357,9 @@ namespace loader
         }
     }
 
-    bool gui::load_texture_from_file(const char* path, ID3D11Device* d3dDevice, Image** image) 
+
+
+    bool gui::load_texture_from_file(const char* path, ID3D11Device* d3dDevice, Image** image) //todo make me not pixelate when scaling
     {
         Image* ret = new Image();
         ret->size[0] = 0;

@@ -46,6 +46,7 @@ namespace loader
 				tab = GAMES;
 			}
 		}
+
 		Image* game_to_icon(egame game)
 		{
 			switch (game)
@@ -97,6 +98,7 @@ namespace loader
 		ImVec2 size = { 800, 600 };
 		egame game;
 		etab tab;
+		ImVec4 accent_color;
 		ImFont* default_font;
 		ImFont* segoeui_font_20px;
 		ImFont* segoeui_font_25px;

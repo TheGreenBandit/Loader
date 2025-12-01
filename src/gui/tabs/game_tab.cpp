@@ -53,7 +53,7 @@ namespace loader
         static int img = 0;//make this in gui.hpp and reset it when clicking on a different game tab
         ImGui::BeginGroup();
         ImVec2 c = ImGui::GetCursorPos();
-        
+        accent_color = col;
         if (img == 0)
             ImGui::Image(game_to_background(game)->view, ImVec2(578, 325));
         else
