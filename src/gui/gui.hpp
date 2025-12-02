@@ -38,6 +38,14 @@ namespace loader
 	inline class gui
 	{
 	public:
+		const char* games[4]
+		{
+			"GTAV",
+			"R.E.P.O",
+			"Content Warning",
+			"Lethal Company"
+		};
+	public:
 		void game_select_button(egame game)
 		{
 			if (ImGui::ImageButton(game_to_icon(game)->view, ImVec2(45, 45)))

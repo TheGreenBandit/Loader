@@ -357,8 +357,6 @@ namespace loader
         }
     }
 
-
-
     bool gui::load_texture_from_file(const char* path, ID3D11Device* d3dDevice, Image** image) //todo make me not pixelate when scaling
     {
         Image* ret = new Image();

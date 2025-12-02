@@ -6,13 +6,6 @@ namespace loader
 	void gui::home_tab()
 	{
         static int changelog_game = 1;
-        const char* games[4]
-        {
-            "GTAV",
-            "R.E.P.O",
-            "Content Warning",
-            "Lethal Company"
-        };
 
         ImGui::BeginGroup();
         ImGui::Text("Changelog");//center me
