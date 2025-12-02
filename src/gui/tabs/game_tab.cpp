@@ -1,5 +1,6 @@
 #include "../gui.hpp"
 #include "../../util/gui_util.hpp"
+#include "../../util/injection.hpp"
 
 namespace loader
 {
@@ -108,7 +109,13 @@ namespace loader
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
         ImGui::PushFont(segoeui_font_25px);
         if (ImGui::Button("Launch Game", ImVec2(155, 30))) active = false;
-        if (ImGui::Button("Run Menu", ImVec2(155, 30))) active = false;
+        if (ImGui::Button("Dev Menu", ImVec2(77.5, 30)))
+        {
+            g_inject.inject_dll(g_gui.game, "C:\\Users\\TGB\\Blade\\build\\RelWithDebInfo\\Blade.dll");
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Run Menu", ImVec2(77.5, 30)))
+            g_inject.inject();
         ImGui::PopFont();
         ImGui::PopStyleColor();
         ImGui::PopStyleColor();
