@@ -8,7 +8,6 @@
 #include "widgets/imgui_notify.h"
 #include "util/message_system.hpp"
 #include "util/discord_util.hpp"
-#include "util/curl_util.hpp"
 
 #pragma warning (disable: 4996)
 
@@ -118,25 +117,23 @@ int main(int, char**)
 {
     // Create application window
     //ImGui_ImplWin32_EnableDpiAwareness();
-    g_logger.clear_log();
-    g_curl_util.setup_curl();//put this before all because write update bat and get release title use it
-    g_logger.log("Welcome!");
-    
-    util::write_update_bat();
+    loader::g_logger.clear_log();
+    loader::g_logger.log("Welcome!");
+    loader::util::write_update_bat();
 #ifdef USE_INTERENT
-    if (util::get_release_title("TheGreenBandit", "Loader") != VERSION)
+    if (loader::util::get_release_title("TheGreenBandit", "Loader") != VERSION)
     {
-        if (util::get_release_title("TheGreenBandit", "Loader") == "FAILED")
+        if (loader::util::get_release_title("TheGreenBandit", "Loader") == "FAILED")
         {
             g_logger.log("Failed to fetch internet, check your connection");
             exit(0);
         }
-        if (util::get_release_title("TheGreenBandit", "Loader") == "Release title not found!")
+        if (loader::util::get_release_title("TheGreenBandit", "Loader") == "Release title not found!")
         {
             g_logger.log("FAILED TO FIND RELEASE TITLE");
             exit(0);
         }
-        g_logger.log(std::format("The loader is outdated! Closing and downloading the newest version. \nCurrent Version: {}\nNew Version: {}", VERSION, loader::util::get_release_title("TheGreenBandit", "Loader")));
+        loader::g_logger.log(std::format("The loader is outdated! Closing and downloading the newest version. \nCurrent Version: {}\nNew Version: {}", VERSION, loader::util::get_release_title("TheGreenBandit", "Loader")));
         outdated = true;
         //system("update.bat");
         //exit(0);
@@ -176,7 +173,7 @@ int main(int, char**)
     }
 
     ImGui_ImplWin32_Init(hwnd);
-    ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+    ImGui_ImplDX11_Init(loader::g_pd3dDevice, loader::g_pd3dDeviceContext);
 
     fs::path w = std::getenv("SYSTEMROOT");
     fs::path windows_fonts = w.string() + "//Fonts";
@@ -195,7 +192,7 @@ int main(int, char**)
         ImFontConfig fnt_cfg{};
         fnt_cfg.FontDataOwnedByAtlas = false;
         strcpy(fnt_cfg.Name, "Fnt20px");
-        g_gui.segoeui_font_20px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 20.0f, &fnt_cfg,
+        loader::g_gui.segoeui_font_20px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 20.0f, &fnt_cfg,
             io.Fonts->GetGlyphRangesDefault());
         fnt_cfg.MergeMode = true;
         io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 20.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
@@ -212,7 +209,7 @@ int main(int, char**)
         ImFontConfig fnt_cfg{};
         fnt_cfg.FontDataOwnedByAtlas = false;
         strcpy(fnt_cfg.Name, "Fnt25px");
-        g_gui.segoeui_font_25px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 25.f, &fnt_cfg,
+        loader::g_gui.segoeui_font_25px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 25.f, &fnt_cfg,
             io.Fonts->GetGlyphRangesDefault());
         fnt_cfg.MergeMode = true;
         io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 25.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
@@ -229,7 +226,7 @@ int main(int, char**)
         ImFontConfig fnt_cfg{};
         fnt_cfg.FontDataOwnedByAtlas = false;
         strcpy(fnt_cfg.Name, "Fnt30px");
-        g_gui.segoeui_font_30px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 30.f, &fnt_cfg,
+        loader::g_gui.segoeui_font_30px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 30.f, &fnt_cfg,
             io.Fonts->GetGlyphRangesDefault());
         fnt_cfg.MergeMode = true;
         io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 30.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
@@ -246,7 +243,7 @@ int main(int, char**)
         ImFontConfig fnt_cfg{};
         fnt_cfg.FontDataOwnedByAtlas = false;
         strcpy(fnt_cfg.Name, "Fnt35px");
-        g_gui.segoeui_font_35px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 35.f, &fnt_cfg,
+        loader::g_gui.segoeui_font_35px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 35.f, &fnt_cfg,
             io.Fonts->GetGlyphRangesDefault());
         fnt_cfg.MergeMode = true;
         io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 35.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
@@ -263,7 +260,7 @@ int main(int, char**)
         ImFontConfig fnt_cfg{};
         fnt_cfg.FontDataOwnedByAtlas = false;
         strcpy(fnt_cfg.Name, "Fnt40px");
-        g_gui.segoeui_font_40px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 40.f, &fnt_cfg,
+        loader::g_gui.segoeui_font_40px = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 40.f, &fnt_cfg,
             io.Fonts->GetGlyphRangesDefault());
         fnt_cfg.MergeMode = true;
         io.Fonts->AddFontFromMemoryTTF(font_data.get(), font_data_size, 40.f, &fnt_cfg, io.Fonts->GetGlyphRangesChineseSimplifiedCommon());
@@ -296,19 +293,19 @@ int main(int, char**)
         if (!active)
             break;
         // Handle window being minimized or screen locked
-        if (g_SwapChainOccluded && g_pSwapChain->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED)
+        if (loader::g_SwapChainOccluded && loader::g_pSwapChain->Present(0, DXGI_PRESENT_TEST) == DXGI_STATUS_OCCLUDED)
         {
             ::Sleep(10);
             continue;
         }
-        g_SwapChainOccluded = false;
+        loader::g_SwapChainOccluded = false;
 
         // Handle window resize (we don't resize directly in the WM_SIZE handler)
-        if (g_ResizeWidth != 0 && g_ResizeHeight != 0)
+        if (loader::g_ResizeWidth != 0 && loader::g_ResizeHeight != 0)
         {
             CleanupRenderTarget();
-            g_pSwapChain->ResizeBuffers(0, g_ResizeWidth, g_ResizeHeight, DXGI_FORMAT_UNKNOWN, 0);
-            g_ResizeWidth = g_ResizeHeight = 0;
+            loader::g_pSwapChain->ResizeBuffers(0, loader::g_ResizeWidth, loader::g_ResizeHeight, DXGI_FORMAT_UNKNOWN, 0);
+            loader::g_ResizeWidth = loader::g_ResizeHeight = 0;
             CreateRenderTarget();
         }
 
@@ -334,9 +331,6 @@ int main(int, char**)
         //HRESULT hr = g_pSwapChain->Present(0, 0); // Present without vsync
         loader::g_SwapChainOccluded = (hr == DXGI_STATUS_OCCLUDED);
     }
-
-    //uninitialize
-    g_curl_util.destroy_curl();
 
     // Cleanup
     ImGui_ImplDX11_Shutdown();
