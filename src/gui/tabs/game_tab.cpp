@@ -80,16 +80,11 @@ namespace loader
             if (img > map.size())
                 img = 0;
         }
-        if (img == 0)
-        {
-            ImGui::SetCursorPos(ImVec2(c.x + (572 - ImGui::CalcTextSize("Press on the arrows to see pictures of the menu!").x) / 2, c.y + 300));
-            ImGui::Text("Press on the arrows to see pictures of the menu!");
-        }
-        else
-        {
-            ImGui::SetCursorPos(ImVec2(c.x + (572 - ImGui::CalcTextSize(map.find(img)->second.first.c_str()).x) / 2, c.y + 300));
-            ImGui::Text(map.find(img)->second.first.c_str());
-        }
+
+        std::string txt = (img == 0) ? "Press on the arrows to see pictures of the menu!" : map.find(img)->second.first;
+        ImGui::SetCursorPos(ImVec2(c.x + (572 - ImGui::CalcTextSize(txt.c_str()).x) / 2, c.y + 300));
+        ImGui::Text(txt.c_str());
+
         ImGui::EndGroup();
         ImGui::SameLine();
         ImGui::BeginGroup();
@@ -109,12 +104,12 @@ namespace loader
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
         ImGui::PushFont(segoeui_font_25px);
         if (ImGui::Button("Launch Game", ImVec2(155, 30))) active = false;
-        if (ImGui::Button("Dev Menu", ImVec2(77.5, 30)))
+        if (ImGui::Button("Dev", ImVec2(75, 30)))
         {
             g_inject.inject_dll(g_gui.game, "C:\\Users\\TGB\\Blade\\build\\RelWithDebInfo\\Blade.dll");
         }
         ImGui::SameLine();
-        if (ImGui::Button("Run Menu", ImVec2(77.5, 30)))
+        if (ImGui::Button("Normal", ImVec2(75, 30)))
             g_inject.inject();
         ImGui::PopFont();
         ImGui::PopStyleColor();

@@ -24,52 +24,32 @@ namespace loader
 	{
 		std::string user = std::string(util::get_username().data());
 		auto now = std::chrono::system_clock::now();
-		g_logger.log("checking size");
-		if (message.size() < 50)
-		{
-			g_logger.log(std::string("sending message: ") + message.data());
-			if (user != "TGB")
-			{
-				if ((now - last_sent) <= 5s)
-				{
-					g_logger.log("ratelimit hit");
-					return;
-				}			
-			}
-				
-			last_sent = now;
-			std::time_t now_time = std::chrono::system_clock::to_time_t(now);
-			struct tm time_info;
-			localtime_s(&time_info, &now_time);  // thread-safe version
-			char time_str[32];
-			strftime(time_str, sizeof(time_str), "%H:%M:%S", &time_info);
 
-			std::string formatted_message = std::format("[{}] {}: {}", time_str, user, message);//temp fix for username 
-			g_logger.log(formatted_message);
-			discord_util.send_bot_message(xorstr_("1376337342612115466"), formatted_message);
-			g_logger.log("message should be sent");
+		if (user != "TGB")
+		{
+			if (message.size() < 50)
+				return;
+
+			if ((now - last_sent) <= 5s)
+			{
+				g_logger.log("ratelimit hit");
+				return;
+			}
 		}
+
+		last_sent = now;
+		std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+		struct tm time_info;
+		localtime_s(&time_info, &now_time);
+		char time_str[32];
+		strftime(time_str, sizeof(time_str), "%H:%M:%S", &time_info);
+
+		std::string formatted_message = std::format("[{}] {}: {}", time_str, user, message);//temp fix for username 
+		discord_util.send_bot_message(xorstr_("1376337342612115466"), formatted_message);
 	}
 
 	void message_system::display_messages()
 	{
-		//for (int i = 0; i < messages.size(); i++)
-		//{
-		//	auto message = messages[i];
-		//	if (message.find("TGB") != std::string::npos) //dev thing, yes it is important
-		//	{
-		//		ImGui::PushStyleColor(ImGuiCol_Text, ImGui::GetStyleColorVec4(ImGuiCol_Button));
-		//		if (messages[messages.size()].con == message)
-		//		{
-		//			ImGui::SetItemDefaultFocus();
-		//			ImGui::TextWrapped(message.c_str());
-		//		}
-		//			
-		//		ImGui::PopStyleColor();
-		//	}
-		//	else
-		//		ImGui::TextWrapped(message.c_str());
-		//}
 		for (auto message : messages)
 		{
 			if (message.find("TGB") != std::string::npos) //dev thing, yes it is important
