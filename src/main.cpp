@@ -1,13 +1,14 @@
+#include <d3d11.h>
+#include "common.hpp"
 #include "backends/imgui_impl_win32.h"
 #include "backends/imgui_impl_dx11.h"
 #include "gui/gui.hpp"
-#include <d3d11.h>
-#include "common.hpp"
 #include "util/injection.hpp"
 #include "util/gui_util.hpp"
-#include "widgets/imgui_notify.h"
 #include "util/message_system.hpp"
 #include "util/discord_util.hpp"
+#include "util/curl_util.hpp"
+#include "widgets/imgui_notify.h"
 
 #pragma warning (disable: 4996)
 
@@ -118,6 +119,7 @@ int main(int, char**)
     // Create application window
     //ImGui_ImplWin32_EnableDpiAwareness();
     loader::g_logger.clear_log();
+    loader::g_curl_util.setup_curl();
     loader::g_logger.log("Welcome!");
     loader::util::write_update_bat();
 #ifdef USE_INTERENT
@@ -181,7 +183,7 @@ int main(int, char**)
     font_file.seekg(0);
     font_file.read(reinterpret_cast<char*>(font_data.get()), font_data_size);
     font_file.close();
-
+    //todo, only need to build font now as we can use the pushfont function to set size!
     {
         ImFontConfig fnt_cfg{};
         fnt_cfg.FontDataOwnedByAtlas = false;
@@ -320,6 +322,9 @@ int main(int, char**)
         //HRESULT hr = g_pSwapChain->Present(0, 0); // Present without vsync
         loader::g_SwapChainOccluded = (hr == DXGI_STATUS_OCCLUDED);
     }
+
+    //uninitialize
+    loader::g_curl_util.destroy_curl();
 
     // Cleanup
     ImGui_ImplDX11_Shutdown();

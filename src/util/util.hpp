@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../common.hpp"
+#include "common.hpp"
+#include "util/curl_util.hpp"
 
 namespace loader::util
 { 
@@ -36,21 +37,15 @@ namespace loader::util
     inline std::string get_release_title(const std::string& owner, const std::string& repo) 
     {
         std::string url = "https://api.github.com/repos/" + owner + "/" + repo + "/releases/latest";
-        std::string readBuffer = download_string(url);
+        std::vector<std::string> headers = { "User-Agent: Loader", "Accept: application/vnd.github+json" };
+        std::string response = g_curl_util.post(url, "", headers);
 
-        if (readBuffer.empty())
-            return "Error: Failed to retrieve release data.";
-
-        try 
+        try
         {
-            auto jsonData = nlohmann::json::parse(readBuffer);
-
-            if (jsonData.contains("name"))
-                return jsonData["name"];
-            else
-                return "Release title not found!";
+            auto jsonData = nlohmann::json::parse(response);
+            return jsonData.contains("name") ? jsonData["name"] : "Release title not found!";
         }
-        catch (const std::exception& e) 
+        catch (const std::exception& e)
         {
             return std::string("JSON parsing error: ") + e.what();
         }
@@ -59,14 +54,12 @@ namespace loader::util
     inline std::string get_latest_release_url(const std::string& owner, const std::string& repo)
     {
         std::string url = "https://api.github.com/repos/" + owner + "/" + repo + "/releases/latest";
-        std::string releaseData = util::download_string(url);
-
-        if (releaseData == "FAILED" || releaseData.empty())
-            return "Error: Failed to retrieve release data.";
+        std::vector<std::string> headers = { "User-Agent: Loader", "Accept: application/vnd.github+json" };
+        std::string response = g_curl_util.post(url, "", headers);
 
         try
         {
-            auto jsonData = nlohmann::json::parse(releaseData);
+            auto jsonData = nlohmann::json::parse(response);
             if (jsonData.contains("assets") && !jsonData["assets"].empty())
                 return jsonData["assets"][0]["browser_download_url"];
             else return "Error: No downloadable assets found in the release data.";
@@ -77,15 +70,12 @@ namespace loader::util
         }
     }
 
-    inline void download_file(std::string path, std::string link)
+    inline void download_file(std::string path, std::string url)
     {
-        char sysdir[MAX_PATH] = { 0 };
-        char Path[MAX_PATH] = { 0 };
-        GetWindowsDirectoryA(sysdir, MAX_PATH);
-        sprintf_s(Path, path.c_str(), sysdir);
-        
-        //auto res = URLDownloadToFileA(NULL, link.c_str(), Path, 0, NULL);
-       // return log((FAILED(res) ? "Failed" : "Success"));
+        std::vector<std::string> headers = { "User-Agent: LoaderClient", "Accept: application/octet-stream" };
+        std::string response = g_curl_util.post(url, "", headers);
+        std::ofstream out(path, std::ios::binary);
+        out.write(response.data(), response.size());
     }
 
     inline void download_menu(std::string owner, std::string repo)

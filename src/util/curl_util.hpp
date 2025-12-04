@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../common.hpp"
 #include "../curl-src/include/curl/curl.h"
 
@@ -23,5 +25,5 @@ namespace loader
 		void destroy_curl();
 		std::string post(const std::string url, const std::string data, const std::vector<std::string> headers = {});
 	};
-	curl_util g_curl_util;
+	static curl_util g_curl_util;
 }
