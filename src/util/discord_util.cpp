@@ -4,36 +4,16 @@
 
 namespace loader
 {
-	discord_util::discord_util()//discord rpc is also a todo
+	discord_util::discord_util()
 	{
-        ZeroMemory(&handlers, sizeof(handlers));
-        
-        Discord_Initialize("1376339260239642625", &handlers, TRUE, "");
 	}
 
 	discord_util::~discord_util()
 	{
-        //Discord_ClearPresence();
-        //Discord_Shutdown();
 	}
 
     void discord_util::update()
     {
-        update_rpc();
-    }
-
-    void discord_util::update_rpc()
-    {
-        {
-            ZeroMemory(&presence, sizeof(presence));
-            presence.state = "Creating the future";
-            presence.startTimestamp = std::chrono::system_clock::to_time_t(g.start_time);
-            presence.largeImageKey = "gta_background";
-        }
-        //else
-            //Discord_ClearPresence();
-        Discord_UpdatePresence(&presence);
-        Discord_RunCallbacks();
     }
 
     std::string escape_json_string(const std::string& input) {

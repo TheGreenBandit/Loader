@@ -13,9 +13,9 @@
 #include <thread>
 #include <iomanip>
 #include <wininet.h>
-#include "../includes/ImGui/imgui.h"
+#include "imgui.h"
 #include "core/globals.hpp"
-#include "../includes/json/json.hpp" //fuckit changeme 
+#include "nlohmann/json.hpp" //fuckit changeme 
 #include "util/util.hpp"
 #include "util/logger.hpp"
 #include "widgets/font_awesome_5.h"

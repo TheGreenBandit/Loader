@@ -10,9 +10,9 @@
 
 #include "fa_solid_900.h"
 #include "font_awesome_5.h"
-#include "../../includes/ImGui/imgui.h"
-#include "../../includes/ImGui/imgui_impl_win32.h"
-#include "../../includes/ImGui/imgui_impl_dx11.h"
+#include "imgui.h"
+#include "backends/imgui_impl_win32.h"
+#include "backends/imgui_impl_dx11.h"
 
 #include <d3d12.h>
 #include <dxgi1_4.h>

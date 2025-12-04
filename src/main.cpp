@@ -1,5 +1,5 @@
-#include "../includes/ImGui/imgui_impl_win32.h"
-#include "../includes/ImGui/imgui_impl_dx11.h"
+#include "backends/imgui_impl_win32.h"
+#include "backends/imgui_impl_dx11.h"
 #include "gui/gui.hpp"
 #include <d3d11.h>
 #include "common.hpp"
@@ -146,10 +146,10 @@ int main(int, char**)
     if (!CreateDeviceD3D(hwnd))
     {
         CleanupDeviceD3D();
-        ::UnregisterClassW(wc.lpszClassName, wc.hInstance);
+        ::UnregisterClassA(wc.lpszClassName, wc.hInstance);
         return 1;
     }
-
+    
     ShowWindow(GetConsoleWindow(), SW_HIDE);
     UpdateWindow(GetConsoleWindow());
     
@@ -161,16 +161,10 @@ int main(int, char**)
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     ImGui::StyleColorsDark();
     //ImGui::StyleColorsLight();
     ImGuiStyle& style = ImGui::GetStyle();
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        style.WindowRounding = 4.0f;
-        style.Colors[ImGuiCol_WindowBg].w = .3f;
-    }
 
     ImGui_ImplWin32_Init(hwnd);
     ImGui_ImplDX11_Init(loader::g_pd3dDevice, loader::g_pd3dDeviceContext);
@@ -320,11 +314,6 @@ int main(int, char**)
         loader::g_pd3dDeviceContext->ClearRenderTargetView(loader::g_mainRenderTargetView, g.gui.color.WindowBg);
         ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-        {
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-        }
 
         // Present
         HRESULT hr = loader::g_pSwapChain->Present(1, 0);   // Present with vsync
@@ -339,7 +328,7 @@ int main(int, char**)
 
     CleanupDeviceD3D();
     ::DestroyWindow(hwnd);
-    ::UnregisterClassW(wc.lpszClassName, wc.hInstance);
+    ::UnregisterClassA(wc.lpszClassName, wc.hInstance);
     loader::g_logger.log("goodbye");
     return 0;
 }

@@ -48,7 +48,7 @@ namespace loader
 	public:
 		void game_select_button(egame game)
 		{
-			if (ImGui::ImageButton(game_to_icon(game)->view, ImVec2(45, 45)))
+			if (ImGui::ImageButton(game_to_name(game).data(), game_to_icon(game)->view, ImVec2(45, 45)))
 			{
 				g_gui.game = game;
 				tab = GAMES;

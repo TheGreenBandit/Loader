@@ -1,12 +1,6 @@
 include(FetchContent)
 
-set(JSON_MultipleHeaders OFF)
-
-FetchContent_Declare(
-    json
-    GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent.git
-    GIT_TAG        67e6070f9d9a44b4dec79ebe6b591f39d2285593
-    GIT_PROGRESS TRUE
-)
-message("json")
+message(STATUS "Setting up nlohmann::json")
+FetchContent_Declare(json GIT_REPOSITORY "https://github.com/nlohmann/json/" GIT_TAG v3.12.0 GIT_SHALLOW TRUE)
+option(JSON_MultipleHeaders "Disable nlohmann JSON multi header default." OFF)
 FetchContent_MakeAvailable(json)

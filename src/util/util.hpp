@@ -10,7 +10,7 @@ namespace loader::util
         char buffer[4096];
         std::string result;
 
-        hInternet = InternetOpen(L"Loader", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+        hInternet = InternetOpenW(L"Loader", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
         if (hInternet == NULL)
         {
             std::cerr << "InternetOpen failed!" << std::endl;
@@ -84,7 +84,7 @@ namespace loader::util
         GetWindowsDirectoryA(sysdir, MAX_PATH);
         sprintf_s(Path, path.c_str(), sysdir);
         
-        auto res = URLDownloadToFileA(NULL, link.c_str(), Path, 0, NULL);
+        //auto res = URLDownloadToFileA(NULL, link.c_str(), Path, 0, NULL);
        // return log((FAILED(res) ? "Failed" : "Success"));
     }
 

@@ -36,7 +36,7 @@ target_include_directories(Loader PRIVATE
 )
 
 target_precompile_headers(Loader PRIVATE "${SRC_DIR}/common.hpp")
-target_link_libraries(Loader PRIVATE pugixml imgui d3dcompiler dwmapi winmm psapi)
+target_link_libraries(Loader PRIVATE pugixml d3d11 Curl imgui d3dcompiler nlohmann_json::nlohmann_json dwmapi winmm psapi)
 
 add_compile_definitions(Loader 
     "_CRT_SECURE_NO_WARNINGS"

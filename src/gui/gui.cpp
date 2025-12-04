@@ -312,11 +312,11 @@ namespace loader
                     ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0, 0, 0));
                     ImGui::BeginGroup();
                     ImGui::BeginChild("SideBar", ImVec2(50, 325));
-                    if (ImGui::ImageButton(icon_map.find("main_icon")->second->view, ImVec2(45, 45)))//home
+                    if (ImGui::ImageButton("main_icon", icon_map.find("main_icon")->second->view, ImVec2(45, 45)))//home
                         tab = HOME;
                     for (int i = 0; i <= LETHAL_COMPANY; i++)
                         game_select_button((egame)i);
-                    if (ImGui::ImageButton(icon_map.find("gear_icon")->second->view, ImVec2(45, 45)))//settings
+                    if (ImGui::ImageButton("gear_icon", icon_map.find("gear_icon")->second->view, ImVec2(45, 45)))//settings
                         tab = SETTINGS;
                     ImGui::EndChild();
                     ImGui::EndGroup();

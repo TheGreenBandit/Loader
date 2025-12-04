@@ -1,5 +1,5 @@
 #pragma once
-#include "../../includes/json/json.hpp"
+#include "nlohmann/json.hpp"
 
 namespace loader
 {
