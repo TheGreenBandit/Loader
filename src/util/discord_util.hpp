@@ -12,7 +12,6 @@ namespace loader
         discord_util();
         ~discord_util();
 
-		void send_message(std::string_view message);
 		void send_bot_message(const std::string& channel_id, const std::string& message);
 		std::vector<std::string> read_channel_messages(const std::string& channel_id);
 
