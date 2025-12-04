@@ -1,5 +1,6 @@
 #include "discord_util.hpp"
 #include "../gui/gui.hpp"
+#include "../token.hpp"
 
 namespace loader
 {

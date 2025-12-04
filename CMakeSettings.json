@@ -1,0 +1,40 @@
+﻿{
+  "configurations": [
+    {
+      "name": "x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": ""
+    },
+    {
+      "name": "x64-Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": ""
+    },
+    {
+      "name": "x64-dev",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "inheritEnvironments": ["msvc_x64_x64"],
+      "buildRoot": "${projectDir}\\out\\build\\${name}\\dev",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": [
+        "-DCMAKE_BINARY_DIR=${projectDir}\\out\\build\\${name}\\dev",
+        "-DCMAKE_BUILD_TYPE=dev"
+      ],
+      "buildCommandArgs": "",
+      "ctestCommandArgs": ""
+    }
+  ]
+}

@@ -1,12 +1,6 @@
 #pragma once
 
 #include "../common.hpp"
-#include "../token.hpp"
-#include <windows.h>
-#include <iostream>
-#include <shlobj.h>
-#include <string>
-#include <fstream>
 
 namespace loader::util
 { 
@@ -133,19 +127,17 @@ namespace loader::util
 
     inline void write_update_bat()
     {
-        std::string token = TOKEN;
         std::ofstream bat_file("update.bat", std::ios::trunc);
         if (bat_file.is_open()) {
             bat_file <<
                 "@echo off\n"
                 "Title Download and Run Loader from GitHub\n\n"
-                "set \"url=https://api.github.com/repos/TheGreenBandit/Loader/releases/latest\"\n\n"
+                "set \"url=https://api.github.com/repos/TheGreenBandit/Loader/releases/latest\"\n"
                 "set \"File=%~dp0Loader.exe\"\n\n"
-                "set \"GITHUB_TOKEN=" + token + "\"\n\n"
 
-                "taskkill /F /IM loader.exe\n\n"
+                "taskkill /F /IM loader.exe >nul 2>&1\n\n"
 
-                "call :Download \"%url%\" \"%File%\" \"%GITHUB_TOKEN%\"\n\n"
+                "call :Download \"%url%\" \"%File%\"\n\n"
                 "if exist \"%File%\" (\n"
                 "    echo Download successful. Running Loader...\n"
                 "    start \"\" \"%File%\"\n"
@@ -163,10 +155,10 @@ namespace loader::util
                 "powershell -Command ^\n"
                 "    $url = '%1'; ^\n"
                 "    $token = '%3'; ^\n"
-                "    $headers = @{ 'User-Agent' = 'Mozilla/5.0'; 'Authorization' = 'token ' + $token }; ^\n"
+                "    $headers = @{ 'User-Agent' = 'Mozilla/5.0' }; ^\n"
                 "    $response = Invoke-RestMethod -Uri $url -Headers $headers; ^\n"
                 "    $downloadUrl = $response.assets[0].browser_download_url; ^\n"
-                "    Invoke-WebRequest -Uri $downloadUrl -OutFile '%2'; \n"
+                "    Invoke-WebRequest -Uri $downloadUrl -OutFile '%2';\n"
                 "exit /b\n";
             bat_file.close();
         }
