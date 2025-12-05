@@ -1,5 +1,6 @@
-#include "../gui.hpp"
-#include "../../util/message_system.hpp"
+#include "gui/gui.hpp"
+#include "util/message_system.hpp"
+#include "util/gui_util.hpp"
 
 namespace loader
 {
@@ -8,8 +9,8 @@ namespace loader
         static int changelog_game = 1;
 
         ImGui::BeginGroup();
-        ImGui::Text("Changelog");//center me
-        ImGui::SetNextItemWidth(300);
+        ImGui::BeginChild("main_changelog_child", ImVec2(300, y), 0, ImGuiWindowFlags_NoBackground);//needed for changelog centertext
+        g_gui_util.centertext("Changelogs", 1);//center me
         if (ImGui::BeginCombo("", games[changelog_game]))
         {
             for (int game_ = 0; game_ <= LETHAL_COMPANY; game_++)
@@ -28,6 +29,7 @@ namespace loader
         if (changelog_game == 2) menu = "Spooksuite";
         if (changelog_game == 3) menu = "Lethal Menu";
         ImGui::TextWrapped(util::read_file((fs::current_path() / "Resources" / menu / "Changelog.txt").string()).c_str());
+        ImGui::EndChild();
         ImGui::EndChild();
         ImGui::EndGroup();
 

@@ -143,6 +143,7 @@ namespace loader
         updatecolstyl();
         if (loader::active)
         {
+            ImGui::SetNextWindowPos(ImVec2(0, 0));//time to remove other menus now
             if (menu_to_test == 1)
             {
                 if (ImGui::Begin("Blade", &active, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar))
@@ -151,7 +152,7 @@ namespace loader
                     ImGui::BeginChild("titlebar", ImVec2(ImGui::GetContentRegionAvail().x, 50));
                     ImGui::Image(icon_map.find("main_icon")->second->view, ImVec2(50, 50));
                     ImGui::SameLine();
-                    ImGui::PushFont(segoeui_font_40px);
+                    ImGui::PushFont(NULL, 40);
                     ImGui::TextColored(ImVec4(0, 255, 0, 255), "Blade");
                     ImGui::SameLine();
                     ImGui::Text("Menu");
@@ -173,7 +174,7 @@ namespace loader
                     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5, 5));
                     if (ImGui::Button(ICON_FA_HAND_MIDDLE_FINGER))
                         active = false;
-                    ImGui::PushFont(segoeui_font_30px);
+                    ImGui::PushFont(NULL, 30);
                     ImGui::PopStyleVar();
                     ImGui::EndChild();
                     ImGui::Separator();
@@ -305,7 +306,7 @@ namespace loader
             {
                 ImGui::PushStyleColor(ImGuiCol_Border, accent_color);
                 ImGui::SetNextWindowSize(ImVec2(803, 364));
-                if (ImGui::Begin(WINDOW_NAME, &active, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
+                if (ImGui::Begin(WINDOW_NAME, &active, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove))
                 {
                     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.5, 2.5));
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(.1, .1, .1, 0));

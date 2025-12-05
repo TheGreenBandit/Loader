@@ -88,7 +88,7 @@ namespace loader
         ImGui::EndGroup();
         ImGui::SameLine();
         ImGui::BeginGroup();
-        ImGui::PushFont(segoeui_font_35px);
+        ImGui::PushFont(NULL, 35);
         ImGui::TextColored(col, name);
         if (name2 != "")
         {
@@ -102,14 +102,16 @@ namespace loader
         ImGui::EndChild();
         ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0);
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-        ImGui::PushFont(segoeui_font_25px);
-        if (ImGui::Button("Launch Game", ImVec2(155, 30))) active = false;
-        if (ImGui::Button("Dev", ImVec2(75, 30)))
+        ImGui::PushFont(NULL, 25);
+        if (ImGui::Button("Launch Game", ImVec2(155, 30)))
+
+        if (util::is_dev())
         {
-            g_inject.inject_dll(g_gui.game, "C:\\Users\\TGB\\Blade\\build\\RelWithDebInfo\\Blade.dll");
+            if (ImGui::Button("Dev", ImVec2(75, 30)))
+                g_inject.inject_dll(g_gui.game, "C:\\Users\\TGB\\Blade\\build\\RelWithDebInfo\\Blade.dll");
+            ImGui::SameLine();
         }
-        ImGui::SameLine();
-        if (ImGui::Button("Normal", ImVec2(75, 30)))
+        if (ImGui::Button("Normal", ImVec2(util::is_dev() ? 75 : 155, 30)))
             g_inject.inject();
         ImGui::PopFont();
         ImGui::PopStyleColor();

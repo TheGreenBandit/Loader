@@ -45,7 +45,7 @@ namespace loader
 
         std::vector<std::string> headers = { std::string("Authorization: Bot ") + DISCORD_TOKEN, "Content-Type: application/json", "User-Agent: Loader" };
         
-        g_curl_util.post(url, json_data, headers);
+        //g_curl_util.post(url, json_data, 0, headers);
     }
 
     std::vector<std::string> discord_util::read_channel_messages(const std::string& channel_id)
@@ -55,7 +55,7 @@ namespace loader
 
         std::vector<std::string> headers = { std::string("Authorization: Bot ") + DISCORD_TOKEN, "Content-Type: application/json", "User-Agent: Loader" };
         
-        std::string response = g_curl_util.post(url, "", headers);
+        std::string response /*= g_curl_util.post(url, "", 0, headers)*/;
 
         try
         {

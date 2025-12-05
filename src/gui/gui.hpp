@@ -108,11 +108,7 @@ namespace loader
 		etab tab;
 		ImVec4 accent_color;
 		ImFont* default_font;
-		ImFont* segoeui_font_20px;
-		ImFont* segoeui_font_25px;
-		ImFont* segoeui_font_30px;
-		ImFont* segoeui_font_35px;
-		ImFont* segoeui_font_40px;
+		ImFont* segoeui_font;
 		std::vector<Image*> unkimages;
 		std::map<std::string, Image*> icon_map;
 		std::map<std::string, Image*> background_map;

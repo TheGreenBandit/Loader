@@ -25,7 +25,7 @@ namespace loader
 		std::string user = std::string(util::get_username().data());
 		auto now = std::chrono::system_clock::now();
 
-		if (user != "TGB")
+		if (util::is_dev())
 		{
 			if (message.size() < 50)
 				return;

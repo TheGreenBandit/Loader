@@ -8,7 +8,7 @@ set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 message("\nFetching modules")
 include(cmake/json.cmake)
 include(cmake/pugixml.cmake)
-include(cmake/curl.cmake)
+# include(cmake/curl.cmake)
 include(cmake/imgui.cmake)
 
 # blade
@@ -22,7 +22,7 @@ file(GLOB_RECURSE SRC_MAIN
     "${SRC_DIR}/**.asm"
 )
 
-add_library(Loader MODULE "${SRC_MAIN}")
+add_executable(Loader "${SRC_MAIN}")
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(TARGET Loader PROPERTY CXX_STANDARD 23)
@@ -36,7 +36,7 @@ target_include_directories(Loader PRIVATE
 )
 
 target_precompile_headers(Loader PRIVATE "${SRC_DIR}/common.hpp")
-target_link_libraries(Loader PRIVATE pugixml d3d11 Curl imgui d3dcompiler nlohmann_json::nlohmann_json dwmapi winmm psapi)
+target_link_libraries(Loader PRIVATE pugixml d3d11 imgui d3dcompiler nlohmann_json::nlohmann_json dwmapi winmm psapi)
 
 add_compile_definitions(Loader 
     "_CRT_SECURE_NO_WARNINGS"
