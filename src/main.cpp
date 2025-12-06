@@ -126,19 +126,14 @@ int main(int, char**)
     util::write_update_bat();
 
 #ifdef USE_INTERENT
-    if (util::get_release_title("TheGreenBandit", "Loader") != VERSION)
+    if (std::string title = util::get_release_title("TheGreenBandit", "Loader"); title != VERSION)
     {
-        if (util::get_release_title("TheGreenBandit", "Loader") == "FAILED")
+        if (title == "Failed, check internet." || "Failed, couldn't get release title.")
         {
-            g_logger.log("Failed to fetch internet, check your connection");
+            g_logger.log(title);
             exit(0);
         }
-        if (util::get_release_title("TheGreenBandit", "Loader") == "Release title not found!")
-        {
-            g_logger.log("FAILED TO FIND RELEASE TITLE");
-            exit(0);
-        }
-        g_logger.log(std::format("The loader is outdated! Closing and downloading the newest version. \nCurrent Version: {}\nNew Version: {}", VERSION, util::get_release_title("TheGreenBandit", "Loader")));
+        g_logger.log(std::format("The loader is outdated! Closing and downloading the newest version. \nCurrent Version: {}\nNew Version: {}", VERSION, title));
         outdated = false;
         //system("update.bat");
         //exit(0);

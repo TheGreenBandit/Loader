@@ -11,7 +11,7 @@ namespace loader::util
         std::string url = "https://api.github.com/repos/" + owner + "/" + repo + "/releases/latest";
         auto response = g_cpr_client.get(url, { {"User-Agent", "Loader"}, {"Accept", "application/vnd.github+json"} });
         if (response.status_code != 200)
-            return "Failed to get release title.";
+            return "Failed, check internet.";
 
         try
         {
@@ -20,7 +20,7 @@ namespace loader::util
             if (jsonData.contains("name"))
                 return jsonData["name"];
             else
-                return "Release title not found!";
+                return "Failed, couldn't get release title.";
         }
         catch (const std::exception& e)
         {
@@ -32,9 +32,7 @@ namespace loader::util
     inline std::string get_latest_release_url(const std::string& owner, const std::string& repo)
     {
         std::string url = "https://api.github.com/repos/" + owner + "/" + repo + "/releases/latest";
-        g_logger.log("l0");
         auto response = g_cpr_client.get(url, { {"User-Agent", "Loader"}, {"Accept", "application/vnd.github+json"} });
-        g_logger.log("L1");
         if (response.status_code != 200)
             return "Failed to post";
 
