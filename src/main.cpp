@@ -155,7 +155,7 @@ int main(int, char**)
     ShowWindow(GetConsoleWindow(), SW_HIDE);
     UpdateWindow(GetConsoleWindow());
 
-    ShowWindow(hwnd, SW_SHOW);
+    ShowWindow(hwnd, SW_SHOW);//required to use a window on new imgui for some reason, unless i fucked up something
     UpdateWindow(hwnd);
 
     ImGui_ImplWin32_EnableDpiAwareness();
@@ -165,7 +165,6 @@ int main(int, char**)
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 
     ImGui::StyleColorsDark();
-
 
     fs::path w = std::getenv("SYSTEMROOT");
     fs::path windows_fonts = w.string() + "//Fonts";

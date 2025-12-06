@@ -15,7 +15,7 @@
 #include <wininet.h>
 #include "imgui.h"
 #include "core/globals.hpp"
-#include "nlohmann/json.hpp" //fuckit changeme 
+#include "nlohmann/json.hpp"
 #include "util/util.hpp"
 #include "util/logger.hpp"
 #include "widgets/font_awesome_5.h"
@@ -28,8 +28,8 @@ namespace fs = std::filesystem;
 using namespace std::chrono_literals;
 
 #define WINDOW_NAME "TGB's Loader"
-#define VERSION "V2.53 Maintence"
-#define TIME "11/5/2025"
+#define VERSION "V3.0 Gui Overhaul"
+#define TIME "12/6/2025"
 #define USE_INTERENT 1//crappy wifi or messing with version/resources
 
 namespace loader

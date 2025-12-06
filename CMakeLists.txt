@@ -22,7 +22,7 @@ file(GLOB_RECURSE SRC_MAIN
     "${SRC_DIR}/**.asm"
 )
 
-add_executable(Loader "${SRC_MAIN}")
+add_executable(Loader "${SRC_MAIN}" resources/Loader.rc)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set_property(TARGET Loader PROPERTY CXX_STANDARD 23)
