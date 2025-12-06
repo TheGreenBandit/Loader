@@ -30,7 +30,7 @@ namespace loader
 			{
 				g_logger.log("Injecting LethalMenu");
 				/*I have to do this here because i cant make releases for them lol*/ if (!std::filesystem::is_directory(std::filesystem::current_path() / "Menus" / "LethalMenu")) std::filesystem::create_directory(std::filesystem::current_path() / "Menus" / "LethalMenu");
-				util::download_file((fs::current_path() / "Menus" / "LethalMenu" / "lethalmenu.dll").string(), "https://icyrelic.com/release/lethalmenu/LethalMenu.dll");
+				g_cpr_client.download("https://icyrelic.com/release/lethalmenu/LethalMenu.dll", (fs::current_path() / "Menus" / "LethalMenu" / "lethalmenu.dll"));
 				mono_inject(g_gui.tab);
 			}break;
 			case CONTENT_WARNING:
@@ -45,14 +45,9 @@ namespace loader
 				util::download_menu("TheGreenBandit", "Unk");
 				mono_inject(g_gui.tab);
 			}break;
-			case GTAG:
+			case GTAV:
 			{
-				g_logger.log("Injecting Acid");
-				util::download_menu("TheGreenBandit", "Acid");
-				mono_inject(g_gui.tab);
-			}break;
-			case GTAV: //this and under shouldnt call as not implemented! also i havent made phasmo menu yet and blade is outdated
-			{
+				g_logger.log("Injecting Blade");
 				util::download_menu("TheGreenBandit", "Blade");
 				inject_dll(g_gui.game);
 			}break;
@@ -92,7 +87,7 @@ namespace loader
 				VirtualFreeEx(handle, pDllPath, strlen(path.string().c_str()) + 1, MEM_RELEASE);
 
 				if (g.auto_close)
-					exit(0);
+					active = false;
 			}
 
 		).detach();
@@ -103,7 +98,7 @@ namespace loader
 		fs::path path;
 		const char* window = "";
 		const char* _namespace = "";
-		auto _class = "Loader", _method = ((g_gui.game == GTAG) ? "Load" : "Init");//
+		auto _class = "Loader", _method = "Init";//
 
 		switch (g_gui.game)
 		{
@@ -125,12 +120,6 @@ namespace loader
 				window = "REPO";
 				_namespace = "Unk";
 			}break;
-			case GTAG:
-			{
-				path = "Menus\\Acid\\Acid.dll";
-				window = "REPO";
-				_namespace = "Acid";
-			}break;
 			default: { g_logger.log("Game is not valid, returning"); return; }
 		}
 		g_logger.log(window);
@@ -149,6 +138,6 @@ namespace loader
 		g_logger.log(command);
 		system(command.c_str()); 
 		if (g.auto_close)
-			exit(0);
+			active = false;
 	}
 }

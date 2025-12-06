@@ -43,26 +43,6 @@ namespace loader
 			ImGui::PopStyleColor();
 		}
 
-		inline Image* download_and_load_image_to_list(const char* path, const char* link, std::vector<loader::Image*>* image_dir = nullptr)
-		{
-			util::download_file(path, link);
-			loader::Image* ret = new loader::Image();
-			g_gui.load_texture_from_file(path, g_pd3dDevice, &ret);
-
-			if (image_dir != nullptr)
-				image_dir->push_back(ret);
-			return ret;
-		}
-
-		inline void tab(etab tab)
-		{
-			ImGui::PushStyleColor(ImGuiCol_Text, (g_gui.tab == tab) ? (&ImGui::GetStyle())->Colors[ImGuiCol_WindowBg] : (&ImGui::GetStyle())->Colors[ImGuiCol_Text]);
-			if (ImGui::Button(std::format("{} {}", g_gui.get_tab_icon(tab), g_gui.tab_to_name(tab).data()).c_str()))
-				g_gui.tab = tab;
-			ImGui::PopStyleColor();
-		}
-		//get me working
-
 		inline void centeredchild(const char* name, ImVec2 size, bool border, std::function<void()> options) // works!
 		{
 			ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x / 2) - (size.x / 2));
@@ -94,16 +74,6 @@ namespace loader
 			}
 			if (seperator)
 				ImGui::Separator();
-		}
-
-		inline void push_font_size(float size)
-		{
-			g_gui.segoeui_font->FontSize = size;
-		}
-
-		inline void pop_font_size()
-		{
-			g_gui.segoeui_font->FontSize = 20;
 		}
 
 		inline void righttext(std::string_view text, bool seperator = false)
