@@ -112,8 +112,8 @@ void initialize()
     download_if_noexist((fs::current_path() / "Resources" / "Acid" / "Changelog.txt"), "https://raw.githubusercontent.com/TheGreenBandit/Acid/refs/heads/main/Changelog.txt");
     if (outdated)
     {
-        //system("update.bat");
-        //exit(0);
+        system("update.bat");
+        exit(0);
     }
 #endif
     g_logger.log("Menu Initialized");
@@ -128,7 +128,7 @@ int main(int, char**)
 #ifdef USE_INTERENT
     if (std::string title = util::get_release_title("TheGreenBandit", "Loader"); title != VERSION)
     {
-        if (title == "Failed, check internet." || "Failed, couldn't get release title.")
+        if ((title == "Failed, check internet.") || (title == "Failed, couldn't get release title."))
         {
             g_logger.log(title);
             exit(0);
