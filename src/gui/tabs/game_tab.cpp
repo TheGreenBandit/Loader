@@ -1,9 +1,25 @@
 #include "../gui.hpp"
 #include "../../util/gui_util.hpp"
 #include "../../util/injection.hpp"
+#include "shellapi.h"
 
 namespace loader
 {
+    void launch_game(egame game)
+    {
+        switch (game)
+        {
+        case GTAV:
+            ShellExecuteA(0, "open", "com.epicgames.launcher://apps/0584d2013f0149a791e7b9bad0eec102%3A6e563a2c0f5f46e3b4e88b5f4ed50cca%3A9d2d0eb64d5c44529cece33fe2a46482?action=launch&silent=true", 0, 0, SW_HIDE); break;
+        case REPO:
+            ShellExecuteA(0, "open", "steam://rungameid/3241660", 0, 0, SW_HIDE); break;
+        case CONTENT_WARNING:
+            ShellExecuteA(0, "open", "steam://rungameid/2881650", 0, 0, SW_HIDE); break;
+        case LETHAL_COMPANY:
+            ShellExecuteA(0, "open", "steam://rungameid/1966720", 0, 0, SW_HIDE); break;
+        }
+    }
+
     void gui::game_tab()
     {
         const char* name = "";
@@ -104,14 +120,14 @@ namespace loader
         ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
         ImGui::PushFont(NULL, 25);
         if (ImGui::Button("Launch Game", ImVec2(155, 30)))
-
-        if (util::is_dev())
+            launch_game(game);
+        if (util::is_dev() && (game == GTAV))
         {
             if (ImGui::Button("Dev", ImVec2(75, 30)))
                 g_inject.inject_dll(g_gui.game, "C:\\Users\\TGB\\Blade\\build\\RelWithDebInfo\\Blade.dll");
             ImGui::SameLine();
         }
-        if (ImGui::Button("Normal", ImVec2(util::is_dev() ? 75 : 155, 30)))
+        if (ImGui::Button("Inject", ImVec2((util::is_dev() && (game == GTAV)) ? 75 : 155, 30)))
             g_inject.inject();
         ImGui::PopFont();
         ImGui::PopStyleColor();

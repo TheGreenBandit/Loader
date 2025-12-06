@@ -79,17 +79,17 @@ namespace loader::util
         return buf.str();
     }
 
-    inline std::string_view get_username()
+    inline std::string get_username()
     {
         char user[25];
         DWORD user_len = sizeof(user);
         GetUserNameA(user, &user_len);
-        return user;
+        return std::string(user);
     }
 
     inline bool is_dev()
     {
-        return get_username().data() == "TGB";
+        return get_username() == "TGB";
     }
 
     inline void write_update_bat()
