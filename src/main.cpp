@@ -134,9 +134,7 @@ int main(int, char**)
             exit(0);
         }
         g_logger.log(std::format("The loader is outdated! Closing and downloading the newest version. \nCurrent Version: {}\nNew Version: {}", VERSION, title));
-        outdated = false;
-        //system("update.bat");
-        //exit(0);
+        outdated = true;
     }
 #endif
 
