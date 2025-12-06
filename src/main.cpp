@@ -7,7 +7,7 @@
 #include "util/gui_util.hpp"
 #include "util/message_system.hpp"
 #include "util/discord_util.hpp"
-#include "util/curl_util.hpp"
+#include "util/cpr_client.hpp"
 #include "widgets/imgui_notify.h"
 //#pragma comment(lib, "libcurl.lib")
 #pragma warning (disable: 4996)
@@ -23,7 +23,7 @@ using namespace loader;
 static inline bool outdated = false;
 static inline HWND hwnd = NULL;
 
-void handle_window_movement()
+void handle_window_movement()//todo clean this up
 {
     POINT cursor;
     GetCursorPos(&cursor);
@@ -44,22 +44,18 @@ void create_dir_if_noexist(fs::path path)
 {
     if (!fs::is_directory(path)) fs::create_directory(path);
 }
-void download_if_noexist(fs::path path, const char* link)
+void download_if_noexist(fs::path path, cpr::Url link)
 {
     if (!fs::exists(path) || outdated)
-        util::download_file(path.string(), link);
+        g_cpr_client.download(link, path);
 }
-Image* download_img_if_noexist(fs::path path, const char* link, std::vector<Image*>* image_dir = nullptr)
+Image* download_img_if_noexist(fs::path path, cpr::Url link)
 {
     Image* ret = new Image();
     if (!fs::exists(path) || outdated)
-        ret = g_gui_util.download_and_load_image_to_list(path.string().c_str(), link, image_dir);
-    else
-    {
-        g_gui.load_texture_from_file(path.string().c_str(), g_pd3dDevice, &ret);
-        if (image_dir != nullptr)
-            image_dir->push_back(ret);
-    }
+        g_cpr_client.download(link, path);
+
+    g_gui.load_texture_from_file(path.string().c_str(), g_pd3dDevice, &ret);
     return ret;
 }
 
@@ -77,6 +73,7 @@ void initialize()
     g_gui.initialize();
     g_inject.auto_inject();
     g_message_system.loop();
+    g_cpr_client.setup_cpr_client();
     g.start_time = std::chrono::system_clock::now();
 #ifdef USE_INTERENT
     //base stuff
@@ -115,8 +112,8 @@ void initialize()
     download_if_noexist((fs::current_path() / "Resources" / "Acid" / "Changelog.txt"), "https://raw.githubusercontent.com/TheGreenBandit/Acid/refs/heads/main/Changelog.txt");
     if (outdated)
     {
-        system("update.bat");
-        exit(0);
+        //system("update.bat");
+        //exit(0);
     }
 #endif
     g_logger.log("Menu Initialized");
@@ -125,7 +122,6 @@ void initialize()
 int main(int, char**)
 {
     g_logger.clear_log();
-    g_curl_util.setup_curl();
     g_logger.log("Welcome!");
     util::write_update_bat();
 
@@ -258,9 +254,6 @@ int main(int, char**)
         HRESULT hr = g_pSwapChain->Present(1, 0);
         g_SwapChainOccluded = (hr == DXGI_STATUS_OCCLUDED);
     }
-
-    // Uninitialize
-    g_curl_util.destroy_curl();
 
     // Cleanup
     ImGui_ImplDX11_Shutdown();

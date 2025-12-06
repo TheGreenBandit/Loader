@@ -30,7 +30,7 @@ namespace loader
 			{
 				g_logger.log("Injecting LethalMenu");
 				/*I have to do this here because i cant make releases for them lol*/ if (!std::filesystem::is_directory(std::filesystem::current_path() / "Menus" / "LethalMenu")) std::filesystem::create_directory(std::filesystem::current_path() / "Menus" / "LethalMenu");
-				util::download_file((fs::current_path() / "Menus" / "LethalMenu" / "lethalmenu.dll").string(), "https://icyrelic.com/release/lethalmenu/LethalMenu.dll");
+				g_cpr_client.download("https://icyrelic.com/release/lethalmenu/LethalMenu.dll", (fs::current_path() / "Menus" / "LethalMenu" / "lethalmenu.dll"));
 				mono_inject(g_gui.tab);
 			}break;
 			case CONTENT_WARNING:

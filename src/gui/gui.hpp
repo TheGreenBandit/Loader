@@ -101,7 +101,7 @@ namespace loader
 		void game_tab();
 		void settings_tab();
 
-		bool load_texture_from_file(const char* path, ID3D11Device* d3dDevice, Image** image);
+		bool load_texture_from_file(fs::path path, ID3D11Device* d3dDevice, Image** image);
 
 		ImVec2 size = { 800, 600 };
 		egame game;

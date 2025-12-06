@@ -9,7 +9,7 @@ namespace loader
         static int changelog_game = 1;
 
         ImGui::BeginGroup();
-        ImGui::BeginChild("main_changelog_child", ImVec2(300, y), 0, ImGuiWindowFlags_NoBackground);//needed for changelog centertext
+        ImGui::BeginChild("main_changelog_child", ImVec2(300, 323), 0, ImGuiWindowFlags_NoBackground);//needed for changelog centertext
         g_gui_util.centertext("Changelogs", 1);//center me
         if (ImGui::BeginCombo("", games[changelog_game]))
         {
@@ -22,7 +22,7 @@ namespace loader
             }
             ImGui::EndCombo();
         }
-        ImGui::BeginChild("changelogs", ImVec2(300, 265), 1);
+        ImGui::BeginChild("changelogs", ImVec2(300, 257), 1);
         std::string menu = "";
         if (changelog_game == 0) menu = "Blade";
         if (changelog_game == 1) menu = "Unk";

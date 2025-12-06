@@ -1,6 +1,7 @@
 #include "discord_util.hpp"
 #include "../gui/gui.hpp"
 #include "../token.hpp"
+#include "../util/cpr_client.hpp"
 
 namespace loader
 {
@@ -16,7 +17,8 @@ namespace loader
     {
     }
 
-    std::string escape_json_string(const std::string& input) {
+    std::string escape_json_string(const std::string& input) 
+    {
         std::ostringstream oss;
         for (char c : input) {
             switch (c) {
@@ -43,23 +45,18 @@ namespace loader
         std::string json_data = "{ \"content\": \"" + escaped_message + "\" }";
         std::string url = "https://discord.com/api/v10/channels/" + channel_id + "/messages";
 
-        std::vector<std::string> headers = { std::string("Authorization: Bot ") + DISCORD_TOKEN, "Content-Type: application/json", "User-Agent: Loader" };
-        
-        //g_curl_util.post(url, json_data, 0, headers);
+        g_cpr_client.post(url, { {"Authorization", std::string("Bot ") + DISCORD_TOKEN},{"Content-Type", "application/json"},{"User-Agent", "Loader"} }, json_data);
     }
 
     std::vector<std::string> discord_util::read_channel_messages(const std::string& channel_id)
     {
         std::vector<std::string> messages;
         std::string url = "https://discord.com/api/v10/channels/" + channel_id + "/messages";
-
-        std::vector<std::string> headers = { std::string("Authorization: Bot ") + DISCORD_TOKEN, "Content-Type: application/json", "User-Agent: Loader" };
-        
-        std::string response /*= g_curl_util.post(url, "", 0, headers)*/;
+        auto response = g_cpr_client.get(url, { {"Authorization", std::string("Bot ") + DISCORD_TOKEN},{"Content-Type", "application/json"},{"User-Agent", "Loader"} });
 
         try
         {
-            auto json = nlohmann::json::parse(response);
+            auto json = nlohmann::json::parse(response.text);
 
             for (const auto& msg : json)
             {
