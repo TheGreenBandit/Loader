@@ -148,7 +148,7 @@ int main(int, char**)
     WNDCLASSEXW wc = { sizeof(WNDCLASSEXW), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandleW(NULL), NULL, NULL, NULL, NULL, L"Loader", NULL};
     RegisterClassExW(&wc);
 
-    hwnd = ::CreateWindowExW(0, wc.lpszClassName, L"Loader", WS_POPUPWINDOW, 0, 0, 803, 364, NULL, NULL, wc.hInstance, NULL);
+    hwnd = ::CreateWindowExW(0, wc.lpszClassName, L"Loader", WS_POPUPWINDOW, 0, 0, 805, 366, NULL, NULL, wc.hInstance, NULL);
 
     if (!CreateDeviceD3D(hwnd))
     {
@@ -211,7 +211,6 @@ int main(int, char**)
     while (active)
     {
         security.loop();
-        discord_util.update();
 
         MSG msg;
         while (::PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))

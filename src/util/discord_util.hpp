@@ -8,14 +8,8 @@ namespace loader
 	{
 		bool rpc_enabled = true;
 		std::string webhook = "none";
-	public:
-        discord_util();
-        ~discord_util();
-
+	public:;
 		void send_bot_message(const std::string& channel_id, const std::string& message);
-		std::vector<std::string> read_channel_messages(const std::string& channel_id);
-
-		void update();
-		
+		std::vector<std::string> read_channel_messages(const std::string& channel_id);		
 	} discord_util;
 }

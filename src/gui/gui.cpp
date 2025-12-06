@@ -138,7 +138,7 @@ namespace loader
         {
             ImGui::SetNextWindowPos(ImVec2(0, 0));
             ImGui::PushStyleColor(ImGuiCol_Border, accent_color);
-            ImGui::SetNextWindowSize(ImVec2(804, 365));
+            ImGui::SetNextWindowSize(ImVec2(803, 364));
             if (ImGui::Begin(WINDOW_NAME, &active, ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove))
             {
                 ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2.5, 2.5));

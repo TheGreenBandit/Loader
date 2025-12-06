@@ -5,18 +5,6 @@
 
 namespace loader
 {
-	discord_util::discord_util()
-	{
-	}
-
-	discord_util::~discord_util()
-	{
-	}
-
-    void discord_util::update()
-    {
-    }
-
     std::string escape_json_string(const std::string& input) 
     {
         std::ostringstream oss;
