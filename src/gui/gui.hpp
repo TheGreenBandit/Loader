@@ -50,6 +50,7 @@ namespace loader
 		{
 			if (ImGui::ImageButton(game_to_name(game).data(), game_to_icon(game)->view, ImVec2(45, 45)))
 			{
+				selected_img = 0;
 				g_gui.game = game;
 				tab = GAMES;
 			}
@@ -103,6 +104,7 @@ namespace loader
 
 		bool load_texture_from_file(fs::path path, ID3D11Device* d3dDevice, Image** image);
 
+		int selected_img = 0;
 		ImVec2 size = { 800, 600 };
 		egame game;
 		etab tab;

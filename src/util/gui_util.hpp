@@ -1,5 +1,6 @@
 #pragma once
-#include "../common.hpp"
+#include "common.hpp"
+#include "gui/gui.hpp"
 
 namespace loader
 {
@@ -10,37 +11,41 @@ namespace loader
 			return string.data();
 		}
 
-		inline void image_showcase(int* selected, std::vector<Image*> images, ImVec2 specified_size = ImVec2(0,0))
+		inline void image_showcase(std::map<int, std::pair<std::string, Image*>> map, ImVec2 specified_size = ImVec2(0, 0), std::string default_tx = "")
 		{
-			ImVec2 s = (specified_size.x == 0 || specified_size.y == 0) ? ImVec2(images[*selected]->size[0],
-				images[*selected]->size[1]) : specified_size;
-			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_WindowBg));
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-			ImVec2 c = { s.x + 40, s.y };
-			centeredchild("", c, false, [=]
-				{				
-					int ret = *selected;
-					float opos = ImGui::GetCursorPosY();
-					float npos = (ImGui::GetContentRegionAvail().y / 2) - 20;
-					ImGui::SetCursorPosY(opos);
-					if (ImGui::Button(ICON_FA_ARROW_LEFT, ImVec2(20, c.y)))
-						ret --;
-					ImGui::SameLine();
-					ImGui::SetCursorPosY(opos);
-					ImGui::Image((void*)images[*selected]->view, s);
-					ImGui::SameLine();
-					ImGui::SetCursorPosY(opos);
+			ImGui::BeginGroup();
+			ImVec2 c = ImGui::GetCursorPos();
+			if (g_gui.selected_img == 0)
+				ImGui::Image(g_gui.game_to_background(g_gui.game)->view, specified_size);
+			else
+				ImGui::Image(map.find(g_gui.selected_img)->second.second->view, specified_size);
 
-					if (ImGui::Button(ICON_FA_ARROW_RIGHT, ImVec2(20, c.y)))
-						ret ++;
-					if (ret > (images.size() - 1)) ret = 0;//back and forth function
-					if (ret < 0) ret = (images.size() - 1);
-					*selected = ret;
-				});
-			ImGui::PopStyleVar();
-			ImGui::PopStyleVar();
-			ImGui::PopStyleColor();
+			ImGui::PushStyleColor(ImGuiCol_Border, g_gui.accent_color);
+			ImGui::PushStyleColor(ImGuiCol_Button, g_gui.accent_color);
+			ImVec4 hov = ImVec4(g_gui.accent_color.x - .3, g_gui.accent_color.y - .3, g_gui.accent_color.z - .3, g_gui.accent_color.w);
+			ImVec4 act = ImVec4(g_gui.accent_color.x - .4, g_gui.accent_color.y - .4, g_gui.accent_color.z - .4, g_gui.accent_color.w);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, hov);
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, act);
+			ImGui::SetCursorPos(ImVec2(c.x, c.y + 162));
+			if (ImGui::Button(ICON_FA_ARROW_LEFT))
+			{
+				g_gui.selected_img--;
+				if (g_gui.selected_img < 0)
+					g_gui.selected_img = map.size();
+			}
+			ImGui::SetCursorPos(ImVec2(c.x + (specified_size.x - 30), c.y + (specified_size.y / 2)));
+			if (ImGui::Button(ICON_FA_ARROW_RIGHT))
+			{
+				g_gui.selected_img++;
+				if (g_gui.selected_img > map.size())
+					g_gui.selected_img = 0;
+			}
+
+			std::string txt = (g_gui.selected_img == 0) ? default_tx : map.find(g_gui.selected_img)->second.first;
+			ImGui::SetCursorPos(ImVec2(c.x + (specified_size.x - ImGui::CalcTextSize(txt.c_str()).x) / 2, c.y + (specified_size.y - 25)));
+			ImGui::Text(txt.c_str());
+
+			ImGui::EndGroup();
 		}
 
 		inline void centeredchild(const char* name, ImVec2 size, bool border, std::function<void()> options) // works!

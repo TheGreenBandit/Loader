@@ -68,40 +68,8 @@ namespace loader
         }break;
         }
         static int img = 0;//make this in gui.hpp and reset it when clicking on a different game tab
-        ImGui::BeginGroup();
-        ImVec2 c = ImGui::GetCursorPos();
         accent_color = col;
-        if (img == 0)
-            ImGui::Image(game_to_background(game)->view, ImVec2(578, 325));
-        else
-            ImGui::Image(map.find(img)->second.second->view, ImVec2(578, 325));
-        
-        ImGui::PushStyleColor(ImGuiCol_Border, col);
-        ImGui::PushStyleColor(ImGuiCol_Button, col);
-        ImVec4 hov = ImVec4(col.x - .3, col.y - .3, col.z - .3, col.w);
-        ImVec4 act = ImVec4(col.x - .4, col.y - .4, col.z - .4, col.w);
-        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, hov);
-        ImGui::PushStyleColor(ImGuiCol_ButtonActive, act);
-        ImGui::SetCursorPos(ImVec2(c.x, c.y + 162));
-        if (ImGui::Button(ICON_FA_ARROW_LEFT))
-        {
-            img--;
-            if (img < 0)
-                img = map.size();
-        }
-        ImGui::SetCursorPos(ImVec2(c.x + 548, c.y + 162));
-        if (ImGui::Button(ICON_FA_ARROW_RIGHT))
-        {
-            img++;
-            if (img > map.size())
-                img = 0;
-        }
-
-        std::string txt = (img == 0) ? "Press on the arrows to see pictures of the menu!" : map.find(img)->second.first;
-        ImGui::SetCursorPos(ImVec2(c.x + (572 - ImGui::CalcTextSize(txt.c_str()).x) / 2, c.y + 300));
-        ImGui::Text(txt.c_str());
-
-        ImGui::EndGroup();
+        g_gui_util.image_showcase(map, ImVec2(578, 325), "Press on the arrows to see pictures of the menu!");
         ImGui::SameLine();
         ImGui::BeginGroup();
         ImGui::PushFont(NULL, 35);
