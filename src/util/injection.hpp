@@ -13,7 +13,7 @@ namespace loader
 	public:
 		void auto_inject();
 		void inject();
-		void mono_inject(etab tab);
+		void mono_inject();
 		void inject_dll(egame tab, std::string_view npath = "", std::string_view nwindow = "");
 	} g_inject;
 }

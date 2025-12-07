@@ -203,6 +203,7 @@ int main(int, char**)
     while (active)
     {
         security.loop();
+        g_inject.auto_inject();
 
         MSG msg;
         while (::PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
