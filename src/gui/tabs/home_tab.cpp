@@ -26,8 +26,9 @@ namespace loader
         std::string menu = "";
         if (changelog_game == 0) menu = "Blade";
         if (changelog_game == 1) menu = "Unk";
-        if (changelog_game == 2) menu = "Spooksuite";
-        if (changelog_game == 3) menu = "Lethal Menu";
+        if (changelog_game == 2) menu = "PhasMenu";
+        if (changelog_game == 3) menu = "Spooksuite";
+        if (changelog_game == 4) menu = "Lethal Menu";
         ImGui::TextWrapped(util::read_file((fs::current_path() / "Resources" / menu / "Changelog.txt").string()).c_str());
         ImGui::EndChild();
         ImGui::EndChild();

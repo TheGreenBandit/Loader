@@ -6,11 +6,6 @@ namespace loader
 {
 	struct gui_util
 	{
-		inline const char* s(std::string_view string)
-		{
-			return string.data();
-		}
-
 		inline void image_showcase(std::map<int, std::pair<std::string, Image*>> map, ImVec2 specified_size = ImVec2(0, 0), std::string default_tx = "")
 		{
 			ImGui::BeginGroup();
@@ -26,25 +21,26 @@ namespace loader
 			ImVec4 act = ImVec4(g_gui.accent_color.x - .4, g_gui.accent_color.y - .4, g_gui.accent_color.z - .4, g_gui.accent_color.w);
 			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, hov);
 			ImGui::PushStyleColor(ImGuiCol_ButtonActive, act);
-			ImGui::SetCursorPos(ImVec2(c.x, c.y + 162));
-			if (ImGui::Button(ICON_FA_ARROW_LEFT))
+			if (map.size() > 0)
 			{
-				g_gui.selected_img--;
-				if (g_gui.selected_img < 0)
-					g_gui.selected_img = map.size();
+				ImGui::SetCursorPos(ImVec2(c.x, c.y + 162));
+				if (ImGui::Button(ICON_FA_ARROW_LEFT))
+				{
+					g_gui.selected_img--;
+					if (g_gui.selected_img < 0)
+						g_gui.selected_img = map.size();
+				}
+				ImGui::SetCursorPos(ImVec2(c.x + (specified_size.x - 30), c.y + (specified_size.y / 2)));
+				if (ImGui::Button(ICON_FA_ARROW_RIGHT))
+				{
+					g_gui.selected_img++;
+					if (g_gui.selected_img > map.size())
+						g_gui.selected_img = 0;
+				}
+				std::string txt = (g_gui.selected_img == 0) ? default_tx : map.find(g_gui.selected_img)->second.first;
+				ImGui::SetCursorPos(ImVec2(c.x + (specified_size.x - ImGui::CalcTextSize(txt.c_str()).x) / 2, c.y + (specified_size.y - 25)));
+				ImGui::Text(txt.c_str());
 			}
-			ImGui::SetCursorPos(ImVec2(c.x + (specified_size.x - 30), c.y + (specified_size.y / 2)));
-			if (ImGui::Button(ICON_FA_ARROW_RIGHT))
-			{
-				g_gui.selected_img++;
-				if (g_gui.selected_img > map.size())
-					g_gui.selected_img = 0;
-			}
-
-			std::string txt = (g_gui.selected_img == 0) ? default_tx : map.find(g_gui.selected_img)->second.first;
-			ImGui::SetCursorPos(ImVec2(c.x + (specified_size.x - ImGui::CalcTextSize(txt.c_str()).x) / 2, c.y + (specified_size.y - 25)));
-			ImGui::Text(txt.c_str());
-
 			ImGui::EndGroup();
 		}
 
@@ -65,18 +61,10 @@ namespace loader
 
 		inline void centertext(std::string_view text, bool seperator = false, bool usemax = false)
 		{
-			if (!usemax)
-			{
-				ImGui::SetCursorPosX(
-					((ImGui::GetContentRegionAvail().x) / 2) - (ImGui::CalcTextSize(text.data()).x / 2));
-				ImGui::Text(text.data());
-			}
-			else
-			{
-				ImGui::SetCursorPosX(
-					(ImGui::GetContentRegionMax().x / 2) - (ImGui::CalcTextSize(text.data()).x / 2));
-				ImGui::Text(text.data());
-			}
+			ImGui::SetCursorPosX(
+				((usemax ? ImGui::GetContentRegionMax().x : ImGui::GetContentRegionAvail().x) / 2) - (ImGui::CalcTextSize(text.data()).x / 2));
+			ImGui::Text(text.data());
+		
 			if (seperator)
 				ImGui::Separator();
 		}

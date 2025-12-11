@@ -23,8 +23,8 @@ namespace loader
 	enum egame : uint32_t
 	{
 		GTAV,
-		//PHASMOPHOBIA maybe make menu for me, or minecraft java
 		REPO,
+		PHASMOPHOBIA,
 		CONTENT_WARNING,
 		LETHAL_COMPANY
 	};
@@ -42,6 +42,7 @@ namespace loader
 		{
 			"GTAV",
 			"R.E.P.O",
+			"Phasmophobia"
 			"Content Warning",
 			"Lethal Company"
 		};
@@ -62,6 +63,7 @@ namespace loader
 			{
 				case GTAV: return icon_map.find("gta_icon")->second; break;
 				case REPO: return icon_map.find("repo_icon")->second; break;
+				case PHASMOPHOBIA: return icon_map.find("phasmophobia_icon")->second; break;
 				case CONTENT_WARNING: return icon_map.find("content_warning_icon")->second; break;
 				case LETHAL_COMPANY: return icon_map.find("lethal_company_icon")->second; break;
 				default: return new Image();//
@@ -75,6 +77,7 @@ namespace loader
 			{
 			case GTAV: return background_map.find("gta_background")->second; break;
 			case REPO: return background_map.find("repo_background")->second; break;
+			case PHASMOPHOBIA: return background_map.find("phasmophobia_background")->second; break;
 			case CONTENT_WARNING: return background_map.find("content_warning_background")->second; break;
 			case LETHAL_COMPANY: return background_map.find("lethal_company_background")->second; break;
 			default: return new Image();//
@@ -88,6 +91,7 @@ namespace loader
 			{				
 				case GTAV: return "GTAV";
 				case REPO: return "R.E.P.O";
+				case PHASMOPHOBIA: return "Phasmophobia";
 				case CONTENT_WARNING: return "Content Warning";
 				case LETHAL_COMPANY: return "Lethal Company";
 
@@ -111,11 +115,11 @@ namespace loader
 		ImVec4 accent_color;
 		ImFont* default_font;
 		ImFont* segoeui_font;
-		std::vector<Image*> unkimages;
 		std::map<std::string, Image*> icon_map;
 		std::map<std::string, Image*> background_map;
 		std::map<int, std::pair<std::string, Image*>> blade_map;
 		std::map<int, std::pair<std::string, Image*>> unk_map;
+		std::map<int, std::pair<std::string, Image*>> phasmophobia_map;
 		std::map<int, std::pair<std::string, Image*>> spooksuite_map;
 		std::map<int, std::pair<std::string, Image*>> lethalmenu_map;
 		//debug

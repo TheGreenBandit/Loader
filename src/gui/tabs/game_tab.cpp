@@ -13,6 +13,8 @@ namespace loader
             ShellExecuteA(0, "open", "com.epicgames.launcher://apps/0584d2013f0149a791e7b9bad0eec102%3A6e563a2c0f5f46e3b4e88b5f4ed50cca%3A9d2d0eb64d5c44529cece33fe2a46482?action=launch&silent=true", 0, 0, SW_HIDE); break;
         case REPO:
             ShellExecuteA(0, "open", "steam://rungameid/3241660", 0, 0, SW_HIDE); break;
+        case PHASMOPHOBIA:
+            ShellExecuteA(0, "open", "steam://rungameid/739630", 0, 0, SW_HIDE); break;
         case CONTENT_WARNING:
             ShellExecuteA(0, "open", "steam://rungameid/2881650", 0, 0, SW_HIDE); break;
         case LETHAL_COMPANY:
@@ -30,7 +32,7 @@ namespace loader
         std::map<int, std::pair<std::string, Image*>> map;
         switch (game)
         {
-        case 0:
+        case GTAV:
         {
             map = blade_map;
             name = "Blade";
@@ -39,7 +41,7 @@ namespace loader
             gamename = "GTAV";
             desc = "A dual UI, personal pet project of mine. Not meant for online as there is zero protection from the anticheat in it.";
         }break;
-        case 1:
+        case REPO:
         {
             map = unk_map;
             name = "Unk";
@@ -48,7 +50,16 @@ namespace loader
             gamename = "R.E.P.O";
             desc = "The most advanced menu for R.E.P.O.";
         }break;
-        case 2:
+        case PHASMOPHOBIA:
+        {
+            map = phasmophobia_map;
+            name = "Phas";
+            name2 = "Menu";
+            col = ImVec4(1, .5, 0, 1);
+            gamename = "Phasmophobia";
+            desc = "A wip menu, the latest menu of the bunch.";
+        }break;
+        case CONTENT_WARNING:
         {
             map = spooksuite_map;
             name = "Spook";
@@ -57,7 +68,7 @@ namespace loader
             gamename = "Content Warning";
             desc = "A old joint collaboration.";
         }break;
-        case 3:
+        case LETHAL_COMPANY:
         {
             map = lethalmenu_map;
             name = "Lethal";
@@ -96,7 +107,16 @@ namespace loader
             ImGui::SameLine();
         }
         if (ImGui::Button("Inject", ImVec2((util::is_dev() && (game == GTAV)) ? 75 : 155, 30)))
-            g_inject.inject();
+        {
+            if (game == PHASMOPHOBIA)
+            {
+				if (util::is_dev())
+                    g_inject.inject_dll(g_gui.game, "C:\\Users\\TGB\\PhasMenu\\build\\RelWithDebInfo\\PhasMenu.dll", "Phasmophobia");
+            }
+			else
+				g_inject.inject();
+        }
+                
         ImGui::PopFont();
         ImGui::PopStyleColor();
         ImGui::PopStyleColor();

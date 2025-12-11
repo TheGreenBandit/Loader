@@ -59,8 +59,10 @@ Image* download_img_if_noexist(fs::path path, cpr::Url link)
     return ret;
 }
 
-void add_to_map(std::map<std::string, Image*>& image_map, std::string name, const char* semilink)
+void add_to_map(std::map<std::string, Image*>& image_map, std::string name, const char* semilink = "")
 {
+	if (semilink == "")
+		semilink = name.c_str();
     image_map.emplace(name, download_img_if_noexist(fs::current_path() / "Resources" / std::format("{}.png", name), std::format("https://github.com/TheGreenBandit/Loader/releases/download/resources/{}.png", semilink).c_str()));
 }
 void add_to_menu_map(std::map<int, std::pair<std::string, Image*>>& image_map, int position, std::string menu, std::string name, const char* semilink)
@@ -85,16 +87,18 @@ void initialize()
     create_dir_if_noexist(fs::current_path() / "Menus");
     //icon mapping
     add_to_map(g_gui.icon_map, "main_icon", "106003542");
-    add_to_map(g_gui.icon_map, "gta_icon", "gta_icon");
-    add_to_map(g_gui.icon_map, "repo_icon", "repo_icon");
+    add_to_map(g_gui.icon_map, "gta_icon");
+    add_to_map(g_gui.icon_map, "repo_icon");
+    add_to_map(g_gui.icon_map, "phasmophobia_icon");
     add_to_map(g_gui.icon_map, "content_warning_icon", "Content-Warning-Logo-500x281");
-    add_to_map(g_gui.icon_map, "lethal_company_icon", "lethal_company_icon");
-    add_to_map(g_gui.icon_map, "gear_icon", "gear_icon");
+    add_to_map(g_gui.icon_map, "lethal_company_icon");
+    add_to_map(g_gui.icon_map, "gear_icon");
     //background mapping
-    add_to_map(g_gui.background_map, "gta_background", "gta_background");
-    add_to_map(g_gui.background_map, "repo_background", "repo_background");
-    add_to_map(g_gui.background_map, "content_warning_background", "content_warning_background");
-    add_to_map(g_gui.background_map, "lethal_company_background", "lethal_company_background");
+    add_to_map(g_gui.background_map, "gta_background");
+    add_to_map(g_gui.background_map, "repo_background");
+    add_to_map(g_gui.background_map, "phasmophobia_background");
+    add_to_map(g_gui.background_map, "content_warning_background");
+    add_to_map(g_gui.background_map, "lethal_company_background");
     //menus
     //Unk
     add_to_menu_map(g_gui.unk_map, 1, "Unk", "unk_self", "unkself");
@@ -141,7 +145,7 @@ int main(int, char**)
     WNDCLASSEXW wc = { sizeof(WNDCLASSEXW), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandleW(NULL), NULL, NULL, NULL, NULL, L"Loader", NULL};
     RegisterClassExW(&wc);
 
-    hwnd = ::CreateWindowExW(0, wc.lpszClassName, L"Loader", WS_POPUPWINDOW, 0, 0, 805, 366, NULL, NULL, wc.hInstance, NULL);
+    hwnd = ::CreateWindowExW(0, wc.lpszClassName, L"Loader", WS_POPUP, 0, 0, 805, 366, NULL, NULL, wc.hInstance, NULL);
 
     if (!CreateDeviceD3D(hwnd))
     {
